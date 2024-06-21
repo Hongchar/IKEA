@@ -18,13 +18,4 @@ public class ButtonFrame extends JButton {
 		setBounds(x, y, 370, 40);
 		
 	}
-	
-	public static void main(String[] args) {
-		
-		JFrame j = new DefaultFrame().getDefaultFrame();
-		
-		j.add(new ButtonFrame("검색", 1, 3));
-		j.setVisible(true);
-		
-	}
 }
