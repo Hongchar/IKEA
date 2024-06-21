@@ -13,6 +13,12 @@ import javax.swing.border.LineBorder;
 
 public class SetButton extends JButton {
 
+	/**
+	 	1. 버튼명
+	 	2. x = x값
+	 	3. y = y값
+	 	버튼 내 아이콘은 필요한 이미지로 수정해야 합니다.
+	*/
 	public SetButton(String title, int x, int y) {
 		ImageIcon manager_icon = new ImageIcon("imgs/manager_icon.png");
 
