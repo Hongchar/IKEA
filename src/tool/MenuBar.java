@@ -1,17 +1,22 @@
 package tool;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
-public class SetButton extends JButton {
+public class MenuBar extends JButton {
 
 	/**
 	 	1. 버튼명
@@ -19,8 +24,8 @@ public class SetButton extends JButton {
 	 	3. y = y값
 	 	버튼 내 아이콘은 필요한 이미지로 수정해야 합니다.
 	*/
-	public SetButton(String title, int x, int y) {
-		ImageIcon manager_icon = new ImageIcon("imgs/manager_icon.png");
+	public MenuBar(String title, String url, int x, int y) {
+		ImageIcon manager_icon = new ImageIcon("imgs/" + url);
 
 		// 위치값은 변수로 설정했습니다
 		this.setBounds(x, y, 375, 50);
@@ -39,15 +44,23 @@ public class SetButton extends JButton {
 		// 텍스트를 왼쪽으로 정렬
 		this.setHorizontalTextPosition(SwingConstants.LEFT);
 
-		
-		// 버튼클릭시 페이지 이동
-		this.addActionListener(new ActionListener() {
+		setBorder(new Border() {
+			private int radius = 10;
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				
+			public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+				g.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
+			}
+
+			@Override
+			public Insets getBorderInsets(Component c) {
+				return new Insets(radius + 1, radius + 1, radius + 2, radius);
+			}
+
+			@Override
+			public boolean isBorderOpaque() {
+				return true;
 			}
 		});
-
 	}
 }

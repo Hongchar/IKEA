@@ -6,9 +6,10 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 
-public class ButtonFrame extends JButton {
+public class BlueLongButton extends JButton {
 
-	public ButtonFrame(String label, int x, int y) {
+	// 파란색 긴 버튼에 노란색 라벨	
+	public BlueLongButton(String label, int x, int y) {
 		super(label, null);
 		
 		setFont(new Font("나눔글꼴", Font.PLAIN, 14));
