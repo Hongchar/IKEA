@@ -11,12 +11,16 @@ import javax.swing.JTextField;
 
 public class CreateTextField {
 	
+	// 긴 사이즈 텍스트입력창 생성
 	public static JTextField textField(Point location, String label) {
 		JTextField tf = new JTextField(label);
 		tf.setSize(375, 50);
 		tf.setFont(new Font("나눔글꼴", Font.PLAIN, 14));
 		tf.setForeground(Color.GRAY);
 		tf.setLocation(location);
+		
+		// 입력받기전 라벨을 회색으로 표기
+		// 입력이 활성화 되면 입력텍스트 검은색으로 설정
 		tf.addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -65,14 +69,5 @@ public class CreateTextField {
 		});
 		
 		return h_tf;
-	}
-	
-	public static void main(String[] args) {
-		
-		JFrame f = new DefaultFrame().getDefaultFrame();
-		CreateTextField c = new CreateTextField();
-		
-		f.add(c.textField(new Point(10, 150), "상품명"));
-		
 	}
 }

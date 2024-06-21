@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 
 public class BlueLongButton extends JButton {
 
-	// 파란색 긴 버튼에 노란색 라벨	
+	// 파란색 긴 버튼에 노란색 라벨
 	public BlueLongButton(String label, int x, int y) {
 		super(label, null);
 		
