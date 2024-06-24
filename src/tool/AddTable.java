@@ -23,6 +23,7 @@ public class AddTable {
 		// 위에 값만큼 컬럼 네임 행 만들고 열의 개수 0부터 시작하는 모델 생성
 		DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 
+		// ddd
 		// 테이블 생성
 		JTable table = new JTable(model);
 
