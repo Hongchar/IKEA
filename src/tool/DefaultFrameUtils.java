@@ -59,6 +59,8 @@ public class DefaultFrameUtils {
 //	public static void makeBackButton(JFrame f) {
 //		f.add(new BackButton());
 //	}
+	
+	/** 회색 문구 라벨 생성 **/
 	public static JLabel makeGrayLabel(String str, int x, int y) {
 		
 		JLabel gray = new JLabel(str);

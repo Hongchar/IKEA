@@ -15,7 +15,7 @@ public class Main {
 		
 		// 화면에 메인 프레임 그려서 시작하기
 		SwingUtilities.invokeLater(() -> {
-			
+			JFrames.getJFrame("MAIN_A1");
 		});
 	}
 	
