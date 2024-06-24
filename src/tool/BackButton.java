@@ -11,7 +11,7 @@ public class BackButton extends JButton {
 
 	// 뒤로가기 버튼
 	public BackButton() {
-		super(new ImageIcon("res/back.png"));
+		super(new ImageIcon("C:\\aiautomation_kdm\\repositories\\ikea\\res\\back.png"));
 		
 		setBackground(new Color(16, 118, 200));
 		setBounds(295, 13, 26, 26);	

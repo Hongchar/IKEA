@@ -14,7 +14,7 @@ public class DefaultFrameUtils {
 	public static void setDefaultSize(JFrame f) {
 		f.setSize(410, 850);
 		f.setLayout(null);
-		f.setVisible(false);
+		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	

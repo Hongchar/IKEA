@@ -13,7 +13,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 public class AddTable {
-
 	
 	public static JScrollPane getTable() {
 
@@ -44,7 +43,7 @@ public class AddTable {
 		
 		// 각종 설정
 		// 크기, 글꼴 설정
-		scp.setBounds(10, 250, 365, 543);
+		scp.setBounds(10, 320, 370, 480);
 		scp.setFont(new Font("나눔글꼴", Font.PLAIN, 14));
 		
 		// 컬럼 네임 행 글씨 가운데 정렬
