@@ -1,13 +1,17 @@
 package tool;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
 
 public class CreateTextField {
 	
@@ -15,7 +19,7 @@ public class CreateTextField {
 	public static JTextField textField(Point location, String label) {
 		JTextField tf = new JTextField(label);
 		tf.setSize(375, 50);
-		tf.setFont(new Font("나눔글꼴", Font.PLAIN, 14));
+		tf.setFont(new Font("넥슨Lv1고딕", Font.PLAIN, 14));
 		tf.setForeground(Color.GRAY);
 		tf.setLocation(location);
 		
@@ -41,13 +45,34 @@ public class CreateTextField {
 			}
 		});
 		
+		
+		// 테두리 라운드로
+		tf.setBorder(new Border() {
+			private int radius = 10;
+
+			@Override
+			public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+				g.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
+			}
+
+			@Override
+			public Insets getBorderInsets(Component c) {
+				return new Insets(radius + 1, radius + 1, radius + 2, radius);
+			}
+
+			@Override
+			public boolean isBorderOpaque() {
+				return true;
+			}
+		});
+		
 		return tf;
 	}
 
 	public static JTextField halfTextField(Point location, String label) {
 		JTextField h_tf = new JTextField();
 		h_tf.setSize(180, 50);
-		h_tf.setFont(new Font("나눔글꼴", Font.PLAIN, 14));
+		h_tf.setFont(new Font("넥슨Lv1고딕", Font.PLAIN, 14));
 		h_tf.setForeground(Color.GRAY);
 		h_tf.setLocation(location);
 		h_tf.addFocusListener(new FocusListener() {
@@ -65,6 +90,26 @@ public class CreateTextField {
 					h_tf.setForeground(Color.GRAY);
 					h_tf.setText(label);
 				}
+			}
+		});
+		
+		// 테두리 라운드로
+		h_tf.setBorder(new Border() {
+			private int radius = 10;
+
+			@Override
+			public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+				g.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
+			}
+
+			@Override
+			public Insets getBorderInsets(Component c) {
+				return new Insets(radius + 1, radius + 1, radius + 2, radius);
+			}
+
+			@Override
+			public boolean isBorderOpaque() {
+				return true;
 			}
 		});
 		

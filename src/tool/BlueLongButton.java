@@ -12,10 +12,10 @@ public class BlueLongButton extends JButton {
 	public BlueLongButton(String label, int x, int y) {
 		super(label, null);
 		
-		setFont(new Font("나눔글꼴", Font.PLAIN, 14));
-		setForeground(Color.decode("#FFDB00"));
+		setFont(new Font("넥슨Lv1고딕", Font.PLAIN, 14));
+		setForeground(new Color(255, 219, 0));
 		
-		setBackground(Color.decode("#1076C8"));
+		setBackground(new Color(16, 118, 200));
 		setBounds(x, y, 370, 40);
 		
 	}
