@@ -1,6 +1,10 @@
 package tool;
 
 import javax.swing.JOptionPane;
+
+import java.awt.Color;
+import java.awt.Font;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -15,6 +19,7 @@ public class DefaultFrameUtils {
 		f.setSize(410, 850);
 		f.setLayout(null);
 		f.setVisible(false);
+		f.setLocationRelativeTo(null);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
@@ -45,6 +50,7 @@ public class DefaultFrameUtils {
 	public static void makeTimer(JFrame f) {
 		new DigitalWatch(f);
 	}
+	
 //	/** 홈버튼 생성 **/
 //	public static void makeHomeButton(JFrame f) {
 //		f.add(new HomeButton());
@@ -53,7 +59,16 @@ public class DefaultFrameUtils {
 //	public static void makeBackButton(JFrame f) {
 //		f.add(new BackButton());
 //	}
-	
+	public static JLabel makeGrayLabel(String str, int x, int y) {
+		
+		JLabel gray = new JLabel(str);
+		
+		gray.setFont(new Font("넥슨Lv1고딕", Font.PLAIN, 14));
+		gray.setForeground(new Color(144, 144, 144));
+		gray.setBounds(x, y, 359, 19);
+		
+		return gray;
+	}
 	public static void main(String[] args) {
 		JFrame f = new JFrame();
 		DefaultFrameUtils.setDefaultSize(f);
