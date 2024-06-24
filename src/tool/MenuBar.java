@@ -25,7 +25,7 @@ public class MenuBar extends JButton {
 	 	버튼 내 아이콘은 필요한 이미지로 수정해야 합니다.
 	*/
 	public MenuBar(String title, String url, int x, int y) {
-		ImageIcon manager_icon = new ImageIcon("imgs/" + url);
+		ImageIcon manager_icon = new ImageIcon("res/" + url);
 
 		// 위치값은 변수로 설정했습니다
 		this.setBounds(x, y, 375, 50);
