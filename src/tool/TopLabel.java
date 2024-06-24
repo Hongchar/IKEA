@@ -13,6 +13,6 @@ public class TopLabel extends JLabel {
 		this.setBackground(new Color(0, 88, 163));
 		this.setForeground(Color.WHITE);
 		this.setHorizontalTextPosition(CENTER);
-		this.setFont(new Font("Sofia Sans Regular", Font.BOLD, 24));
+		this.setFont(new Font("넥슨Lv1고딕 굵게", Font.BOLD, 24));
 	}
 }
