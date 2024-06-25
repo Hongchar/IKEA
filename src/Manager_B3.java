@@ -10,6 +10,7 @@ import tool.CreateTextField;
 import tool.DefaultFrameUtils;
 import tool.HomeButton;
 import tool.InfoLabel;
+import tool.MenuBar;
 
 public class Manager_B3 extends JFrame {
 
@@ -23,11 +24,12 @@ public class Manager_B3 extends JFrame {
 		DefaultFrameUtils.makeTopLabel(this, "접근기록조회");
 		DefaultFrameUtils.makeTopPanel(this);
 		this.add(new InfoLabel("SEARCH CONDITIONS", 20, 58));
-		this.add(text.textField(new Point(12, 90), "날짜"));
+		this.add(text.halfTextField(new Point(12, 90), "날짜"));
+		this.add(text.halfTextField(new Point(207, 90), "날짜"));
 		this.add(text.textField(new Point(12, 153), "계정ID"));
 		this.add(new BlueLongButton("검색", 12, 220));
 		this.add(new InfoLabel("SEARCH DATA", 12, 259));
-		this.add(AddTable.getTable());
+//		this.add(AddTable.getTable());
 	}
 	
 	public static void main(String[] args) {

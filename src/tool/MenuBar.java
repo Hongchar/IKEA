@@ -22,15 +22,16 @@ public class MenuBar extends JButton {
 	 	1. 버튼명
 	 	2. x = x값
 	 	3. y = y값
+	 	4. gap 글자, 아이콘 간격 알아서...
 	 	버튼 내 아이콘은 필요한 이미지로 수정해야 합니다.
 	*/
-	public MenuBar(String title, String url, int x, int y) {
+	public MenuBar(String title, String url, int x, int y, int gap) {
 		ImageIcon manager_icon = new ImageIcon("res/" + url);
 
 		// 위치값은 변수로 설정했습니다
 		this.setBounds(x, y, 375, 50);
 		this.setBackground(new Color(255, 255, 255));
-		this.setFont(new Font("Pretendard Variable", Font.BOLD, 24));
+		this.setFont(new Font("넥슨Lv1고딕 굵게", Font.BOLD, 24));
 		LineBorder border = new LineBorder(new Color(203, 203, 203), 1, true);
 
 		this.setBorder(border);
@@ -38,7 +39,7 @@ public class MenuBar extends JButton {
 		this.setText(title);
 		
 		// 텍스트, 아이콘 간격 설정
-		this.setIconTextGap(203);
+		this.setIconTextGap(gap);
 		// 텍스트&아이콘 가운데 정렬
 		this.setHorizontalAlignment(SwingConstants.CENTER);
 		// 텍스트를 왼쪽으로 정렬
