@@ -21,6 +21,8 @@ public class DefaultFrameUtils {
 		f.setVisible(false);
 		f.setLocationRelativeTo(null);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.setResizable(false);
+		f.getContentPane().setBackground(new Color(255, 255, 255));
 	}
 	
 	/** 알림창 생성 (String 메세지) 입력 **/

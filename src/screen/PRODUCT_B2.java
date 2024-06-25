@@ -43,7 +43,6 @@ public class PRODUCT_B2 extends JFrame {
 	
 	public PRODUCT_B2() {
 		DefaultFrameUtils.setDefaultSize(this);
-		DefaultFrameUtils.makeLogo(this);
 		DefaultFrameUtils.makeTopLabel(this, "상품이동");
 		
 		this.setVisible(true);
@@ -53,7 +52,7 @@ public class PRODUCT_B2 extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-//				JFrames.getJFrame("MAIN_A2").setVisible(true);
+				JFrames.getJFrame("MAIN_A2").setVisible(true);
 				JFrames.getJFrame("PRODUCT_B2").setVisible(false);
 			}
 		});
@@ -124,9 +123,7 @@ public class PRODUCT_B2 extends JFrame {
 			}
 		});
 		
-		move.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		move.addActionListener(e -> {
 				String sql1 = "SELECT COUNT(*) FROM product";
 				String sql2 = "UPDATE product SET sector_seq = ? "
 						+ "WHERE sector_seq = ? AND product_seq = ? AND product_qty = ?";
@@ -159,8 +156,6 @@ public class PRODUCT_B2 extends JFrame {
 				} catch (SQLException e1) {
 					DefaultFrameUtils.makeNotice("조회할 수 없습니다.");
 				}
-
-			}
 		});
 
 		this.add(home);
@@ -171,7 +166,7 @@ public class PRODUCT_B2 extends JFrame {
 		this.add(moveSector);
 		this.add(move);
 		this.add(grayText);
-		
+		DefaultFrameUtils.makeLogo(this);
 		DefaultFrameUtils.makeTopPanel(this);
 	}
 }
