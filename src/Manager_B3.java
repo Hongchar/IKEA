@@ -15,6 +15,7 @@ import tool.MenuBar;
 public class Manager_B3 extends JFrame {
 
 	CreateTextField text = new CreateTextField();
+	String[] columnNames = {"계정ID", "아이디", "접속일"};
 	
 	public Manager_B3() {
 		DefaultFrameUtils.setDefaultSize(this);
@@ -29,7 +30,9 @@ public class Manager_B3 extends JFrame {
 		this.add(text.textField(new Point(12, 153), "계정ID"));
 		this.add(new BlueLongButton("검색", 12, 220));
 		this.add(new InfoLabel("SEARCH DATA", 12, 259));
-//		this.add(AddTable.getTable());
+		this.add(AddTable.getTable(12, 278, 370, 540, columnNames));
+		
+		this.setVisible(true);
 	}
 	
 	public static void main(String[] args) {

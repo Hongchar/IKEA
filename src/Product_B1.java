@@ -14,6 +14,7 @@ import tool.InfoLabel;
 public class Product_B1 extends JFrame {
 	
 	CreateTextField text = new CreateTextField();
+	String[] columnNames = {"ID", "재고명", "수량", "원가", "판매가", "무게", "납품업체"};
 	
 	public Product_B1() {
 		DefaultFrameUtils.makeLogo(this);
@@ -28,7 +29,9 @@ public class Product_B1 extends JFrame {
 		this.add(new BlueLongButton("검색", 14, 159));
 		this.add(new InfoLabel("SEARCH DATE", 15, 249));
 		
-		this.add(AddTable.getTable());
+		this.add(AddTable.getTable(15, 268, 370, 556, columnNames));
+		
+		this.setVisible(true);
 		
 	}
 	

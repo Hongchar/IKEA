@@ -1,72 +1,98 @@
 package tool;
 
 import java.awt.Color;
-//import java.awt.Dimension;
 import java.awt.Font;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+
 public class AddTable {
 
-	
-	public static JScrollPane getTable() {
-
-		// 열 이름 설정
-		String[] columnNames = { "ID", "재고명", "수량", "원가", "판매가", "무게", "납품업체" };
-
-		// 위에 값만큼 컬럼 네임 행 만들고 열의 개수 0부터 시작하는 모델 생성
-		DefaultTableModel model = new DefaultTableModel(columnNames, 0);
-
-		// 테이블 생성
-		JTable table = new JTable(model);
-
-		// 열 추가
-		// 테스트용 3줄
-		model.addRow(new Object[] { "1", "상품1", "10", "10000", "15000", "1.2", "업체A" });
-        model.addRow(new Object[] { "2", "상품2", "20", "8000", "12000", "0.8", "업체B" });
-        model.addRow(new Object[] { "3", "상품3", "15", "12000", "18000", "1.5", "업체C" });
+	// DB에서 테이블의 COUNT 값을 가져오는 기능
+	private static class RowCount {
+		// 테스트용 DB연결기 & 계정임 
+		private static final DBConnector2 connector = new DBConnector2("HR", "1234");
 		
-        // 공백 열 13줄 추가
-		int rowCount = 13;
+		// 실제로 사용할 DB 연결 기능 (위의 테스트용 기능 지우고 이거 사용하면 됨)
+//		private static final DBConnector connector = new DBConnector();
+
+		// 테이블의 행 수를 반환하는 메서드
+		public static int getRowCount() {
+			String sql = "SELECT COUNT(*) FROM test_table"; 
+										  // 테스트용 이름임
+			int result = 0;
+			try (
+					Connection conn = connector.getConnection();
+					PreparedStatement pstmt = conn.prepareStatement(sql);
+					ResultSet rs = pstmt.executeQuery()
+			) {
+				if (rs.next()) {
+					result = rs.getInt(1);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+			// 해당 테이블의 행 개수
+			return result;
+		}
+	}
+
+	// 테이블의 위치, 사이즈, 열 이름 (맨 윗줄 행) 값
+	public static JScrollPane getTable(
+			int locationX, int locationY, 
+			int width, int height, String[] columnNames) {
+		
+		// 받아온 열 이름으로 한 행을 가진 모델을 생성 후 테이블에 적용
+		DefaultTableModel model = new DefaultTableModel(columnNames, 0);
+		JTable table = new JTable(model);
+		
+		// 테이블의 행 개수만큼 자동으로 행 추가
+		int rowCount = RowCount.getRowCount();
 		for (int i = 0; i < rowCount; i++) {
-			model.addRow(new Object[] { 
-					"", "", "", "", "", "", "", "", "", "", "", "", "" });
+			model.addRow(new Object[] { "" });
 		}
 
-		// 스크롤 패널 생성 
+		// 스크롤 패널 생성
 		JScrollPane scp = new JScrollPane(table);
-		
+
 		// 각종 설정
-		// 크기, 글꼴 설정
-		scp.setBounds(10, 250, 365, 543);
+		scp.setBounds(locationX, locationY, width, height);
 		scp.setFont(new Font("나눔글꼴", Font.PLAIN, 14));
+
+		// columnNames 행 글씨 가운데 정렬
+		DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
+		dtcr.setHorizontalAlignment(SwingConstants.CENTER);
+
+		// columnNames 행 배경색, 글씨색 설정
+		table.getTableHeader().setBackground(Color.decode("#106EBE"));
+		table.getTableHeader().setForeground(Color.decode("#FFFFFF"));
 		
-		// 컬럼 네임 행 글씨 가운데 정렬
-		DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer(); 
-	    dtcr.setHorizontalAlignment(SwingConstants.CENTER); 
-	    
-	    // 컬럼 네임 행 배경색, 글씨색 설정
-	    table.getTableHeader().setBackground(Color.decode("#106EBE"));
-	    table.getTableHeader().setForeground(Color.decode("#FFFFFF"));
+		// 셀 높이 설정
+		int defaultHeight = 40;
+		table.setRowHeight(defaultHeight); 
 		
-		// 셀 높이, 너비 조절
-        table.setRowHeight(40);
-	    table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);  // 자동 크기 조정 비활성화
-        TableColumn column;
-        for (int i = 0; i < table.getColumnCount(); i++) {
-            column = table.getColumnModel().getColumn(i);
-            column.setPreferredWidth(80);  // 각 열의 너비 설정
-        }
-	    
-        // 가로 스크롤바 추가
-        scp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        
+		//셀 너비 설정
+		// 너비 자동 크기 조정 비활성화
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		int bestSize = 121; // 가장 보기 좋은 사이즈
+		for (int i = 0; i < table.getColumnCount(); i++) {
+			TableColumn column = table.getColumnModel().getColumn(i);
+			column.setPreferredWidth(bestSize);
+		}
+
+		// 가로 스크롤바 추가
+		scp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		
 		return scp;
 	}
 }
