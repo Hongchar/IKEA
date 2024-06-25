@@ -62,7 +62,7 @@ public class MANAGER_B1 extends JFrame {
 			}
 		});
 
-		// 저장 버튼 기능 (계정 생성)
+		// 저장 버튼 (계정 생성)
 		saveBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
