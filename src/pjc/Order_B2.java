@@ -29,7 +29,6 @@ public class Order_B2 extends JFrame {
 	
 	public Order_B2() {
 		
-		
 		add(new BackButton());
 		add(new HomeButton());
 		
@@ -68,7 +67,7 @@ public class Order_B2 extends JFrame {
 		boolean condition = false;
 		
 		if (!dateFrom.isEmpty() || !dateTo.isEmpty()) {
-			query.append(condition ? " AND" : " WHERE");
+			query.append(" WHERE");
 			
 			if (!dateFrom.isEmpty() && !dateTo.isEmpty()) {
 				query.append(" order_date BETWEEN TO_DATE(?, 'YYYYMMDD') AND TO_DATE(?, 'YYYYMMDD')");
@@ -103,7 +102,7 @@ public class Order_B2 extends JFrame {
 		try (
 				Connection conn = DBConnector.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(sql)
-				) {
+			) {
 			for (int i = 0; i < params.size(); ++i) {
 				System.out.println("Setting parameter " + (i + 1) + ": " + params.get(i));
 				pstmt.setObject(i + 1, params.get(i));
@@ -123,14 +122,14 @@ public class Order_B2 extends JFrame {
 					}
 					model.addRow(row);
 				}
-			}			
+			}	
 		} catch (SQLException ex) {
 			ex.printStackTrace();
+			
 		}
 	}
 	
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> new Order_B2());
 	}
-	
 }

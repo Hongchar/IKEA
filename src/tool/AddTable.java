@@ -21,7 +21,6 @@ public class AddTable {
 		
 		public static int getRowCount() {
 			String sql = "SELECT COUNT(*) FROM orders"; 
-										  // 테스트용 이름임
 			int result = 0;
 			try (
 					Connection conn = connector.getConnection();
