@@ -17,19 +17,21 @@ public class Order_B1 extends JFrame {
 	
 	public Order_B1() {
 		
-		DefaultFrameUtils.setDefaultSize(this);
-		DefaultFrameUtils.makeLogo(this);
 		add(new BackButton());
 		add(new HomeButton());
+		
+		DefaultFrameUtils.setDefaultSize(this);
+		DefaultFrameUtils.makeLogo(this);
 		DefaultFrameUtils.makeTopLabel(this, "발주신청");
 		DefaultFrameUtils.makeTopPanel(this);
 		
-		JTextField tf1 = CreateTextField.textField(new Point(10, 80), "신청일자");
-		JTextField tf2 = CreateTextField.textField(new Point(10, 140), "상품ID");
-		JTextField tf3 = CreateTextField.textField(new Point(10, 200), "상품명");
-		JTextField tf4 = CreateTextField.halfTextField(new Point(10, 260), "발주수량");
-		JTextField tf5 = CreateTextField.halfTextField(new Point(200, 260), "업체ID");
+		JTextField tf1 = CreateTextField.textField(10, 80, "신청일자");
+		JTextField tf2 = CreateTextField.textField(10, 140, "상품ID");
+		JTextField tf3 = CreateTextField.textField(10, 200, "상품명");
+		JTextField tf4 = CreateTextField.halfTextField(10, 260, "발주수량");
+		JTextField tf5 = CreateTextField.halfTextField(200, 260, "업체ID");
 		BlueLongButton b1 = new BlueLongButton("신청", 10, 320);
+		
 		add(new BottomImage());
 		add(new BackButton());
 		
