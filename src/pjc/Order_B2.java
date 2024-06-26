@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
@@ -18,9 +19,9 @@ import tool.BackButton;
 import tool.BlueLongButton;
 import tool.CreateTextField;
 import tool.DBConnector;
+import tool.DataValidator;
 import tool.DefaultFrameUtils;
 import tool.HomeButton;
-
 
 public class Order_B2 extends JFrame {
 	String[] tableLabel = {"idx", "상품명", "날짜", "수량", "입고여부", "납품업체"};
@@ -39,7 +40,7 @@ public class Order_B2 extends JFrame {
 		
 		tf1 = CreateTextField.halfTextField(10, 80, "발주일자");
 		tf2 = CreateTextField.halfTextField(205, 80, "");
-		tf3 = CreateTextField.textField(10, 140, "상품ID");
+		tf3 = CreateTextField.textField(10, 140, "상품명");
 		tf4 = CreateTextField.textField(10, 200, "거래처");
 		
 		tableComponents = AddTable.getTable(10,  320,  370,  480, tableLabel);
@@ -66,18 +67,35 @@ public class Order_B2 extends JFrame {
 		List<Object> params = new ArrayList<>();
 		boolean condition = false;
 		
+		if (!dateFrom.isEmpty() && !DataValidator.validateDate(dateFrom)) {
+			JOptionPane.showMessageDialog(null, "시작 날짜 형식이 올바르지 않습니다. 8자리 숫자로 입력해 주세요.");
+			return ;
+		}
+		
+		if (!dateTo.isEmpty() && !DataValidator.validateDate(dateTo)) {
+			JOptionPane.showMessageDialog(null, "종료 날짜 형식이 올바르지 않습니다. 8자리 숫자로 입력해 주세요.");
+			return ;
+		}
+		
+		name = DataValidator.validateProductName(name);
+		
+		if (!clientId.isEmpty() && !DataValidator.validateClient(clientId)) {
+			JOptionPane.showMessageDialog(null, "업체 ID 형식이 올바르지 않습니다.");
+			return ;
+		}
+		
 		if (!dateFrom.isEmpty() || !dateTo.isEmpty()) {
 			query.append(" WHERE");
 			
 			if (!dateFrom.isEmpty() && !dateTo.isEmpty()) {
-				query.append(" order_date BETWEEN TO_DATE(?, 'YYYYMMDD') AND TO_DATE(?, 'YYYYMMDD')");
+				query.append(" order_date BETWEEN ? AND ?");
 				params.add(dateFrom);
 				params.add(dateTo);
 			} else if (!dateFrom.isEmpty()) {
-				query.append(" order_date >= TO_DATE(?, 'YYYYMMDD')");
+				query.append(" order_date >= ?");
 				params.add(dateFrom);
 			} else if (!dateTo.isEmpty()) {
-				query.append(" order_date <= TO_DATE(?, 'YYYYMMDD')");
+				query.append(" order_date <= ?");
 				params.add(dateTo);
 			}
 			condition = true;
