@@ -5,6 +5,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Formatter;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -27,9 +31,11 @@ public class Manager_B3 extends JFrame {
 	static DBConnector2 connector = new DBConnector2("HR", "1234");
 
 	CreateTextField text = new CreateTextField();
-	String[] columnNames = {"계정ID", "아이디", "접속일"};
+	String[] columnNames = {"No.", "아이디", "접속일"};
 	
 	static boolean isAccessLog = false;
+	static boolean isResult = false;
+	static boolean isVaildDate = false;
 	
 	static JScrollPane sp;
 	static DefaultTableModel model;
@@ -37,20 +43,99 @@ public class Manager_B3 extends JFrame {
 	
 	public Manager_B3() {
 		DefaultFrameUtils.setDefaultSize(this);
-		this.add(new BackButton());
-		this.add(new HomeButton());
+		JButton home = (JButton) this.add(new BackButton());
+		JButton back = (JButton) this.add(new HomeButton());
 		DefaultFrameUtils.makeLogo(this);
 		DefaultFrameUtils.makeTopLabel(this, "접근기록조회");
 		DefaultFrameUtils.makeTopPanel(this);
 		this.add(new InfoLabel("SEARCH CONDITIONS", 20, 58));
-		JTextField startDateInput = (JTextField) add(text.halfTextField(new Point(12, 90), "날짜"));
-		JTextField endDateInput = (JTextField) add(text.halfTextField(new Point(207, 90), "날짜"));
-		JTextField accountInput = (JTextField) add(text.textField(new Point(12, 153), "계정ID"));
+		JTextField startDateInput = (JTextField) this.add(text.halfTextField(new Point(12, 90), "날짜"));
+		JTextField endDateInput = (JTextField) this.add(text.halfTextField(new Point(207, 90), "날짜"));
+		JTextField accountInput = (JTextField) this.add(text.textField(new Point(12, 153), "계정ID"));
 		JButton searchBtn = (JButton) this.add(new BlueLongButton("검색", 12, 220));
 		this.add(new InfoLabel("SEARCH DATA", 12, 259));
 		
+		// 홈 버튼 클릭 이벤트
+		home.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+//				JFrame.getJFrame("").setVisible(false);
+				// 메인 화면으로 이동하는 코드 추가
+			}
+		});
+		// 뒤로가기 버튼 클릭 이벤트
+		back.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+//				JFrames.getJFrame("").setVisible(true);
+//				JFrames.getJFrame("").setVisible(false);
+			}
+		});
+		
 		// 검색
-		searchBtn.addActionListener(new ActionListener() {
+//		searchBtn.addActionListener(new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				String startDate = startDateInput.getText();
+//				String endDate = endDateInput.getText();
+//				String account = accountInput.getText();
+//				
+//				inputDate(startDate, endDate, account);
+//				
+//				if(!isAccessLog) {
+//					DefaultFrameUtils.makeNotice("조회할 데이터가 없습니다");
+//				}
+//			}
+//		});
+		
+		startDateInput.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String startDate = startDateInput.getText();
+				
+				inputDate(startDate, "", "");
+				
+			    if (startDate.isEmpty()) {
+			    	DefaultFrameUtils.makeNotice("조회할 날짜를 입력하세요");
+			    }
+			    
+			    if (!isVaildDate(startDate)) {
+			    	DefaultFrameUtils.makeNotice("시작날짜형식이 올바르지 않습니다 (\"yyyy-mm-dd\")");
+			    	return;
+			    }
+			}
+		});
+		
+		endDateInput.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String startDate = startDateInput.getText();
+				String endDate = endDateInput.getText();
+				
+				inputDate(startDate, endDate, "");
+				
+				
+			    if (startDate.isEmpty()) {
+			    	DefaultFrameUtils.makeNotice("조회할 날짜를 입력하세요");
+			    }
+			    
+			    if (!isVaildDate(startDate)) {
+			    	DefaultFrameUtils.makeNotice("시작날짜형식이 올바르지 않습니다 (\"yyyy-mm-dd\")");
+			    	return;
+			    }
+				
+				if (!isVaildDate(endDate)) {
+			    	DefaultFrameUtils.makeNotice("종료날짜형식이 올바르지 않습니다 (\"yyyy-mm-dd\")");
+			    	return;
+			    }
+				
+			}
+		});
+		
+		accountInput.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -58,12 +143,9 @@ public class Manager_B3 extends JFrame {
 				String endDate = endDateInput.getText();
 				String account = accountInput.getText();
 				
-				inputDate(startDate, endDate, account);
+				System.out.println("Action performed. startDate: " + startDate + ", endDate: " + endDate + ", account: " + account);
 				
-				if(!isAccessLog) {
-					DefaultFrameUtils.makeNotice("조회할 데이터가 없습니다");
-				}
-				
+				inputDate(startDate, null, account);
 			}
 		});
 		
@@ -79,41 +161,98 @@ public class Manager_B3 extends JFrame {
 	}
 	
 	private static void inputDate(String startDate, String endDate, String account) {
-		
-		String sql = "SELECT * FROM accessRecord "
-				+ "WHERE acc_date >= ? AND acc_date <= ? "
-				+ "AND account_id LIKE ? ORDER BY acc_date";
-		
-		model.setRowCount(0);
-		
-		try (
-			Connection conn = connector.getConnection();
-			PreparedStatement pstmt = conn.prepareStatement(sql);
-		) {
-			pstmt.setString(1, startDate);
-			pstmt.setString(2, endDate);
-			pstmt.setString(3, "%" + account + "%");
-			
-			try (
-				ResultSet rs = pstmt.executeQuery();
-			) {
-    			int columnCount = rs.getMetaData().getColumnCount();
-    			
-    			while (rs.next()) {
-    				String[] row = new String[columnCount];
-    				for (int i = 1; i <= columnCount; i++) {
-    					row[i - 1] = rs.getString(i);
-    				}
-    				model.addRow(row);
-    				isAccessLog = true;
-    			}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			isAccessLog = false;
-		}
+		System.out.println("쿼리불러오기");
+	    String sql;
+	    
+        SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd");
+	    
+	    boolean hasEndDate = endDate != null && !endDate.trim().isEmpty();
+	    boolean hasAccount = account != null && !account.trim().isEmpty();
+
+	    if (hasEndDate && hasAccount) {
+	        sql = "SELECT * FROM accessRecord "
+	            + "WHERE acc_date >= ? "
+	            + "AND acc_date <= ? "
+	            + "AND account_id LIKE ? ORDER BY acc_date";
+	    } else if (!hasEndDate && hasAccount) {
+	        sql = "SELECT * FROM accessRecord "
+	            + "WHERE acc_date >= ? "
+	            + "AND account_id LIKE ? ORDER BY acc_date";
+	    } else if (hasEndDate && !hasAccount) {
+	        sql = "SELECT * FROM accessRecord "
+		            + "WHERE acc_date >= ? "
+		            + "AND acc_date <= ? "
+		            + "ORDER BY acc_date";
+	    } else {
+	        sql = "SELECT * FROM accessRecord "
+	            + "WHERE acc_date >= ? ORDER BY acc_date";
+	    }
+	    
+	    
+	    model.setRowCount(0);
+	    
+	    System.out.println("DB불러오는 중");
+	    try (
+	        Connection conn = connector.getConnection();
+	        PreparedStatement pstmt = conn.prepareStatement(sql);
+	    ) {
+	    	System.out.println("DB불러오기성공");
+	        int parameterIndex = 1;
+	        pstmt.setString(parameterIndex++, startDate);
+	        
+	        if (hasEndDate) {
+	            pstmt.setString(parameterIndex++, endDate);
+	        }
+	        
+	        if (hasAccount) {
+	            pstmt.setString(parameterIndex, "%" + account + "%");
+	        }
+
+	        System.out.println("쿼리 가져와라~~" + pstmt.toString());
+	        try (ResultSet rs = pstmt.executeQuery()) {
+	        	System.out.println("쿼리 가져왔딴");
+	            int columnCount = rs.getMetaData().getColumnCount();
+	            int rowNum = 1;
+
+	            while (rs.next()) {
+	                String[] row = new String[columnCount + 1];
+	                row[0] = String.valueOf(rowNum++); // 행번호 추가
+	                
+	                for (int i = 1; i <= columnCount; i++) {
+	                    if (rs.getMetaData().getColumnName(i).equalsIgnoreCase("acc_date")) {
+	                        java.sql.Date accDate = rs.getDate("acc_date");
+	                        if (accDate != null) {
+	                            row[i] = dateForm.format(accDate);
+	                        } else {
+	                            row[i] = "";
+	                        }
+	                    } else {
+	                        row[i] = rs.getString(i);
+	                    }
+	                }
+	                model.addRow(row);
+	            }
+	            isAccessLog = true;
+	        }
+	    } catch (SQLException e) {
+	    	System.out.println("DB불러오기 실패" + e.getMessage());
+	        e.printStackTrace();
+	        isAccessLog = false;
+	    }
 	}
 	
+	private static boolean isVaildDate(String date) {
+		SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd");
+		
+		try {
+			dateForm.parse(date);
+			return true;
+		} catch (ParseException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
 	public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override

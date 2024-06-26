@@ -70,7 +70,7 @@ public class CreateTextField {
 	}
 
 	public static JTextField halfTextField(Point location, String label) {
-		JTextField h_tf = new JTextField();
+		JTextField h_tf = new JTextField(label);
 		h_tf.setSize(180, 50);
 		h_tf.setFont(new Font("넥슨Lv1고딕", Font.PLAIN, 14));
 		h_tf.setForeground(Color.GRAY);
