@@ -5,96 +5,48 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Insets;
-import java.awt.Point;
+import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-
-import javax.swing.JFrame;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 public class CreateTextField {
-	
-	// 긴 사이즈 텍스트입력창 생성
-	public static JTextField textField(Point location, String label) {
-		JTextField tf = new JTextField(label);
-		tf.setSize(375, 50);
-		tf.setFont(new Font("넥슨Lv1고딕", Font.PLAIN, 14));
-		tf.setForeground(Color.GRAY);
-		tf.setLocation(location);
-		
-		// 입력받기전 라벨을 회색으로 표기
-		// 입력이 활성화 되면 입력텍스트 검은색으로 설정
-		tf.addFocusListener(new FocusListener() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				if (tf.getText().equals(label)) {
-					tf.setText("");
-					tf.setForeground(Color.BLACK);
-				}
-				
-			}
-			
-			@Override
-			public void focusLost(FocusEvent e) {
-				if (tf.getText().isEmpty()) {
-					tf.setForeground(Color.GRAY);
-					tf.setText(label);
-				}
-				
-			}
-		});
-		
-		
-		// 테두리 라운드로
-		tf.setBorder(new Border() {
-			private int radius = 10;
+	public static JTextField textField(int x, int y, String label) {
 
-			@Override
-			public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-				g.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
-			}
-
-			@Override
-			public Insets getBorderInsets(Component c) {
-				return new Insets(radius + 1, radius + 1, radius + 2, radius);
-			}
-
-			@Override
-			public boolean isBorderOpaque() {
-				return true;
-			}
-		});
-		
-		return tf;
+		JTextField txf = new CustomTextField(x, y, label);
+		txf.setBorder(roundBorder());
+		return txf;
 	}
 
-	public static JTextField halfTextField(Point location, String label) {
-		JTextField h_tf = new JTextField(label);
-		h_tf.setSize(180, 50);
-		h_tf.setFont(new Font("넥슨Lv1고딕", Font.PLAIN, 14));
-		h_tf.setForeground(Color.GRAY);
-		h_tf.setLocation(location);
-		h_tf.addFocusListener(new FocusListener() {
-			
-			@Override
-			public void focusGained(FocusEvent e) {
-				if (h_tf.getText().equals(label)) {
-					h_tf.setText("");
-					h_tf.setForeground(Color.BLACK);
-				}
-			}
-			@Override
-			public void focusLost(FocusEvent e) {
-				if (h_tf.getText().isEmpty()) {
-					h_tf.setForeground(Color.GRAY);
-					h_tf.setText(label);
-				}
-			}
-		});
-		
-		// 테두리 라운드로
-		h_tf.setBorder(new Border() {
+	public static JTextField halfTextField(int x, int y, String label) {
+
+		JTextField txf = new HalfTextField(x, y, label);
+		txf.setBorder(roundBorder());
+		return txf;
+	}
+
+	public static JTextField iconTextField(int x, int y, String label) {
+		JTextField txf = new IconTextField(x, y, label,
+				new ImageIcon("C:\\aiautomation_kdm\\repositories\\ikea\\res\\calendar.png"));
+		txf.setBorder(roundBorder());
+
+		return txf;
+	}
+
+	public static JTextField iconHalfTextField(int x, int y, String label) {
+		JTextField txf = new IconHalfTextField(x, y, label,
+				new ImageIcon("C:\\aiautomation_kdm\\repositories\\ikea\\res\\calendar.png"));
+		txf.setBorder(roundBorder());
+
+		return txf;
+
+	}
+
+	private static Border roundBorder() {
+		return new Border() {
 			private int radius = 10;
 
 			@Override
@@ -111,8 +63,186 @@ public class CreateTextField {
 			public boolean isBorderOpaque() {
 				return true;
 			}
+		};
+	}
+}
+
+class CustomTextField extends JTextField {
+
+	private String label;
+	private boolean isShowingLabel;
+
+	public CustomTextField(int x, int y, String label) {
+		this.label = label;
+		this.isShowingLabel = true;
+		setSize(375, 50);
+		setFont(new Font("나눔글꼴", Font.PLAIN, 14));
+		setForeground(Color.GRAY);
+		setLocation(x, y);
+		setText(label);
+		addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (isShowingLabel) {
+					setText("");
+					setForeground(Color.BLACK);
+					isShowingLabel = false;
+				}
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (getText().isEmpty()) {
+					setForeground(Color.GRAY);
+					setText(label);
+					isShowingLabel = true;
+				}
+			}
 		});
-		
-		return h_tf;
+	}
+
+	@Override
+	public String getText() {
+		return isShowingLabel ? "" : super.getText();
+	}
+}
+
+class HalfTextField extends JTextField {
+
+	private String label;
+	private boolean isShowingLabel;
+
+	public HalfTextField(int x, int y, String label) {
+		this.label = label;
+		this.isShowingLabel = true;
+		setSize(180, 50);
+		setFont(new Font("나눔글꼴", Font.PLAIN, 14));
+		setForeground(Color.GRAY);
+		setLocation(x, y);
+		setText(label);
+		addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (isShowingLabel) {
+					setText("");
+					setForeground(Color.BLACK);
+					isShowingLabel = false;
+				}
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (getText().isEmpty()) {
+					setForeground(Color.GRAY);
+					setText(label);
+					isShowingLabel = true;
+				}
+			}
+		});
+	}
+
+	@Override
+	public String getText() {
+		return isShowingLabel ? "" : super.getText();
+	}
+}
+
+class IconTextField extends CustomTextField {
+	private Icon icon;
+	private boolean isShowingIcon;
+
+	public IconTextField(int x, int y, String label, Icon icon) {
+		super(x, y, label);
+		this.icon = icon;
+		this.isShowingIcon = true;
+
+		addFocusListener(new FocusAdapter() {
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				isShowingIcon = false;
+				repaint();
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				isShowingIcon = true;
+				repaint();
+			}
+
+		});
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		if (isShowingIcon && icon != null) {
+			int iconWidth = icon.getIconWidth();
+			int iconHeight = icon.getIconHeight();
+			int x = getWidth() - iconWidth - 10;
+			int y = (getHeight() - iconHeight) / 2;
+			icon.paintIcon(this, g, x, y);
+		}
+	}
+
+	public void setIcon(Icon icon) {
+		this.icon = icon;
+		repaint();
+	}
+
+	public Icon getIcon() {
+		return this.icon;
+	}
+
+}
+
+class IconHalfTextField extends HalfTextField {
+	private Icon icon;
+	private boolean isShowingIcon;
+
+	public IconHalfTextField(int x, int y, String label, Icon icon) {
+		super(x, y, label);
+		this.icon = icon;
+		this.isShowingIcon = true;
+
+		addFocusListener(new FocusAdapter() {
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				isShowingIcon = false;
+				repaint();
+
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				isShowingIcon = true;
+				repaint();
+
+			}
+		});
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		if (isShowingIcon && icon != null) {
+			int iconWidth = icon.getIconWidth();
+			int iconHeight = icon.getIconHeight();
+			int x = getWidth() - iconWidth - 10;
+			int y = (getHeight() - iconHeight) / 2;
+			icon.paintIcon(this, g, x, y);
+		}
+
+	}
+
+	public void setIcon(Icon icon) {
+		this.icon = icon;
+		repaint();
+	}
+
+	public Icon getIcon() {
+		return this.icon;
 	}
 }

@@ -7,8 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Formatter;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,18 +16,19 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
+import jframe.JFrames;
 import tool.AddTable;
+import tool.AddTable.TableComponents;
 import tool.BackButton;
 import tool.BlueLongButton;
 import tool.CreateTextField;
+import tool.DBConnector;
 import tool.DBConnector2;
 import tool.DefaultFrameUtils;
 import tool.HomeButton;
 import tool.InfoLabel;
 
 public class Manager_B3 extends JFrame {
-	static DBConnector2 connector = new DBConnector2("HR", "1234");
-
 	CreateTextField text = new CreateTextField();
 	String[] columnNames = {"No.", "아이디", "접속일"};
 	
@@ -37,9 +36,10 @@ public class Manager_B3 extends JFrame {
 	static boolean isResult = false;
 	static boolean isVaildDate = false;
 	
-	static JScrollPane sp;
-	static DefaultTableModel model;
-	static JTable table;
+	private JTextField startDateInput, endDateInput, accountInput;
+	
+	private AddTable.TableComponents tableComp;
+	private static DefaultTableModel model;
 	
 	public Manager_B3() {
 		DefaultFrameUtils.setDefaultSize(this);
@@ -49,45 +49,56 @@ public class Manager_B3 extends JFrame {
 		DefaultFrameUtils.makeTopLabel(this, "접근기록조회");
 		DefaultFrameUtils.makeTopPanel(this);
 		this.add(new InfoLabel("SEARCH CONDITIONS", 20, 58));
-		JTextField startDateInput = (JTextField) this.add(text.halfTextField(new Point(12, 90), "날짜"));
-		JTextField endDateInput = (JTextField) this.add(text.halfTextField(new Point(207, 90), "날짜"));
-		JTextField accountInput = (JTextField) this.add(text.textField(new Point(12, 153), "계정ID"));
+		startDateInput = CreateTextField.iconHalfTextField(12, 90, "날짜");		
+		endDateInput = CreateTextField.iconHalfTextField(207, 90, "날짜");		
+		accountInput = CreateTextField.textField(12, 153, "계정ID");
+		
 		JButton searchBtn = (JButton) this.add(new BlueLongButton("검색", 12, 220));
-		this.add(new InfoLabel("SEARCH DATA", 12, 259));
+		this.add(new InfoLabel("SEARCH DATA", 6, 296));
+		
+		add(startDateInput);
+		add(endDateInput);
+		add(accountInput);
+		
+		tableComp = AddTable.getTable(columnNames, "WM_ACCOUNT_ACCESS");
+		add(tableComp.scrollPane);
+		model = (DefaultTableModel) tableComp.table.getModel();
 		
 		// 홈 버튼 클릭 이벤트
-		home.addActionListener(new ActionListener() {
+//		home.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				JFrames.getJFrame("MAIN_A2").setVisible(true);
+//				JFrames.getJFrame("MANAGER_B3").setVisible(false);				
+//			}
+//		});
+//
+//		// 뒤로가기 버튼 클릭 이벤트
+//		back.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				JFrames.getJFrame("MANAGER_B2").setVisible(true);
+//				JFrames.getJFrame("MANAGER_B3").setVisible(false);				
+//
+//			}
+//		});
+		
+		searchBtn.addActionListener(new ActionListener() {
+			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-//				JFrame.getJFrame("").setVisible(false);
-				// 메인 화면으로 이동하는 코드 추가
-			}
-		});
-		// 뒤로가기 버튼 클릭 이벤트
-		back.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-//				JFrames.getJFrame("").setVisible(true);
-//				JFrames.getJFrame("").setVisible(false);
+				String startDate = startDateInput.getText();
+				String endDate = endDateInput.getText();
+				String account = accountInput.getText();
+				
+				inputDate(startDate, "", "");
+				inputDate(startDate, "", account);
+				inputDate(startDate, endDate, "");
+				inputDate("", "", account);
+				
 			}
 		});
 		
-		// 검색
-//		searchBtn.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				String startDate = startDateInput.getText();
-//				String endDate = endDateInput.getText();
-//				String account = accountInput.getText();
-//				
-//				inputDate(startDate, endDate, account);
-//				
-//				if(!isAccessLog) {
-//					DefaultFrameUtils.makeNotice("조회할 데이터가 없습니다");
-//				}
-//			}
-//		});
 		
 		startDateInput.addActionListener(new ActionListener() {
 			
@@ -149,18 +160,12 @@ public class Manager_B3 extends JFrame {
 			}
 		});
 		
-		
-		Object[] tableComponents = 
-				AddTable.getTableComponents(12, 278, 370, 540, columnNames, "accessRecord");
-		sp = (JScrollPane) tableComponents[0];
-		model = (DefaultTableModel) tableComponents[1];
-		table = (JTable) tableComponents[2];
-		this.add(sp);
-		
 		this.setVisible(true);
 	}
 	
 	private static void inputDate(String startDate, String endDate, String account) {
+		DBConnector connector = new DBConnector();
+		
 		System.out.println("쿼리불러오기");
 	    String sql;
 	    
@@ -170,22 +175,25 @@ public class Manager_B3 extends JFrame {
 	    boolean hasAccount = account != null && !account.trim().isEmpty();
 
 	    if (hasEndDate && hasAccount) {
-	        sql = "SELECT * FROM accessRecord "
-	            + "WHERE acc_date >= ? "
-	            + "AND acc_date <= ? "
-	            + "AND account_id LIKE ? ORDER BY acc_date";
+	        sql = "SELECT * FROM WM_ACCOUNT_ACCESS "
+	            + "WHERE access_date >= ? "
+	            + "AND access_date <= ? "
+	            + "AND lower(account_name) LIKE ? ORDER BY access_date";
 	    } else if (!hasEndDate && hasAccount) {
-	        sql = "SELECT * FROM accessRecord "
-	            + "WHERE acc_date >= ? "
-	            + "AND account_id LIKE ? ORDER BY acc_date";
+	        sql = "SELECT * FROM WM_ACCOUNT_ACCESS "
+	            + "WHERE access_date >= ? "
+	            + "AND lower(account_name) LIKE ? ORDER BY access_date";
 	    } else if (hasEndDate && !hasAccount) {
-	        sql = "SELECT * FROM accessRecord "
-		            + "WHERE acc_date >= ? "
-		            + "AND acc_date <= ? "
-		            + "ORDER BY acc_date";
+	        sql = "SELECT * FROM WM_ACCOUNT_ACCESS "
+		            + "WHERE access_date >= ? "
+		            + "AND access_date <= ? "
+		            + "ORDER BY access_date";
+	    } else if (hasAccount) {
+	        sql = "SELECT * FROM WM_ACCOUNT_ACCESS "
+	        		+ "WHERE lower(account_name) LIKE ? ORDER BY access_date";
 	    } else {
-	        sql = "SELECT * FROM accessRecord "
-	            + "WHERE acc_date >= ? ORDER BY acc_date";
+	        sql = "SELECT * FROM WM_ACCOUNT_ACCESS "
+	            + "WHERE access_date >= ? ORDER BY access_date";
 	    }
 	    
 	    
@@ -193,7 +201,7 @@ public class Manager_B3 extends JFrame {
 	    
 	    System.out.println("DB불러오는 중");
 	    try (
-	        Connection conn = connector.getConnection();
+	        Connection conn = DBConnector.getConnection();
 	        PreparedStatement pstmt = conn.prepareStatement(sql);
 	    ) {
 	    	System.out.println("DB불러오기성공");
@@ -219,8 +227,8 @@ public class Manager_B3 extends JFrame {
 	                row[0] = String.valueOf(rowNum++); // 행번호 추가
 	                
 	                for (int i = 1; i <= columnCount; i++) {
-	                    if (rs.getMetaData().getColumnName(i).equalsIgnoreCase("acc_date")) {
-	                        java.sql.Date accDate = rs.getDate("acc_date");
+	                    if (rs.getMetaData().getColumnName(i).equalsIgnoreCase("access_date")) {
+	                        java.sql.Date accDate = rs.getDate("access_date");
 	                        if (accDate != null) {
 	                            row[i] = dateForm.format(accDate);
 	                        } else {
