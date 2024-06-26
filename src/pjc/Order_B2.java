@@ -38,7 +38,7 @@ public class Order_B2 extends JFrame {
 		DefaultFrameUtils.makeTopLabel(this, "발주 현황 조회");
 		DefaultFrameUtils.makeTopPanel(this);
 		
-		tf1 = CreateTextField.halfTextField(10, 80, "발주일자");
+		tf1 = CreateTextField.iconTextField(10, 80, "발주일자");
 		tf2 = CreateTextField.halfTextField(205, 80, "");
 		tf3 = CreateTextField.textField(10, 140, "상품명");
 		tf4 = CreateTextField.textField(10, 200, "거래처");
@@ -79,7 +79,7 @@ public class Order_B2 extends JFrame {
 		
 		name = DataValidator.validateProductName(name);
 		
-		if (!clientId.isEmpty() && !DataValidator.validateClient(clientId)) {
+		if (!clientId.isEmpty() && !DataValidator.validateId(clientId)) {
 			JOptionPane.showMessageDialog(null, "업체 ID 형식이 올바르지 않습니다.");
 			return ;
 		}

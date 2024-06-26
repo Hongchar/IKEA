@@ -32,7 +32,7 @@ public class DataValidator {
 	}
 	
 	public static boolean validateQuantity(String quantity) {
-		return quantity.matches("^\\d{1, 10}$");
+		return quantity.matches("^\\d{1,10}$");
 	}
 	
 	public static String validateStatus(String status) {
@@ -40,8 +40,8 @@ public class DataValidator {
 		return status.equals("Y") || status.equals("N") ? status : "N";
 	}
 	
-	public static boolean validateClient(String client) {
-		return client.matches("^\\d{1,6}$");
+	public static boolean validateId(String id) {
+		return id.matches("^\\d{1,6}$");
 	}
 	
 	
