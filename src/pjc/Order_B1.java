@@ -106,7 +106,7 @@ public class Order_B1 extends JFrame {
 		try (
 			Connection conn = DBConnector.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement(sql);
-				) {
+			) {
 			
 			for (int i = 0; i < params.size(); ++i) {
 				System.out.println("Setting parameter " + (i + 1) + ":" + params.get(i));

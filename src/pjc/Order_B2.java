@@ -118,8 +118,8 @@ public class Order_B2 extends JFrame {
 		System.out.println(params);
 		
 		try (
-				Connection conn = DBConnector.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(sql)
+			Connection conn = DBConnector.getConnection();
+			PreparedStatement pstmt = conn.prepareStatement(sql)
 			) {
 			for (int i = 0; i < params.size(); ++i) {
 				System.out.println("Setting parameter " + (i + 1) + ": " + params.get(i));
@@ -127,8 +127,8 @@ public class Order_B2 extends JFrame {
 			}
 			
 			try (
-					ResultSet rs = pstmt.executeQuery();
-					) {
+				ResultSet rs = pstmt.executeQuery();
+				) {
 				
 				DefaultTableModel model = (DefaultTableModel) tableComponents.table.getModel();
 				model.setRowCount(0);
