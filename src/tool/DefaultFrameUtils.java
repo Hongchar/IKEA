@@ -18,11 +18,11 @@ public class DefaultFrameUtils {
 	public static void setDefaultSize(JFrame f) {
 		f.setSize(410, 850);
 		f.setLayout(null);
-		f.setVisible(false);
 		f.setLocationRelativeTo(null);
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		f.setResizable(false);
 		f.getContentPane().setBackground(new Color(255, 255, 255));
+		f.setVisible(false);
 	}
 	
 	/** 알림창 생성 (String 메세지) 입력 **/

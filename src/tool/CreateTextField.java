@@ -124,7 +124,6 @@ public class CreateTextField {
 		h_tf.setFont(new Font("넥슨Lv1고딕", Font.PLAIN, 14));
 		h_tf.setForeground(Color.GRAY);
 		h_tf.setLocation(location);
-		h_tf.setText("password");
         h_tf.setToolTipText("비밀번호를 입력하세요.");
 		// 테두리 라운드로
 		h_tf.setBorder(new Border() {

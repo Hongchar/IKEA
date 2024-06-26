@@ -1,30 +1,76 @@
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import jframe.JFrames;
+import screen.CLIENT_A1;
 import screen.MAIN_A1;
 import screen.MAIN_A2;
+import screen.MANAGER_A1;
+import screen.ORDER_A1;
+import screen.PRODUCT_A1;
 import screen.PRODUCT_B2;
 import screen.PRODUCT_B3;
+import screen.SALESINFO_A1;
+import tool.LoginTool;
 
 public class Main {
-	
+
 	public static void main(String[] args) {
-		// 각 프레임 인스턴스 생성
-		JFrame product_b2 = new PRODUCT_B2();
-		JFrame product_b3 = new PRODUCT_B3();
+
+		// 로그인 인스턴스 생성
 		JFrame main_a1 = new MAIN_A1();
-		JFrame main_a2 = new MAIN_A2();
+
 		// 모든 프레임들 맵에 추가
 		JFrames.setJFrame("MAIN_A1", main_a1);
-		JFrames.setJFrame("MAIN_A2", main_a2);
-		JFrames.setJFrame("PRODUCT_B2", product_b2);
-		JFrames.setJFrame("PRODUCT_B3", product_b3);
+
 		
+		JFrames.getJFrame("MAIN_A1").addWindowListener(new WindowAdapter() {
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				if (LoginTool.confirmExit()) {
+					System.exit(0);
+				}  else {
+					LoginTool.setConfirm('N');
+				}
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent e) {
+				if (LoginTool.getEnter() == 'Y') {
+					// 각 프레임 인스턴스 생성
+					JFrame main_a2 = new MAIN_A2();
+					JFrame client_a1 = new CLIENT_A1();
+					JFrame product_b2 = new PRODUCT_B2();
+					JFrame product_b3 = new PRODUCT_B3();
+					JFrame salesinfo_a1 = new SALESINFO_A1();
+					JFrame order_a1 = new ORDER_A1();
+					JFrame product_a1 = new PRODUCT_A1();
+					JFrame manager_a1 = new MANAGER_A1();
+					
+					
+					JFrames.setJFrame("MANAGER_A1", manager_a1);
+					JFrames.setJFrame("SALESINFO_A1", salesinfo_a1);
+					JFrames.setJFrame("ORDER_A1", order_a1);
+					JFrames.setJFrame("CLIENT_A1", client_a1);
+					JFrames.setJFrame("PRODUCT_A1", product_a1);
+					JFrames.setJFrame("PRODUCT_B2", product_b2);
+					JFrames.setJFrame("PRODUCT_B3", product_b3);
+					JFrames.setJFrame("MAIN_A2", main_a2);
+				} else if (LoginTool.getConfirm() != 'Y') {
+					JFrames.getJFrame("MAIN_A1").setVisible(true);
+				}
+			}
+
+		});
+
 		// 화면에 메인 프레임 그려서 시작하기
 		SwingUtilities.invokeLater(() -> {
-			JFrames.getJFrame("MAIN_A1");
+			JFrames.getJFrame("MAIN_A2");
 		});
 	}
-	
+
 }

@@ -1,7 +1,10 @@
 package screen;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Point;
-import java.io.Reader;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,6 +22,7 @@ import tool.BlueLongButton;
 import tool.CreateTextField;
 import tool.DBConnector;
 import tool.DefaultFrameUtils;
+import tool.LoginTool;
 
 public class MAIN_A1 extends JFrame {
 
@@ -27,24 +31,51 @@ public class MAIN_A1 extends JFrame {
 	private JTextField idField = CreateTextField.textField(new Point(12, 282), "ID");
 	private JPasswordField pwField = CreateTextField.PasswordTextField(new Point(12, 347));
 	
-	private JButton login = new BlueLongButton("로그인", 12, 412);
+	static JButton login = new BlueLongButton("로그인", 12, 412);
 	
-	private String id;
-	private String pw;
+	private static String id;
+	private static String pw;
 	
-	private static char master = 'N';
-	
-	public static char getMaster() {
-		return master;
-	}
-
-	private static void setMaster(char ch) {
-		master = ch;
-	}
-
+	private JLabel idLabel = new JLabel();
+	private JLabel pwLabel = new JLabel();
 	public MAIN_A1() {
 		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeLogo(this);
+		
+		idField.setBounds(87, 283, 228, 50);
+		idField.setText(null);
+		idField.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				idField.setForeground(Color.BLACK);
+				idField.setText("");
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				idField.setForeground(Color.BLACK);
+			}
+		});
+		pwField.setBounds(87, 348, 228, 50);
+		pwField.addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				pwField.setForeground(Color.BLACK);
+			}
+			@Override
+			public void focusLost(FocusEvent e) {
+				pwField.setForeground(Color.BLACK);
+			}
+		});
+		idLabel.setText("ID");
+		pwLabel.setText("PW");
+		
+		idLabel.setFont(new Font("넥슨Lv1고딕", Font.BOLD, 22));
+		pwLabel.setFont(new Font("넥슨Lv1고딕", Font.BOLD, 20));
+		
+		idLabel.setBounds(28, 296, 52, 24);
+		pwLabel.setBounds(28, 361, 52, 24);
 		
 		ImageIcon img = new ImageIcon("res/ikeaLogo.png");
 		JLabel jpg = new JLabel(img);
@@ -59,6 +90,8 @@ public class MAIN_A1 extends JFrame {
 			pw = new String(pwField.getPassword());
 			
 			String sql = "SELECT * FROM wm_account_info WHERE account_name = ? AND account_password = ?";
+
+			String sql2 = "INSERT INTO wm_account_access VALUES (?, sysdate)";
 			try (
 				Connection conn = DBConnector.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -68,24 +101,34 @@ public class MAIN_A1 extends JFrame {
 				
 				try (
 					ResultSet rs = pstmt.executeQuery();
+					PreparedStatement pstmt2 = conn.prepareStatement(sql2);
 				){
-					if (rs.next() == true) {
-						if (rs.getCharacterStream("master_yn") != null) {
+					while(rs.next()) {
+						pstmt2.setString(1, rs.getString("account_name"));
+						pstmt2.executeUpdate();
+						
+						if (rs.getString("master_yn").equals("Y")) {
 							System.out.println("관리자 계정입니다");
-							setMaster('Y');
+							LoginTool.setMaster('Y');
+							LoginTool.setEnter('Y');
+							this.dispose();
+
+						} else {
+							System.out.println("일반 계정입니다");
+							LoginTool.setEnter('Y');
+							this.dispose();
 						}
 						
-						JFrames.getJFrame("MAIN_A2").setVisible(true);
-						JFrames.getJFrame("MAIN_A1").setVisible(false);
-					} else {
-						DefaultFrameUtils.makeNotice("ID 또는 PW가 틀렸습니다.");
+						
 					}
 				}
+				
 			} catch (SQLException e1) {
-				e1.printStackTrace();
+				DefaultFrameUtils.makeNotice("ID 또는 PW가 틀렸습니다.");
 			}
 		});
-		
+		this.add(idLabel);
+		this.add(pwLabel);
 		this.add(jpg);
 		this.add(bg);
 		this.add(login);

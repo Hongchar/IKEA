@@ -51,8 +51,6 @@ public class PRODUCT_B3 extends JFrame {
 		DefaultFrameUtils.makeLogo(this);
 		DefaultFrameUtils.makeTopLabel(this, "검수/입고");
 
-		this.setVisible(true);
-
 		home.addActionListener(e -> {
 			JFrames.getJFrame("MAIN_A2").setVisible(true);
 			JFrames.getJFrame("PRODUCT_B3").setVisible(false);
@@ -62,6 +60,7 @@ public class PRODUCT_B3 extends JFrame {
 			JFrames.getJFrame("PRODUCT_B2").setVisible(true);
 			JFrames.getJFrame("PRODUCT_B3").setVisible(false);
 		});
+		
 		save.addActionListener(e -> {
 			nameText = productName.getText();
 			costText = Integer.parseInt(cost.getText());
@@ -80,7 +79,7 @@ public class PRODUCT_B3 extends JFrame {
 				try (
 					ResultSet rs = pstmt1.executeQuery();
 				){
-					if(rs.next() == true) {
+					if(rs.next()) {
 						String sql2 = "INSERT INTO product(product_seq, product_name, "
 								+ "product_qty, product_cost, product_price, client_id, sector_seq) "
 								+ "VALUES (product_seq.nextval, ?, ?, ?, ?, ?, ?)";
@@ -126,9 +125,8 @@ public class PRODUCT_B3 extends JFrame {
 		this.add(sectorCord);
 		this.add(productQty);
 		this.add(save);
+		this.dispose();
 		
 		DefaultFrameUtils.makeTopPanel(this);
-
-		
 	}
 }

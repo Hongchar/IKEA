@@ -45,81 +45,58 @@ public class PRODUCT_B2 extends JFrame {
 		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeTopLabel(this, "상품이동");
 		
-		this.setVisible(true);
 		
 		// 홈 버튼 기능구현
-		home.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JFrames.getJFrame("MAIN_A2").setVisible(true);
-				JFrames.getJFrame("PRODUCT_B2").setVisible(false);
-			}
+		home.addActionListener(e -> {
+			JFrames.getJFrame("MAIN_A2").setVisible(true);
+			this.dispose();
 		});
 		
 		// 뒤로가기 버튼 기능구현
-		back.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-//				JFrames.getJFrame("PRODUCT_B1").setVisible(true);
-				JFrames.getJFrame("PRODUCT_B2").setVisible(false);
-			}
+		back.addActionListener(e -> {
+			JFrames.getJFrame("PRODUCT_B1").setVisible(true);
+			this.dispose();
 		});
 		
 		// 재고ID 텍스트 필드 기능구현
-		productId.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					String text = productId.getText();
-					idText = Integer.parseInt(text);
-				} catch (NumberFormatException e1) {
-					DefaultFrameUtils.makeNotice("재고ID를 입력하세요.");
-					
-				}
+		productId.addActionListener(e -> {
+			try {
+				String text = productId.getText();
+				idText = Integer.parseInt(text);
+			} catch (NumberFormatException e1) {
+				DefaultFrameUtils.makeNotice("재고ID를 입력하세요.");
+
 			}
 		});
 		
 		// 구역코드 텍스트 필드 기능구현
-		sectorCode.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					String text = sectorCode.getText();
-					sectorCodeText = Integer.parseInt(text);
-				} catch (NumberFormatException exception) {
-					DefaultFrameUtils.makeNotice("구역코드를 입력하세요.");
-				}
+		sectorCode.addActionListener(e -> {
+			try {
+				String text = sectorCode.getText();
+				sectorCodeText = Integer.parseInt(text);
+			} catch (NumberFormatException exception) {
+				DefaultFrameUtils.makeNotice("구역코드를 입력하세요.");
 			}
 		});
 		
 		// 수량 텍스트 필드 기능구현
-		productQty.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					String text = productQty.getText();
-					qtyText = Integer.parseInt(text);
-				} catch (NumberFormatException exception) {
-					DefaultFrameUtils.makeNotice("수량을 입력하세요.");
-					
-				}
+		productQty.addActionListener(e -> {
+			try {
+				String text = productQty.getText();
+				qtyText = Integer.parseInt(text);
+			} catch (NumberFormatException exception) {
+				DefaultFrameUtils.makeNotice("수량을 입력하세요.");
+
 			}
 		});
 		// 이동할 구역코드 텍스트 필드 기능구현
-		moveSector.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					String text = moveSector.getText();
-					moveText = Integer.parseInt(text);
-				} catch (NumberFormatException exception) {
-					DefaultFrameUtils.makeNotice("이동할 구역코드를 입력하세요.");
-					
-				}
+		moveSector.addActionListener(e -> {
+			try {
+				String text = moveSector.getText();
+				moveText = Integer.parseInt(text);
+			} catch (NumberFormatException exception) {
+				DefaultFrameUtils.makeNotice("이동할 구역코드를 입력하세요.");
+
 			}
 		});
 		
@@ -168,5 +145,6 @@ public class PRODUCT_B2 extends JFrame {
 		this.add(grayText);
 		DefaultFrameUtils.makeLogo(this);
 		DefaultFrameUtils.makeTopPanel(this);
+		this.dispose();
 	}
 }
