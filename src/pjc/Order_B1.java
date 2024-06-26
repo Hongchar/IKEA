@@ -33,7 +33,7 @@ public class Order_B1 extends JFrame {
 		DefaultFrameUtils.makeTopLabel(this, "발주신청");
 		DefaultFrameUtils.makeTopPanel(this);
 		
-		tf1 = CreateTextField.textField(10, 80, "신청일자");
+		tf1 = CreateTextField.iconTextField(10, 80, "신청일자");
 		tf2 = CreateTextField.textField(10, 140, "상품ID");
 		tf3 = CreateTextField.textField(10, 200, "상품명");
 		tf4 = CreateTextField.halfTextField(10, 260, "발주수량");

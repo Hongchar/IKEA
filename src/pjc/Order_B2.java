@@ -38,8 +38,8 @@ public class Order_B2 extends JFrame {
 		DefaultFrameUtils.makeTopLabel(this, "발주 현황 조회");
 		DefaultFrameUtils.makeTopPanel(this);
 		
-		tf1 = CreateTextField.iconTextField(10, 80, "발주일자");
-		tf2 = CreateTextField.halfTextField(205, 80, "");
+		tf1 = CreateTextField.iconHalfTextField(10, 80, "발주일자");
+		tf2 = CreateTextField.iconHalfTextField(205, 80, "");
 		tf3 = CreateTextField.textField(10, 140, "상품명");
 		tf4 = CreateTextField.textField(10, 200, "거래처");
 		
