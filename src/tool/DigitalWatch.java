@@ -7,6 +7,7 @@ import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.border.LineBorder;
 // 전자 시계 추가
 public class DigitalWatch implements Runnable {
 	JFrame f;
@@ -25,6 +26,11 @@ public class DigitalWatch implements Runnable {
 		b.setBounds(247, 13, 153, 23);
 		b.setBackground(new Color(0, 88, 163));
 		b.setForeground(new Color(255, 219, 0));
+		b.setBorder(null);
+		b.setBorder(new LineBorder(new Color(0, 88, 163)));
+		b.setBorderPainted(false);
+		b.setFocusPainted(false);
+		b.setContentAreaFilled(false);
 		f.add(b);
 	}
 	
@@ -39,7 +45,7 @@ public class DigitalWatch implements Runnable {
 				minutes = cal.get(Calendar.MINUTE);
 				seconds = cal.get(Calendar.SECOND);
 
-				SimpleDateFormat formatter = new SimpleDateFormat("hh:mm:ss(E)");
+				SimpleDateFormat formatter = new SimpleDateFormat("yyyy-hh-mm-ss(E)");
 				Date date = cal.getTime();
 				timeString = formatter.format(date);
 				printTime();
