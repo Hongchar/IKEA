@@ -1,3 +1,4 @@
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -5,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import jframe.JFrames;
+
 import screen.CLIENT_A1;
 import screen.MAIN_A1;
 import screen.MAIN_A2;
@@ -22,6 +24,7 @@ import tool.LoginTool;
 public class Main {
 
 	public static void main(String[] args) {
+
 
 		// 로그인 인스턴스 생성
 		JFrame main_a1 = new MAIN_A1();
