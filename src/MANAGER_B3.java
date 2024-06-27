@@ -23,7 +23,11 @@ import tool.DefaultFrameUtils;
 import tool.HomeButton;
 import tool.InfoLabel;
 
-public class Manager_B3 extends JFrame {
+public class MANAGER_B3 extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	CreateTextField text = new CreateTextField();
 	String[] columnNames = {"No.", "아이디", "접속일"};
 	
@@ -42,7 +46,7 @@ public class Manager_B3 extends JFrame {
 	private AddTable.TableComponents tableComp;
 	private static DefaultTableModel model;
 	
-	public Manager_B3() {
+	public MANAGER_B3() {
 		DefaultFrameUtils.setDefaultSize(this);
 		add(home);
 		add(back);
@@ -198,7 +202,7 @@ public class Manager_B3 extends JFrame {
 
 	            while(rs.next()) {
 	                String[] row = new String[colCnt + 1];
-	                row[0] = String.valueOf(rowNum++);
+	                row[0] = String.valueOf(rowNum++);	
 
 	                for (int i = 1; i <= colCnt; i++) {
 	                    if (rs.getMetaData().getColumnName(i).equalsIgnoreCase("access_date")) {
@@ -207,6 +211,7 @@ public class Manager_B3 extends JFrame {
 	                    } else {
 	                        row[i] = rs.getString(i);
 	                    }
+	                    System.out.println("결과불러오기");
 	                }
 	                model.addRow(row);
 	                isAccessLog = true;
@@ -222,7 +227,7 @@ public class Manager_B3 extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-        		new Manager_B3();
+        		new MANAGER_B3();
             }
         });
 	}

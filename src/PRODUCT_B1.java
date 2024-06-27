@@ -21,8 +21,13 @@ import tool.DefaultFrameUtils;
 import tool.HomeButton;
 import tool.InfoLabel;
 
-public class Product_B1 extends JFrame {
-	
+public class PRODUCT_B1 extends JFrame {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	String[] columnNames = {"ID", "재고명", "수량", "원가", "판매가", "무게", "납품업체"};
 	
 	private JTextField inputName;
@@ -38,7 +43,7 @@ public class Product_B1 extends JFrame {
 	static boolean isLoad = false;
 	
 	
-	public Product_B1() {
+	public PRODUCT_B1() {
 		DefaultFrameUtils.makeLogo(this);
 		DefaultFrameUtils.setDefaultSize(this);
 		add(home);
@@ -82,10 +87,6 @@ public class Product_B1 extends JFrame {
 				
 				getProductName(name);
 				
-				if(!isLoad) {
-					DefaultFrameUtils.makeNotice("검색한 " + "[" + name + "]" + " 결과가 없습니다");
-				}
-				
 			}
 		});
 		
@@ -95,6 +96,7 @@ public class Product_B1 extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String name = inputName.getText();
+				
 				getProductName(name);
 
 				
@@ -123,7 +125,7 @@ public class Product_B1 extends JFrame {
 				while(rs.next()) {
 					String[] row = new String[columnCount];
 					for (int i = 1; i < columnCount; i++) {
-						row[i - 1] = rs.getString(i);
+						row[i] = rs.getString(i);
 					}
 					model.addRow(row);
 					isLoad = true;
@@ -139,7 +141,7 @@ public class Product_B1 extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-        		new Product_B1();
+        		new PRODUCT_B1();
             }
         });
 	}

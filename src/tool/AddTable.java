@@ -55,6 +55,7 @@ public class AddTable {
 		DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 		JTable table = new JTable(model);
 		
+//		int rowCount = RowCount.getRowCount(tableName);
 		int rowCount = 12;
 		for (int i = 0; i < rowCount; ++i) {
 //			model.addRow(new Object[] { "" });
