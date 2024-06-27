@@ -21,7 +21,7 @@ import tool.DBConnector;
 import tool.DefaultFrameUtils;
 import tool.HomeButton;
 import tool.InfoLabel;
-
+import jframe.JFrames;
 public class PRODUCT_B1 extends JFrame {
 
 	/**
@@ -62,23 +62,23 @@ public class PRODUCT_B1 extends JFrame {
 		add(tableComp.scrollPane);
 		model = (DefaultTableModel) tableComp.table.getModel();
 		
-//		// 홈 버튼 클릭 이벤트
-//		home.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				JFrames.getJFrame("MAIN_A2").setVisible(true);
-//				JFrames.getJFrame("PRODUCT_B1").setVisible(false);
-//			}
-//		});
-//		
-//		// 뒤로가기 버튼 클릭 이벤트
-//		back.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				JFrames.getJFrame("PRODUCT_A1").setVisible(true);
-//				JFrames.getJFrame("PRODUCT_B1").setVisible(false);
-//			}
-//		});
+		// 홈 버튼 클릭 이벤트
+		home.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrames.getJFrame("MAIN_A2").setVisible(true);
+				JFrames.getJFrame("PRODUCT_B1").setVisible(false);
+			}
+		});
+		
+		// 뒤로가기 버튼 클릭 이벤트
+		back.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrames.getJFrame("PRODUCT_A1").setVisible(true);
+				JFrames.getJFrame("PRODUCT_B1").setVisible(false);
+			}
+		});
 		
 		inputName.addActionListener(new ActionListener() {
 			
@@ -106,7 +106,6 @@ public class PRODUCT_B1 extends JFrame {
 			}
 		});
 		
-		this.setVisible(true);
 	}
 	
 	
@@ -149,15 +148,6 @@ public class PRODUCT_B1 extends JFrame {
 			e.printStackTrace();
 			isLoad = false;
 		}
-	}
-	
-	public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-        		new PRODUCT_B1();
-            }
-        });
 	}
 
 }

@@ -30,7 +30,7 @@ public class MenuBar extends JButton {
 		this.setBounds(x, y, 375, 50);
 		this.setBackground(new Color(255, 255, 255));
 
-		this.setFont(new Font("넥슨Lv1고딕 굵게", Font.BOLD, 24));
+		this.setFont(new Font("넥슨Lv1고딕 굵게", Font.BOLD, 17));
 		LineBorder border = new LineBorder(new Color(203, 203, 203), 1, true);
 
 

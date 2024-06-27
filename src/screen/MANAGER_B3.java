@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
+import jframe.JFrames;
 import tool.AddTable;
 import tool.BackButton;
 import tool.BlueLongButton;
@@ -74,23 +75,23 @@ public class MANAGER_B3 extends JFrame {
 		tableComp.table.setEnabled(false);
 		
 		// 홈 버튼 클릭 이벤트
-//		home.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				JFrames.getJFrame("MAIN_A2").setVisible(true);
-//				JFrames.getJFrame("MANAGER_B3").setVisible(false);				
-//			}
-//		});
-//
-//		// 뒤로가기 버튼 클릭 이벤트
-//		back.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				JFrames.getJFrame("MANAGER_B2").setVisible(true);
-//				JFrames.getJFrame("MANAGER_B3").setVisible(false);				
-//
-//			}
-//		});
+		home.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrames.getJFrame("MAIN_A2").setVisible(true);
+				JFrames.getJFrame("MANAGER_B3").setVisible(false);				
+			}
+		});
+
+		// 뒤로가기 버튼 클릭 이벤트
+		back.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrames.getJFrame("MANAGER_B2").setVisible(true);
+				JFrames.getJFrame("MANAGER_B3").setVisible(false);				
+
+			}
+		});
 		
         startDateInput.addActionListener(new ActionListener() {
             @Override
@@ -114,7 +115,7 @@ public class MANAGER_B3 extends JFrame {
         });
 		
 		
-		this.setVisible(true);
+		this.setVisible(false);
 	}
 	
 	private void performSearch() {
@@ -132,7 +133,6 @@ public class MANAGER_B3 extends JFrame {
 	    StringBuilder sb = new StringBuilder();
 	    sb.append("SELECT * FROM WM_ACCOUNT_ACCESS WHERE 1=1");
 
-//	    List<String> conditions = new ArrayList<>();
 	    List<Object> params = new ArrayList<>();
 	    
 		boolean firstCondition = true;
@@ -203,67 +203,4 @@ public class MANAGER_B3 extends JFrame {
 	        e.printStackTrace();
 	    }
 	}
-		
-//	private void inputDate(String startDate, String endDate, String account) {
-//	    SimpleDateFormat dateForm = new SimpleDateFormat("yyyyMMdd");
-//
-//	    model.setRowCount(0);
-//
-//	    StringBuilder sb = new StringBuilder();
-//	    sb.append("SELECT * FROM WM_ACCOUNT_ACCESS");
-//
-//	    List<String> conditions = new ArrayList<>();
-//	    List<String> params = new ArrayList<>();
-//	    
-//
-//	    sb.append(" ORDER BY access_date");
-//
-//	    String sql = sb.toString();
-//
-//	    System.out.println("Executing SQL: " + sql);
-//	    try (
-//	        Connection conn = DBConnector.getConnection();
-//	        PreparedStatement pstmt = conn.prepareStatement(sql);
-//	    ) {
-//	        for (int i = 0; i < params.size(); i++) {
-//	            pstmt.setString(i + 1, params.get(i));
-//	        }
-//
-//            System.out.println("결과불러오기");
-//	        try (ResultSet rs = pstmt.executeQuery()) {
-//	            int colCnt = rs.getMetaData().getColumnCount();
-//	            int rowNum = 1;
-//
-//	            while(rs.next()) {
-//	                String[] row = new String[colCnt + 1];
-//	                row[0] = String.valueOf(rowNum++);	
-//
-//	                for (int i = 1; i <= colCnt; i++) {
-//	                    if (rs.getMetaData().getColumnName(i).equalsIgnoreCase("access_date")) {
-//	                        java.sql.Date accDate = rs.getDate("access_date");
-//	                        row[i] = (accDate != null) ? dateForm.format(accDate) : "";
-//	                    } else {
-//	                        row[i] = rs.getString(i);
-//	                    }
-//	                }
-//	                model.addRow(row);
-//	            }
-//	            isAccessLog = true;
-//	            System.out.println("결과불러왔다");
-//	        }
-//	    } catch (SQLException e) {
-//	        e.printStackTrace();
-//	        isAccessLog = false;
-//	    }
-//	}
-
-	public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-        		new MANAGER_B3();
-            }
-        });
-	}
-
 }
