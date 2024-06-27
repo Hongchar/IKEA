@@ -123,18 +123,48 @@ public class MANAGER_B3 extends JFrame {
 		
 		inputDate(startDate, endDate, account);
 	}
-		
+	
 	private void inputDate(String startDate, String endDate, String account) {
-	    SimpleDateFormat dateForm = new SimpleDateFormat("yyyyMMdd");
-
+	    SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd");	    
 	    model.setRowCount(0);
 
 	    StringBuilder sb = new StringBuilder();
-	    sb.append("SELECT * FROM WM_ACCOUNT_ACCESS");
+	    sb.append("SELECT * FROM WM_ACCOUNT_ACCESS WHERE 1=1");
 
-	    List<String> conditions = new ArrayList<>();
-	    List<String> params = new ArrayList<>();
+//	    List<String> conditions = new ArrayList<>();
+	    List<Object> params = new ArrayList<>();
 	    
+		boolean firstCondition = true;
+
+		if (!startDate.isEmpty()) {
+			if (firstCondition) {
+				sb.append(" AND access_date >= ?");
+				firstCondition = false;
+			} else {
+				sb.append(" AND access_date >= ?");
+			}
+			params.add(startDate);
+		}
+
+		if (!endDate.isEmpty()) {
+			if (firstCondition) {
+				sb.append(" AND access_date <= ?");
+				firstCondition = false;
+			} else {
+				sb.append(" AND access_date <= ?");
+			}
+			params.add(endDate);
+		}
+
+		if (!account.isEmpty()) {
+			if (firstCondition) {
+				sb.append(" AND lower(account_name) LIKE ?");
+				firstCondition = false;
+			} else {
+				sb.append(" AND lower(account_name) LIKE ?");
+			}
+			params.add("%" + account.toLowerCase() + "%");
+		}
 
 	    sb.append(" ORDER BY access_date");
 
@@ -146,17 +176,16 @@ public class MANAGER_B3 extends JFrame {
 	        PreparedStatement pstmt = conn.prepareStatement(sql);
 	    ) {
 	        for (int i = 0; i < params.size(); i++) {
-	            pstmt.setString(i + 1, params.get(i));
+	            pstmt.setObject(i + 1, params.get(i));
 	        }
 
-            System.out.println("결과불러오기");
 	        try (ResultSet rs = pstmt.executeQuery()) {
 	            int colCnt = rs.getMetaData().getColumnCount();
 	            int rowNum = 1;
 
 	            while(rs.next()) {
 	                String[] row = new String[colCnt + 1];
-	                row[0] = String.valueOf(rowNum++);	
+	                row[0] = String.valueOf(rowNum++);
 
 	                for (int i = 1; i <= colCnt; i++) {
 	                    if (rs.getMetaData().getColumnName(i).equalsIgnoreCase("access_date")) {
@@ -168,14 +197,64 @@ public class MANAGER_B3 extends JFrame {
 	                }
 	                model.addRow(row);
 	            }
-	            isAccessLog = true;
-	            System.out.println("결과불러왔다");
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
-	        isAccessLog = false;
 	    }
 	}
+		
+//	private void inputDate(String startDate, String endDate, String account) {
+//	    SimpleDateFormat dateForm = new SimpleDateFormat("yyyyMMdd");
+//
+//	    model.setRowCount(0);
+//
+//	    StringBuilder sb = new StringBuilder();
+//	    sb.append("SELECT * FROM WM_ACCOUNT_ACCESS");
+//
+//	    List<String> conditions = new ArrayList<>();
+//	    List<String> params = new ArrayList<>();
+//	    
+//
+//	    sb.append(" ORDER BY access_date");
+//
+//	    String sql = sb.toString();
+//
+//	    System.out.println("Executing SQL: " + sql);
+//	    try (
+//	        Connection conn = DBConnector.getConnection();
+//	        PreparedStatement pstmt = conn.prepareStatement(sql);
+//	    ) {
+//	        for (int i = 0; i < params.size(); i++) {
+//	            pstmt.setString(i + 1, params.get(i));
+//	        }
+//
+//            System.out.println("결과불러오기");
+//	        try (ResultSet rs = pstmt.executeQuery()) {
+//	            int colCnt = rs.getMetaData().getColumnCount();
+//	            int rowNum = 1;
+//
+//	            while(rs.next()) {
+//	                String[] row = new String[colCnt + 1];
+//	                row[0] = String.valueOf(rowNum++);	
+//
+//	                for (int i = 1; i <= colCnt; i++) {
+//	                    if (rs.getMetaData().getColumnName(i).equalsIgnoreCase("access_date")) {
+//	                        java.sql.Date accDate = rs.getDate("access_date");
+//	                        row[i] = (accDate != null) ? dateForm.format(accDate) : "";
+//	                    } else {
+//	                        row[i] = rs.getString(i);
+//	                    }
+//	                }
+//	                model.addRow(row);
+//	            }
+//	            isAccessLog = true;
+//	            System.out.println("결과불러왔다");
+//	        }
+//	    } catch (SQLException e) {
+//	        e.printStackTrace();
+//	        isAccessLog = false;
+//	    }
+//	}
 
 	public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
