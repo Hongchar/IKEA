@@ -57,7 +57,7 @@ public class PRODUCT_B3 extends JFrame {
 		});
 
 		back.addActionListener(e -> {
-			JFrames.getJFrame("PRODUCT_B2").setVisible(true);
+			JFrames.getJFrame("PRODUCT_A1").setVisible(true);
 			JFrames.getJFrame("PRODUCT_B3").setVisible(false);
 		});
 		
@@ -93,8 +93,8 @@ public class PRODUCT_B3 extends JFrame {
 							pstmt2.setInt(5, clientText);
 							pstmt2.setInt(6, sectorText);
 							
-							int row = pstmt2.executeUpdate();
-							DefaultFrameUtils.makeNotice(String.format("%s %d 입고완료.[%d]", nameText, qtyText, row));
+							pstmt2.executeUpdate();
+							DefaultFrameUtils.makeNotice(String.format("상품 %s(이)가 %d개 입고 됐습니다.", nameText, qtyText));
 							String sql3 = "UPDATE orders SET wh_yn = 'Y' WHERE order_name = ? AND order_qty = ?";
 							try (
 								PreparedStatement pstmt3 = conn.prepareStatement(sql3);
@@ -104,14 +104,12 @@ public class PRODUCT_B3 extends JFrame {
 								pstmt3.executeUpdate();
 							}
 						} catch (SQLException e1) {
-							DefaultFrameUtils.makeNotice("값을 모두 입력해주세요.");
+							DefaultFrameUtils.makeNotice("정확한 값을 모두 입력해주세요.");
 						}
-					} else {
-						DefaultFrameUtils.makeNotice("발주내역이 존재하지 않습니다.");
-					}
+					} 
 				}
 			} catch (SQLException e1) {
-				e1.printStackTrace();
+				DefaultFrameUtils.makeNotice("PRODUCT_B3 에러");
 			}
 		});
 

@@ -13,9 +13,9 @@ public class PRODUCT_A1 extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	
-	private JButton proButton = new MenuBar("상품 목록 조회/수정", "res/arrow.png", 12, 190, 120);
-	private JButton moveButton = new MenuBar("상품 이동", "res/arrow.png", 12, 293, 222);
-	private JButton inButton = new MenuBar("검수/입고", "res/arrow.png", 12, 396, 213);
+	private JButton proButton = new MenuBar("목록 관리", "res/arrow.png", 12, 190, 224);
+	private JButton moveButton = new MenuBar("상품 이동", "res/arrow.png", 12, 293, 224);
+	private JButton inButton = new MenuBar("검수 입고", "res/arrow.png", 12, 396, 224);
 	
 	private JButton home = new HomeButton();
 	
@@ -26,22 +26,22 @@ public class PRODUCT_A1 extends JFrame {
 		
 		proButton.addActionListener(e -> {
 			JFrames.getJFrame("PRODUCT_B1").setVisible(true);
-			this.dispose();
+			this.setVisible(false);
 		});
 		
 		moveButton.addActionListener(e -> {
 			JFrames.getJFrame("PRODUCT_B2").setVisible(true);
-			this.dispose();
+			this.setVisible(false);
 		});
 		
 		inButton.addActionListener(e -> {
 			JFrames.getJFrame("PRODUCT_B3").setVisible(true);
-			this.dispose();
+			this.setVisible(false);
 		});
 		
 		home.addActionListener(e -> {
 			JFrames.getJFrame("MAIN_A2").setVisible(true);
-			this.dispose();
+			this.setVisible(false);
 		});
 		
 		this.add(new BottomImage());
@@ -50,6 +50,6 @@ public class PRODUCT_A1 extends JFrame {
 		this.add(inButton);
 		this.add(home);
 		DefaultFrameUtils.makeTopPanel(this);
-		this.dispose();
+		this.setVisible(false);
 	}
 }

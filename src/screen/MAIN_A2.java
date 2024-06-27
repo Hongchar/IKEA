@@ -13,18 +13,17 @@ import tool.MenuBar;
 
 public class MAIN_A2 extends JFrame {
 	private static final long serialVersionUID = 1L;
-	private JButton mgButton = new MenuBar("관리자 전용", "res/manager_icon.png", 11, 103, 220);
-	private JButton pdButton = new MenuBar("상품 관리", "res/icon4.png", 11, 206, 220);
-	private JButton odButton = new MenuBar("발주 관리", "res/icon3.png", 11, 309, 223);
-	private JButton clButton = new MenuBar("납품업체 관리", "res/icon2.png", 11, 400, 177);
-	private JButton slButton = new MenuBar("판매 실적 조회", "res/icon1.png", 11, 503, 172);
-	private JLabel grayText = DefaultFrameUtils.makeGrayLabel("Administrator only", 11, 84);
+	private JButton mgButton = new MenuBar("관리자 전용", "res/manager_icon.png", 11, 103, 222);
+	private JButton pdButton = new MenuBar("상품 관리", "res/icon4.png", 11, 206, 225);
+	private JButton odButton = new MenuBar("발주 관리", "res/icon3.png", 11, 309, 225);
+	private JButton clButton = new MenuBar("납품업체 관리", "res/icon2.png", 11, 400, 185);
+	private JButton slButton = new MenuBar("판매실적 조회", "res/icon1.png", 11, 503, 185);
+	private JLabel grayText = DefaultFrameUtils.makeGrayLabel("Administrator only", 11, 86);
 	
 	public MAIN_A2() {
 		DefaultFrameUtils.setDefaultSize(this);
-		DefaultFrameUtils.makeTimer(this);
 		DefaultFrameUtils.makeLogo(this);
-		DefaultFrameUtils.makeTopPanel(this);
+		DefaultFrameUtils.makeTimer(this);
 		
 		mgButton.addActionListener(e -> {
 			JFrames.getJFrame("MANAGER_A1").setVisible(true);
@@ -70,6 +69,7 @@ public class MAIN_A2 extends JFrame {
 		}
 		
 		this.add(new BottomImage());
+		DefaultFrameUtils.makeTopPanel(this);
 		this.setVisible(true);
 	}
 }

@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 
 // 기본 프레임 도구 
 public class DefaultFrameUtils {
-	static String url = "res/ikea.png";
+	static String url = "./res/ikea.png";
 	private static JLabel icon = new JLabel();
 	
 	/** 기본 사이즈로 변환 (setVisible = false)**/

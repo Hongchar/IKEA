@@ -28,17 +28,17 @@ public class CLIENT_A1 extends JFrame {
 		
 		regButton.addActionListener(e -> {
 			JFrames.getJFrame("CLIENT_B1").setVisible(true);
-			this.dispose();
+			this.setVisible(false);
 		});
 		
 		modButton.addActionListener(e -> {
 			JFrames.getJFrame("CLIENT_B2").setVisible(true);
-			this.dispose();
+			this.setVisible(false);
 		});
 		
 		home.addActionListener(e -> {
 			JFrames.getJFrame("MAIN_A2").setVisible(true);
-			this.dispose();
+			this.setVisible(false);
 		});
 		
 		this.add(home);
@@ -46,6 +46,6 @@ public class CLIENT_A1 extends JFrame {
 		this.add(modButton);
 		DefaultFrameUtils.makeTopPanel(this);
 		this.add(new BottomImage());
-		this.dispose();
+		this.setVisible(false);
 	}
 }
