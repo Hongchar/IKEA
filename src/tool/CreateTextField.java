@@ -118,7 +118,7 @@ class HalfTextField extends JTextField {
         this.label = label;
         this.isShowingLabel = true;
         setSize(180, 50);
-        setFont(new Font("넥슨", Font.PLAIN, 14));
+        setFont(new Font("넥슨Lv1고딕", Font.PLAIN, 14));
         setForeground(Color.GRAY);
         setLocation(x, y);
         setText(label);

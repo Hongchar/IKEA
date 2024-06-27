@@ -60,7 +60,7 @@ public class AddTable {
 		}
 		JScrollPane scp = new JScrollPane(table);
 		scp.setBounds(x, y, width, height);
-		scp.setFont(new Font("나눔글꼴", Font.PLAIN, 14));
+		scp.setFont(new Font("넥슨Lv1고딕", Font.PLAIN, 14));
 		DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
 		dtcr.setHorizontalAlignment(SwingConstants.CENTER);
 		table.getTableHeader().setBackground(Color.decode("#106EBE"));
