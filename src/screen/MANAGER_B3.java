@@ -25,6 +25,7 @@ import tool.CreateTextField;
 import tool.DBConnector;
 import tool.DefaultFrameUtils;
 import tool.HomeButton;
+import tool.IkeaTextField;
 import tool.InfoLabel;
 
 public class MANAGER_B3 extends JFrame {
@@ -59,9 +60,9 @@ public class MANAGER_B3 extends JFrame {
 		DefaultFrameUtils.makeTopLabel(this, "접근기록조회");
 		DefaultFrameUtils.makeTopPanel(this);
 		add(greyLabel1);
-		startDateInput = CreateTextField.halfTextField(new Point(12, 90), "시작날짜");		
-		endDateInput = CreateTextField.halfTextField(new Point(207, 90), "종료날짜");		
-		accountInput = CreateTextField.textField(new Point(12, 153), "계정ID");
+		startDateInput = IkeaTextField.iconHalfTextField(12, 90, "시작날짜");				
+		endDateInput = IkeaTextField.iconHalfTextField(207, 90, "종료날짜");
+		accountInput = IkeaTextField.textField(12, 153, "계정ID");
 		
 		add(searchBtn);
 		add(greyLabel2);
@@ -97,9 +98,9 @@ public class MANAGER_B3 extends JFrame {
 		});
 		
 		// 텍스트필드 초기화
-	    addPlaceholderBehavior(startDateInput, "시작날짜");
-	    addPlaceholderBehavior(endDateInput, "종료날짜");
-	    addPlaceholderBehavior(accountInput, "계정ID");
+//	    addPlaceholderBehavior(startDateInput, "시작날짜");
+//	    addPlaceholderBehavior(endDateInput, "종료날짜");
+//	    addPlaceholderBehavior(accountInput, "계정ID");
 
 	    startDateInput.addActionListener(e -> inputDate());
 	    endDateInput.addActionListener(e -> inputDate());
@@ -112,24 +113,24 @@ public class MANAGER_B3 extends JFrame {
 	
 	
 	// 텍스트필드 초기화 메서드
-	private void addPlaceholderBehavior(JTextField field, String placeholder) {
-	    field.setText(placeholder);
-	    field.addFocusListener(new FocusAdapter() {
-	        @Override
-	        public void focusGained(FocusEvent e) {
-	            if (field.getText().equals(placeholder)) {
-	                field.setText("");
-	            }
-	        }
-
-	        @Override
-	        public void focusLost(FocusEvent e) {
-	            if (field.getText().isEmpty()) {
-	                field.setText(placeholder);
-	            }
-	        }
-	    });
-	}
+//	private void addPlaceholderBehavior(JTextField field, String placeholder) {
+//	    field.setText(placeholder);
+//	    field.addFocusListener(new FocusAdapter() {
+//	        @Override
+//	        public void focusGained(FocusEvent e) {
+//	            if (field.getText().equals(placeholder)) {
+//	                field.setText("");
+//	            }
+//	        }
+//
+//	        @Override
+//	        public void focusLost(FocusEvent e) {
+//	            if (field.getText().isEmpty()) {
+//	                field.setText(placeholder);
+//	            }
+//	        }
+//	    });
+//	}
 	
 	private void inputDate() {
 		SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd");
@@ -193,10 +194,12 @@ public class MANAGER_B3 extends JFrame {
 	                    }
 	                }
 	                model.addRow(row);
+	                isAccessLog = true;
 	            }
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
+	        isAccessLog = false;
 	    }
 	}
 	
