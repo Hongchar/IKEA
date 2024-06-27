@@ -11,49 +11,53 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import tool.BackButton;
+import tool.BottomImage;
 import tool.CreateTextField;
 import tool.DefaultFrameUtils;
 import tool.HomeButton;
+import tool.IkeaTextField;
 import tool.InfoLabel;
 import tool.OhTable;
 import tool.SmallCheckButton;
 import tool.TopLabel;
 import tool.TopPanel;
 
-public class Client_B2 extends JFrame {
-	JTextField text_field = new CreateTextField().textField(12, 83, "전체조회");
-	JButton search = new SmallCheckButton(307, 143, "조회");
-	JButton modify = new SmallCheckButton(207, 143, "수정");
+public class CLIENT_B2 extends JFrame {
+	JTextField text_field = new IkeaTextField().textField(12, 83, "전체조회");
+	JButton search = new SmallCheckButton("조회", 307, 143);
+	JButton modify = new SmallCheckButton("수정", 207, 143);
+	JButton back = new BackButton();
+	JButton home = new HomeButton();
+
 	String kor_value = "";
 	String eng_value = "";
 	String sql = "";
 	boolean isListenerAdded = false; // 플래그 변수 추가
 	JPanel table = new OhTable();
 
-	public Client_B2() {
+	public CLIENT_B2() {
 		DefaultFrameUtils.makeLogo(this);
 		DefaultFrameUtils.setDefaultSize(this);
-		add(new BackButton("CLIENT_B2", "CLIENT_A1"));
-		add(new HomeButton(""));
-		add(new TopLabel("   정보 수정"));
-		DefaultFrameUtils.makeTopPanel(this);
-		add(new InfoLabel("PROGRESS INFORMATION", 20, 59));
-		add(new InfoLabel("SEARCH DATA", 8, 178));
+		DefaultFrameUtils.makeTopLabel(this, "  정보수정");
+		add(DefaultFrameUtils.makeGrayLabel("PROGRESS INFORMATION", 20, 59));
+		add(DefaultFrameUtils.makeGrayLabel("SEARCH DATA", 8, 178));
+
 		add(text_field);
 		add(comboBox());
 		add(table);
+
 		// 수정버튼 추가 및 기능구현
 		add(modify);
-        modify.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                modify.setText("수정중");
-                modify.setFont(new Font("넥슨고딕Lv1", Font.BOLD, 15));
-            	OhTable addTable = (OhTable) table;
-                addTable.modifyMod(modify);
-            }
-        });
-        
+		modify.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				modify.setText("수정중");
+				modify.setFont(new Font("넥슨고딕Lv1", Font.BOLD, 15));
+				OhTable addTable = (OhTable) table;
+				addTable.modifyMod(modify);
+			}
+		});
+
 		// 조회버튼 추가 및 기능구현
 		add(search);
 		search.addActionListener(new ActionListener() {
@@ -63,7 +67,10 @@ public class Client_B2 extends JFrame {
 				search();
 			}
 		});
-		add(new TopPanel());
+
+		DefaultFrameUtils.makeLogo(this);
+		DefaultFrameUtils.makeTopPanel(this);
+
 	}
 
 	// 기준으로 검색하기
@@ -126,13 +133,5 @@ public class Client_B2 extends JFrame {
 
 		OhTable addTable = (OhTable) table;
 		addTable.loadTableData(sql, input);
-	}
-
-	public static void main(String[] args) {
-
-		JFrame f = new Client_B2();
-
-		f.setVisible(true);
-
 	}
 }
