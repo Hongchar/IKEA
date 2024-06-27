@@ -98,8 +98,10 @@ public class PRODUCT_B1 extends JFrame {
 				String name = inputName.getText();
 				
 				getProductName(name);
-
 				
+				if (name.isBlank()) {
+					getProductName("");					
+				}				
 			}
 		});
 		
@@ -108,15 +110,26 @@ public class PRODUCT_B1 extends JFrame {
 	
 	
 	public static void getProductName(String name) {
-		String sql = "SELECT * FROM product WHERE product_name LIKE ?";
+		String sql = "SELECT product_seq, "
+				+ "product_name, "
+				+ "product_qty, "
+				+ "product_cost, "	
+				+ "product_price, "
+				+ "product_weight, "
+				+ "client_id "
+				+ "FROM product"
+				+ (name.isBlank() ? "" : " WHERE product_name LIKE ?");
 		
 		model.setRowCount(0);
-		
+			
+		System.out.println(sql);
 		try (
 			Connection conn = DBConnector.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 		) {
-			pstmt.setString(1, "%" + name + "%");
+			if (!name.isEmpty()) {
+				pstmt.setString(1, "%" + name + "%");				
+			}
 			
 			try (
 				ResultSet rs = pstmt.executeQuery();
@@ -125,7 +138,7 @@ public class PRODUCT_B1 extends JFrame {
 				while(rs.next()) {
 					String[] row = new String[columnCount];
 					for (int i = 1; i < columnCount; i++) {
-						row[i] = rs.getString(i);
+						row[i - 1] = rs.getString(i);
 					}
 					model.addRow(row);
 					isLoad = true;

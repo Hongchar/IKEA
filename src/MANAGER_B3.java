@@ -91,54 +91,26 @@ public class MANAGER_B3 extends JFrame {
 //			}
 //		});
 		
-		startDateInput.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-//				String startDate = startDateInput.getText();
-//				String endDate = endDateInput.getText();
-//				String account = accountInput.getText();
-//				
-//				inputDate(startDate, endDate, account);
-//				
-//				if (startDate.isEmpty()) {
-//					DefaultFrameUtils.makeNotice("조회할 내용을 입력해주세요");
-//					return;
-//				}
-//				
-//				if ()
-				performSearch();
-				
-				
-			}
-		});
-		
-		endDateInput.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				performSearch();
-				
-			}
-		});
-		
-		accountInput.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				performSearch();
-				
-			}
-		});
-		
-		searchBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				performSearch();
-				
-			}
-		});
+        startDateInput.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                performSearch();
+            }
+        });
+        
+        endDateInput.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                performSearch();
+            }
+        });
+        
+        accountInput.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                performSearch();
+            }
+        });
 		
 		
 		this.setVisible(true);
@@ -153,35 +125,16 @@ public class MANAGER_B3 extends JFrame {
 	}
 		
 	private void inputDate(String startDate, String endDate, String account) {
-	    SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd");
+	    SimpleDateFormat dateForm = new SimpleDateFormat("yyyyMMdd");
 
 	    model.setRowCount(0);
 
 	    StringBuilder sb = new StringBuilder();
-	    sb.append("SELECT * FROM WM_ACCOUNT_ACCESS WHERE 1=1 ");
+	    sb.append("SELECT * FROM WM_ACCOUNT_ACCESS");
 
 	    List<String> conditions = new ArrayList<>();
-	    List<Object> params = new ArrayList<>();
+	    List<String> params = new ArrayList<>();
 	    
-
-	    if (!startDate.isEmpty()) {
-	        conditions.add("access_date >= ?");
-	        params.add(startDate);
-	    }
-
-	    if (!endDate.isEmpty()) {
-	        conditions.add("access_date <= ?");
-	        params.add(endDate);
-	    }
-
-	    if (!account.isEmpty()) {
-	        conditions.add("lower(account_name) LIKE ?");
-	        params.add("%" + account.toLowerCase() + "%");
-	    }
-
-	    if (!conditions.isEmpty()) {
-	        sb.append(" AND ").append(String.join(" AND ", conditions));
-	    }
 
 	    sb.append(" ORDER BY access_date");
 
@@ -193,9 +146,10 @@ public class MANAGER_B3 extends JFrame {
 	        PreparedStatement pstmt = conn.prepareStatement(sql);
 	    ) {
 	        for (int i = 0; i < params.size(); i++) {
-	            pstmt.setObject(i + 1, params.get(i));
+	            pstmt.setString(i + 1, params.get(i));
 	        }
 
+            System.out.println("결과불러오기");
 	        try (ResultSet rs = pstmt.executeQuery()) {
 	            int colCnt = rs.getMetaData().getColumnCount();
 	            int rowNum = 1;
@@ -211,11 +165,11 @@ public class MANAGER_B3 extends JFrame {
 	                    } else {
 	                        row[i] = rs.getString(i);
 	                    }
-	                    System.out.println("결과불러오기");
 	                }
 	                model.addRow(row);
-	                isAccessLog = true;
 	            }
+	            isAccessLog = true;
+	            System.out.println("결과불러왔다");
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
