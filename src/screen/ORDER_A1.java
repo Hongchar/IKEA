@@ -24,17 +24,17 @@ public class ORDER_A1 extends JFrame {
 		
 		appButton.addActionListener(e -> {
 			JFrames.getJFrame("ORDER_B1").setVisible(true);
-			this.dispose();
+			this.setVisible(false);
 		});
 		
 		orderButton.addActionListener(e -> {
 			JFrames.getJFrame("ORDER_B2").setVisible(true);
-			this.dispose();
+			this.setVisible(false);
 		});
 		
 		home.addActionListener(e -> {
 			JFrames.getJFrame("MAIN_A2").setVisible(true);
-			this.dispose();
+			this.setVisible(false);
 		});
 		
 		this.add(appButton);
@@ -42,6 +42,6 @@ public class ORDER_A1 extends JFrame {
 		this.add(home);
 		this.add(new BottomImage());
 		DefaultFrameUtils.makeTopPanel(this);
-		this.dispose();
+		this.setVisible(false);
 	}
 }

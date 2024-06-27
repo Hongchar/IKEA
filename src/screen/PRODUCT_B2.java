@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 import jframe.JFrames;
 import tool.BackButton;
 import tool.BlueLongButton;
+import tool.BottomImage;
 import tool.CreateTextField;
 import tool.DBConnector;
 import tool.DefaultFrameUtils;
@@ -43,19 +44,19 @@ public class PRODUCT_B2 extends JFrame {
 	
 	public PRODUCT_B2() {
 		DefaultFrameUtils.setDefaultSize(this);
+		DefaultFrameUtils.makeLogo(this);
 		DefaultFrameUtils.makeTopLabel(this, "상품이동");
-		
 		
 		// 홈 버튼 기능구현
 		home.addActionListener(e -> {
 			JFrames.getJFrame("MAIN_A2").setVisible(true);
-			this.dispose();
+			this.setVisible(false);
 		});
 		
 		// 뒤로가기 버튼 기능구현
 		back.addActionListener(e -> {
-			JFrames.getJFrame("PRODUCT_B1").setVisible(true);
-			this.dispose();
+			JFrames.getJFrame("PRODUCT_A1").setVisible(true);
+			this.setVisible(false);
 		});
 		
 		// 재고ID 텍스트 필드 기능구현
@@ -143,8 +144,8 @@ public class PRODUCT_B2 extends JFrame {
 		this.add(moveSector);
 		this.add(move);
 		this.add(grayText);
-		DefaultFrameUtils.makeLogo(this);
+		this.add(new BottomImage());
 		DefaultFrameUtils.makeTopPanel(this);
-		this.dispose();
+		this.setVisible(false);
 	}
 }

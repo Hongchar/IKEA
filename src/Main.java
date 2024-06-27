@@ -14,6 +14,9 @@ import screen.PRODUCT_A1;
 import screen.PRODUCT_B2;
 import screen.PRODUCT_B3;
 import screen.SALESINFO_A1;
+import screen.SALESINFO_B1;
+import screen.SALESINFO_B2;
+import tool.DefaultFrameUtils;
 import tool.LoginTool;
 
 public class Main {
@@ -46,14 +49,19 @@ public class Main {
 					JFrame client_a1 = new CLIENT_A1();
 					JFrame product_b2 = new PRODUCT_B2();
 					JFrame product_b3 = new PRODUCT_B3();
-					JFrame salesinfo_a1 = new SALESINFO_A1();
+					JFrame salesInfo_a1 = new SALESINFO_A1();
+					JFrame salesInfo_b1 = new SALESINFO_B1();
+					JFrame salesInfo_b2 = new SALESINFO_B2();
 					JFrame order_a1 = new ORDER_A1();
 					JFrame product_a1 = new PRODUCT_A1();
 					JFrame manager_a1 = new MANAGER_A1();
 					
 					
+					
+					JFrames.setJFrame("SALESINFO_B2", salesInfo_b2);
+					JFrames.setJFrame("SALESINFO_B1", salesInfo_b1);
 					JFrames.setJFrame("MANAGER_A1", manager_a1);
-					JFrames.setJFrame("SALESINFO_A1", salesinfo_a1);
+					JFrames.setJFrame("SALESINFO_A1", salesInfo_a1);
 					JFrames.setJFrame("ORDER_A1", order_a1);
 					JFrames.setJFrame("CLIENT_A1", client_a1);
 					JFrames.setJFrame("PRODUCT_A1", product_a1);
