@@ -1,21 +1,28 @@
 package tool;
 
 import javax.swing.JOptionPane;
+
+import java.awt.Color;
+import java.awt.Font;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 // 기본 프레임 도구 
 public class DefaultFrameUtils {
-	static String url = "res/ikea.png";
+	static String url = "./res/ikea.png";
 	private static JLabel icon = new JLabel();
 	
 	/** 기본 사이즈로 변환 (setVisible = false)**/
 	public static void setDefaultSize(JFrame f) {
 		f.setSize(410, 850);
 		f.setLayout(null);
+		f.setLocationRelativeTo(null);
+		f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		f.setResizable(false);
+		f.getContentPane().setBackground(new Color(255, 255, 255));
 		f.setVisible(false);
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	/** 알림창 생성 (String 메세지) 입력 **/
@@ -45,6 +52,7 @@ public class DefaultFrameUtils {
 	public static void makeTimer(JFrame f) {
 		new DigitalWatch(f);
 	}
+	
 //	/** 홈버튼 생성 **/
 //	public static void makeHomeButton(JFrame f) {
 //		f.add(new HomeButton());
@@ -54,6 +62,17 @@ public class DefaultFrameUtils {
 //		f.add(new BackButton());
 //	}
 	
+	/** 회색 문구 라벨 생성 **/
+	public static JLabel makeGrayLabel(String str, int x, int y) {
+		
+		JLabel gray = new JLabel(str);
+		
+		gray.setFont(new Font("넥슨Lv1고딕", Font.PLAIN, 14));
+		gray.setForeground(new Color(144, 144, 144));
+		gray.setBounds(x, y, 359, 19);
+		
+		return gray;
+	}
 	public static void main(String[] args) {
 		JFrame f = new JFrame();
 		DefaultFrameUtils.setDefaultSize(f);
