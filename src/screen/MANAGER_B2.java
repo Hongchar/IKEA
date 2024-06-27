@@ -23,6 +23,7 @@ public class MANAGER_B2 extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
+	// 버튼, 필드, 라벨 등 생성
 	JButton home = new HomeButton();
 	JButton back = new BackButton();
 	JTextField searchField = CreateTextField.textField(new Point(12, 80), "계정ID");
@@ -31,17 +32,19 @@ public class MANAGER_B2 extends JFrame {
 	JButton deleteBtn = new BlueLongButton("삭제", 300, 200);
 	JLabel grayText2 = DefaultFrameUtils.makeGrayLabel("SEARCH DATA", 20, 250);
 
+	// 테이블이 있는 패널 생성
 	String[] columnNames = { "행 번호", "아이디", "비밀번호" };
+	int[] columnWidths = {75, 145, 145};
 	String tableName = "wm_account_info";
 	String columnIdName = "account_name";
-	int LocationX = 10;
-	int LocationY = 40;
-	int width = 365;
-	int height = 540;
+	int LocationX = 10; int LocationY = 40;
+	int width = 365;    int height = 540;
 
-	JPanel accountTablePanel = new AccountTablePanel(columnNames, tableName, columnIdName, LocationX, LocationY, width,
-			height);
+	JPanel accountTablePanel = new AccountTablePanel(
+			columnNames, columnWidths, tableName, columnIdName, 
+			LocationX, LocationY, width, height);
 
+	
 	public MANAGER_B2() {
 		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeTopLabel(this, "계정 관리");
@@ -59,8 +62,8 @@ public class MANAGER_B2 extends JFrame {
 		});
 
 		// 패널 배경색 설정
-		accountTablePanel.setBackground(Color.WHITE); // 원하는 색상으로 변경 가능
-		accountTablePanel.setBounds(0, 230, 400, 600); // 패널 위치 및 크기 조정
+		accountTablePanel.setBackground(Color.WHITE);
+		accountTablePanel.setBounds(0, 230, 400, 600); 
 
 		// 조회 버튼 클릭 이벤트
 		searchBtn.addActionListener(new ActionListener() {
@@ -84,6 +87,7 @@ public class MANAGER_B2 extends JFrame {
             }
         });
 
+        // 추가
 		this.add(home);
 		this.add(back);
 		this.add(searchField);

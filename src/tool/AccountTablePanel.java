@@ -23,14 +23,14 @@ public class AccountTablePanel extends JPanel {
 	private String tableName;
 	private String columnIdName;
 
-	// 인트값 (행 크기 관련)
-
-	public AccountTablePanel(String[] columnNames, String tableName, String columnIdName, int locationX, int locationY,
-			int width, int height) {
+	public AccountTablePanel(
+			String[] columnNames, int[] columnWidths, String tableName, String columnIdName, 
+			int locationX, int locationY, int width, int height) {
 
 		this.tableName = tableName;
 		this.columnIdName = columnIdName;
 
+		// 모델 생성
 		tableModel = new DefaultTableModel(columnNames, 0);
 		table = new JTable(tableModel);
 		scp = new JScrollPane(table);
@@ -39,25 +39,15 @@ public class AccountTablePanel extends JPanel {
 
 		// JScrollPane 설정
 		scp.setBounds(locationX, locationY, width, height);
-		scp.setFont(new Font("넥슨Lv1고딕", Font.PLAIN, 14));
-
-		table.setOpaque(false); // 테이블의 행의 배경을 투명하게 설정
-
-		// 테이블 배경색 설정
-		table.setBackground(Color.WHITE);
-		// JScrollPane 배경색 설정
-		scp.setBackground(Color.WHITE);
-		// JPanel(현재 클래스) 배경색 설정
-		setBackground(Color.WHITE);
 
 		// 테이블 헤더 스타일 설정
-		table.getTableHeader().setBackground(Color.decode("#106EBE"));
-		table.getTableHeader().setForeground(Color.decode("#FFFFFF"));
-		table.getTableHeader().setPreferredSize(new Dimension(table.getTableHeader().getPreferredSize().width, 30)); // 헤더
-																														// 설정
-		table.getTableHeader().setFont(new Font("넥슨Lv1고딕", Font.PLAIN, 16));
+		table.getTableHeader().setBackground(Color.decode("#106EBE")); // 배경 색
+		table.getTableHeader().setForeground(Color.decode("#FFFFFF")); // 글자 색
+		table.getTableHeader().setPreferredSize(
+				new Dimension(table.getTableHeader().getPreferredSize().width, 30)); // 높이																									
+		table.getTableHeader().setFont(new Font("넥슨Lv1고딕", Font.PLAIN, 16)); // 글꼴
 
-		// 행 글꼴 설정
+		// 셀 글꼴 설정
 		table.setFont(new Font("넥슨Lv1고딕", Font.PLAIN, 14));
 
 		// 셀 높이 설정
@@ -65,18 +55,16 @@ public class AccountTablePanel extends JPanel {
 
 		// 셀 너비 설정
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		int columnWidth = 121;
+		int[] columnWidth = columnWidths; 
 		for (int i = 0; i < table.getColumnCount(); i++) {
 			TableColumn column = table.getColumnModel().getColumn(i);
-			column.setPreferredWidth(columnWidth);
+			column.setPreferredWidth(columnWidth[i]);
 		}
 
 		// 테이블 셀 배경색 및 폰트 설정
 		DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer();
 		cellRenderer.setHorizontalAlignment(DefaultTableCellRenderer.CENTER); // 가운데 정렬
 		cellRenderer.setBackground(Color.WHITE); // 셀 배경색 설정
-		cellRenderer.setFont(new Font("넥슨Lv1고딕", Font.PLAIN, 14)); // 폰트 설정
-		table.setDefaultRenderer(Object.class, cellRenderer);
 
 		add(scp);
 	}
@@ -94,10 +82,10 @@ public class AccountTablePanel extends JPanel {
 	// 계정 조회 기능
 	public void searchAccount(String accountId) {
 		String sql = "SELECT rownum, account_name, account_password FROM " 
-				+ tableName + " WHERE " 
-				+ columnIdName + " = ?";
+				+ tableName + " WHERE " + columnIdName + " = ?";
 
-		try (Connection conn = DBConnector.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		try (Connection conn = DBConnector.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, accountId);
 
 			try (ResultSet rs = pstmt.executeQuery()) {
@@ -119,7 +107,8 @@ public class AccountTablePanel extends JPanel {
 	public void deleteAccount(String accountId) {
 		String sql = "DELETE FROM " + tableName + " WHERE " + columnIdName + " = ?";
 
-		try (Connection conn = DBConnector.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		try (Connection conn = DBConnector.getConnection(); 
+				PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, accountId);
 
 			int rowsDeleted = pstmt.executeUpdate();
@@ -130,12 +119,9 @@ public class AccountTablePanel extends JPanel {
 				if (selectedRow != -1) {
 					tableModel.removeRow(selectedRow);
 				}
-			} else {
-				JOptionPane.showMessageDialog(this, "삭제할 계정을 찾을 수 없습니다.");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
-
 }
