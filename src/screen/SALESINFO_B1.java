@@ -1,10 +1,10 @@
 package screen;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import jframe.JFrames;
+import tool.AccountTablePanel;
 import tool.BackButton;
 import tool.BlueLongButton;
 import tool.CreateTextField;
@@ -12,6 +12,7 @@ import tool.DBConnector;
 import tool.DefaultFrameUtils;
 import tool.HomeButton;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,6 +31,18 @@ public class SALESINFO_B1 extends JFrame {
 	private JLabel gray2 = DefaultFrameUtils.makeGrayLabel("SEARCH DATA", 7, 222);
 	private JTextField start = CreateTextField.halfTextField(new Point(7, 80), "시작");
 	private JTextField end = CreateTextField.halfTextField(new Point(198, 80), "종료");
+	
+	// 테이블이 있는 패널 생성
+	String[] columnNames = { "번호", "총금액", "판매일", "상품명", "판매수량", "판매금액",};
+	int[] columnWidths = {124, 124, 124, 124, 124, 124};
+	String tableName = "sales_record"; // 테이블명 확인후 넣기
+	String columnIdName = "account_name"; // 컬럼명 확인 후 넣기
+	int LocationX = 10; int LocationY = 40;
+	int width = 375;    int height = 540;
+	
+	AccountTablePanel accountTablePanel = new AccountTablePanel(
+			columnNames, columnWidths, tableName, columnIdName,
+			LocationX, LocationY, width, height);
 	
 	public SALESINFO_B1() {
 		DefaultFrameUtils.setDefaultSize(this);
@@ -50,7 +63,9 @@ public class SALESINFO_B1 extends JFrame {
 		end.addActionListener(e -> {
 			
 		});
-		
+		// 패널 배경색 설정
+		accountTablePanel.setBackground(Color.WHITE);
+		accountTablePanel.setBounds(0, 230, 400, 600);
 		
 		serch.addActionListener(e -> {
 		StringBuilder unSql = new StringBuilder("SELECT sales_key, total_price, reg_date, product_name, qty, product_price "
@@ -74,6 +89,7 @@ public class SALESINFO_B1 extends JFrame {
 				PreparedStatement pstmt = conn.prepareStatement(sql2);
 				ResultSet rs = pstmt.executeQuery();
 			) {
+				accountTablePanel.getTableModel().setRowCount(0);
 				while (rs.next()) {
 					int key = rs.getInt("sales_key");
 					int totalPrice = rs.getInt("total_price");
@@ -81,9 +97,12 @@ public class SALESINFO_B1 extends JFrame {
 					String product_name = rs.getString("product_name");
 					int qty = rs.getInt("qty");
 					int product_price = rs.getInt("product_price");
-					// 확인용 
-					//System.out.printf("key = %d\ntotalPrice = %d\nreg_date = %s\nproduct_name = %s\nqty = %d\nproduct_price = %d\n",
-					//    				 key, totalPrice, reg_date, product_name, qty, product_price);
+					// 테이블 초기화
+					
+
+					// 조회 결과 테이블에 추가
+					Object[] rowData = { key, totalPrice, reg_date, product_name, qty, product_price};
+					accountTablePanel.getTableModel().addRow(rowData);
 				}
 			} catch (SQLException e1) {
 				DefaultFrameUtils.makeNotice("날짜를 입력해주세요.");
@@ -110,6 +129,7 @@ public class SALESINFO_B1 extends JFrame {
 		this.add(back);
 		this.add(gray1);
 		this.add(gray2);
+		this.add(accountTablePanel);
 		DefaultFrameUtils.makeTopPanel(this);
 		this.setVisible(false);
 	}
