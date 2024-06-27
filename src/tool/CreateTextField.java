@@ -31,6 +31,7 @@ public class CreateTextField {
     }
    
     public static JTextField iconTextField(int x, int y, String label) {
+    	
     	JTextField txf = new IconTextField(x, y, label, new ImageIcon("C:\\aiautomation_kdm\\repositories\\ikea\\res\\calendar.png"));
     	txf.setBorder(roundBorder());
     	
@@ -38,13 +39,15 @@ public class CreateTextField {
     }
     
     public static JTextField iconHalfTextField(int x, int y, String label) {
+    	
     	JTextField txf = new IconHalfTextField(x, y, label, new ImageIcon("C:\\aiautomation_kdm\\repositories\\ikea\\res\\calendar.png"));
     	txf.setBorder(roundBorder());
     	
     	return txf;
     	
     }
-    
+ 
+ 
     private static Border roundBorder() {
     	return new Border() {
 			private int radius = 10;
@@ -76,7 +79,7 @@ class CustomTextField extends JTextField {
         this.label = label;
         this.isShowingLabel = true;
         setSize(375, 50);
-        setFont(new Font("나눔글꼴", Font.PLAIN, 14));
+        setFont(new Font("", Font.PLAIN, 14));
         setForeground(Color.GRAY);
         setLocation(x, y);
         setText(label);
@@ -99,6 +102,7 @@ class CustomTextField extends JTextField {
             }
         });
     }
+    
     @Override
     public String getText() {
         return isShowingLabel ? "" : super.getText();
