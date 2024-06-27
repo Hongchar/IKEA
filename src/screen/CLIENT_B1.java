@@ -1,5 +1,6 @@
 package screen;
 
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -11,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 
+import jframe.JFrames;
 import tool.BackButton;
 import tool.BlueLongButton;
 import tool.BottomImage;
@@ -18,31 +20,54 @@ import tool.CreateTextField;
 import tool.DBConnector;
 import tool.DefaultFrameUtils;
 import tool.HomeButton;
-import tool.ImageLabel;
 import tool.InfoLabel;
 import tool.TopLabel;
 
-public class Client_B1 extends JFrame {
-	JTextField Client_name = new CreateTextField().textField(7, 140, "납품업체명");
-	JTextField Manager_name = new CreateTextField().textField(7, 200, "담당자명");
-	JTextField Manager_phone = new CreateTextField().textField(7, 260, "전화번호");
-	JTextField date_field = new CreateTextField().textField(7, 81, "신청일자: " + LocalDate.now());
+public class CLIENT_B1 extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	JTextField Client_name = CreateTextField.textField(new Point(7, 140), "납품업체명");
+	JTextField Manager_name = CreateTextField.textField(new Point(7, 200), "담당자명");
+	JTextField Manager_phone = CreateTextField.textField(new Point(7, 260), "전화번호");
+	JTextField date_field = CreateTextField.textField(new Point(7, 81), "신청일자: " + LocalDate.now());
 	JButton save_button = new BlueLongButton("저장", 10, 321);
+	BackButton back = new BackButton();
+	HomeButton home = new HomeButton();
 	
-	public Client_B1() {
-		add(new ImageLabel(334, 13, "src/imgs/back.png"));
+	public CLIENT_B1() {
+		add(new BottomImage());
 		DefaultFrameUtils.makeLogo(this);
 		DefaultFrameUtils.setDefaultSize(this);
 		add(new BottomImage());
 		add(new InfoLabel("CREATE CLIENT INFORMATION", 7, 59));
-		add(new BackButton("CLIENT_B1", "CLIENT_A1"));
-		add(new HomeButton("CLIENT_B1"));
+		add(back);
+		add(home);
 		add(new TopLabel("  정보 등록"));
 		DefaultFrameUtils.makeTopPanel(this);
 		add(date_field);
 		add(Client_name);
 		add(Manager_name);
 		add(Manager_phone);
+		
+		home.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrames.getJFrame("MAIN_A2").setVisible(true);
+								
+			}
+		});
+		
+		back.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrames.getJFrame("CLIENT_A1").setVisible(true);
+				JFrames.getJFrame("CLIENT_B1").setVisible(false);
+			}
+		});
 		
 		save_button.addActionListener(new ActionListener() {
 
@@ -64,16 +89,16 @@ public class Client_B1 extends JFrame {
 		
 		
 		if (c_name.isEmpty()) {
-			DefaultFrameUtils.makeNotice(this, "[납품업체명] 공백입니다");
+			DefaultFrameUtils.makeNotice(this + "[납품업체명] 공백입니다");
 			return;
 		} else if (m_name.isEmpty()) {
-			DefaultFrameUtils.makeNotice(this, "[담당자명] 공백입니다");
+			DefaultFrameUtils.makeNotice(this + "[담당자명] 공백입니다");
 			return;
 		} else if (m_phone.isEmpty()) {
-			DefaultFrameUtils.makeNotice(this, "[전화번호] 공백입니다");
+			DefaultFrameUtils.makeNotice(this + "[전화번호] 공백입니다");
 			return;
 		} else if (m_phone.length() != 11 || !m_phone.matches("0[0-9]{10}")) {
-			DefaultFrameUtils.makeNotice(this, "[전화번호] - 를 제외한 0으로 시작하는 11자리 숫자");
+			DefaultFrameUtils.makeNotice(this + "[전화번호] - 를 제외한 0으로 시작하는 11자리 숫자");
 			return;
 		}
 		
@@ -81,9 +106,9 @@ public class Client_B1 extends JFrame {
 			date_check = true;
 		} else {
 			if (date.isEmpty()) {
-				DefaultFrameUtils.makeNotice(this, "날짜입력칸이 공백이어서 금일로 등록됩니다");
+				DefaultFrameUtils.makeNotice(this + "날짜입력칸이 공백이어서 금일로 등록됩니다");
 			} else {
-				DefaultFrameUtils.makeNotice(this, "[yyyy-MM-dd] 형식이 잘못되어 금일로 등록됩니다");
+				DefaultFrameUtils.makeNotice(this + "[yyyy-MM-dd] 형식이 잘못되어 금일로 등록됩니다");
 			}
 		}
 		
@@ -104,7 +129,7 @@ public class Client_B1 extends JFrame {
 				}
 				pstmt.executeUpdate();
 
-				DefaultFrameUtils.makeNotice(this, "[등록성공] 등록이 완료되었습니다");
+				DefaultFrameUtils.makeNotice(this + "[등록성공] 등록이 완료되었습니다");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

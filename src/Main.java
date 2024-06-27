@@ -6,19 +6,20 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import jframe.JFrames;
-
 import screen.CLIENT_A1;
 import screen.MAIN_A1;
 import screen.MAIN_A2;
 import screen.MANAGER_A1;
+import screen.MANAGER_B2;
+import screen.MANAGER_B3;
 import screen.ORDER_A1;
 import screen.PRODUCT_A1;
+import screen.PRODUCT_B1;
 import screen.PRODUCT_B2;
 import screen.PRODUCT_B3;
 import screen.SALESINFO_A1;
 import screen.SALESINFO_B1;
 import screen.SALESINFO_B2;
-import tool.DefaultFrameUtils;
 import tool.LoginTool;
 
 public class Main {
@@ -57,17 +58,22 @@ public class Main {
 					JFrame salesInfo_b2 = new SALESINFO_B2();
 					JFrame order_a1 = new ORDER_A1();
 					JFrame product_a1 = new PRODUCT_A1();
-					JFrame manager_a1 = new MANAGER_A1();
-					
+					JFrame product_b1 = new PRODUCT_B1();
+					JFrame manager_a1 = new MANAGER_A1();					
+					JFrame manager_b2 = new MANAGER_B2();
+					JFrame manager_b3 = new MANAGER_B3();
 					
 					
 					JFrames.setJFrame("SALESINFO_B2", salesInfo_b2);
 					JFrames.setJFrame("SALESINFO_B1", salesInfo_b1);
 					JFrames.setJFrame("MANAGER_A1", manager_a1);
+					JFrames.setJFrame("MANAGER_B2", manager_b2);
+					JFrames.setJFrame("MANAGER_B3", manager_b3);
 					JFrames.setJFrame("SALESINFO_A1", salesInfo_a1);
 					JFrames.setJFrame("ORDER_A1", order_a1);
 					JFrames.setJFrame("CLIENT_A1", client_a1);
 					JFrames.setJFrame("PRODUCT_A1", product_a1);
+					JFrames.setJFrame("PRODUCT_B1", product_b1);
 					JFrames.setJFrame("PRODUCT_B2", product_b2);
 					JFrames.setJFrame("PRODUCT_B3", product_b3);
 					JFrames.setJFrame("MAIN_A2", main_a2);

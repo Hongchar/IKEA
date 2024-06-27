@@ -1,6 +1,7 @@
 package screen;
 
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -10,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import jframe.JFrames;
 import tool.BackButton;
 import tool.CreateTextField;
 import tool.DefaultFrameUtils;
@@ -21,20 +23,24 @@ import tool.TopLabel;
 import tool.TopPanel;
 
 public class Client_B2 extends JFrame {
-	JTextField text_field = new CreateTextField().textField(12, 83, "전체조회");
-	JButton search = new SmallCheckButton(307, 143, "조회");
-	JButton modify = new SmallCheckButton(207, 143, "수정");
+	JTextField text_field = CreateTextField.textField(new Point(12, 83), "전체조회");
+	JButton search = new SmallCheckButton("조회", 307, 143);
+	JButton modify = new SmallCheckButton("수정", 207, 143);
 	String kor_value = "";
 	String eng_value = "";
 	String sql = "";
+	
+	BackButton back = new BackButton();
+	HomeButton home = new HomeButton();
+	
 	boolean isListenerAdded = false; // 플래그 변수 추가
 	JPanel table = new OhTable();
 
 	public Client_B2() {
 		DefaultFrameUtils.makeLogo(this);
 		DefaultFrameUtils.setDefaultSize(this);
-		add(new BackButton("CLIENT_B2", "CLIENT_A1"));
-		add(new HomeButton(""));
+		add(back);
+		add(home);
 		add(new TopLabel("   정보 수정"));
 		DefaultFrameUtils.makeTopPanel(this);
 		add(new InfoLabel("PROGRESS INFORMATION", 20, 59));
@@ -42,6 +48,26 @@ public class Client_B2 extends JFrame {
 		add(text_field);
 		add(comboBox());
 		add(table);
+		
+		home.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrames.getJFrame("CLIENT_B2").setVisible(false);
+				JFrames.getJFrame("MANAGER_A2").setVisible(true);				
+			}
+		});
+		
+		back.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrames.getJFrame("CLIENT_B2").setVisible(false);
+				JFrames.getJFrame("CLIENT_B1").setVisible(true);
+			}
+		});
+		
+		
 		// 수정버튼 추가 및 기능구현
 		add(modify);
         modify.addActionListener(new ActionListener() {

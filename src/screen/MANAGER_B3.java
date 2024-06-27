@@ -2,19 +2,26 @@ package screen;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
+import jframe.JFrames;
 import tool.AddTable;
 import tool.BackButton;
 import tool.BlueLongButton;
@@ -29,6 +36,7 @@ public class MANAGER_B3 extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	CreateTextField text = new CreateTextField();
 	String[] columnNames = {"No.", "아이디", "접속일"};
 	
@@ -74,104 +82,96 @@ public class MANAGER_B3 extends JFrame {
 		tableComp.table.setEnabled(false);
 		
 		// 홈 버튼 클릭 이벤트
-//		home.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				JFrames.getJFrame("MAIN_A2").setVisible(true);
-//				JFrames.getJFrame("MANAGER_B3").setVisible(false);				
-//			}
-//		});
-//
-//		// 뒤로가기 버튼 클릭 이벤트
-//		back.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				JFrames.getJFrame("MANAGER_B2").setVisible(true);
-//				JFrames.getJFrame("MANAGER_B3").setVisible(false);				
-//
-//			}
-//		});
+		home.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrames.getJFrame("MAIN_A2").setVisible(true);
+				JFrames.getJFrame("MANAGER_B3").setVisible(false);				
+			}
+		});
+
+		// 뒤로가기 버튼 클릭 이벤트
+		back.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrames.getJFrame("MANAGER_B2").setVisible(true);
+				JFrames.getJFrame("MANAGER_B3").setVisible(false);				
+
+			}
+		});
 		
-        startDateInput.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                performSearch();
-            }
-        });
+		// 텍스트필드 초기화
+	    addPlaceholderBehavior(startDateInput, "시작날짜");
+	    addPlaceholderBehavior(endDateInput, "종료날짜");
+	    addPlaceholderBehavior(accountInput, "계정ID");
+
+	    startDateInput.addActionListener(e -> inputDate());
+	    endDateInput.addActionListener(e -> inputDate());
+	    accountInput.addActionListener(e -> inputDate());
+	    searchBtn.addActionListener(e -> inputDate());
         
-        endDateInput.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                performSearch();
-            }
-        });
-        
-        accountInput.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                performSearch();
-            }
-        });
-		
 		
 		this.setVisible(true);
 	}
 	
-	private void performSearch() {
-		String startDate = startDateInput.getText();
-		String endDate = endDateInput.getText();
-		String account = accountInput.getText();
-		
-		inputDate(startDate, endDate, account);
+	
+	// 텍스트필드 초기화 메서드
+	private void addPlaceholderBehavior(JTextField field, String placeholder) {
+	    field.setText(placeholder);
+	    field.addFocusListener(new FocusAdapter() {
+	        @Override
+	        public void focusGained(FocusEvent e) {
+	            if (field.getText().equals(placeholder)) {
+	                field.setText("");
+	            }
+	        }
+
+	        @Override
+	        public void focusLost(FocusEvent e) {
+	            if (field.getText().isEmpty()) {
+	                field.setText(placeholder);
+	            }
+	        }
+	    });
 	}
 	
-	private void inputDate(String startDate, String endDate, String account) {
-	    SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd");	    
-	    model.setRowCount(0);
+	private void inputDate() {
+		SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd");
+		
+		String startDate = startDateInput.getText().trim();
+		String endDate = endDateInput.getText().trim();
+		String account = accountInput.getText().trim();
+		
+		model.setRowCount(0);
 
-	    StringBuilder sb = new StringBuilder();
-	    sb.append("SELECT * FROM WM_ACCOUNT_ACCESS WHERE 1=1");
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT * FROM WM_ACCOUNT_ACCESS");
 
-//	    List<String> conditions = new ArrayList<>();
-	    List<Object> params = new ArrayList<>();
+		List<String> conditions = new ArrayList<>();
+		List<Object> params = new ArrayList<>();
+
+	    if (isValidInput(startDate, "시작날짜")) {
+	        conditions.add("access_date >= ?");
+	        params.add(startDate.trim());
+	    }
+	    if (isValidInput(endDate, "종료날짜")) {
+	        conditions.add("access_date <= ?");
+	        params.add(endDate.trim());
+	    }
+	    if (isValidInput(account, "계정ID")) {
+	        conditions.add("lower(account_name) LIKE ?");
+	        params.add("%" + account.toLowerCase().trim() + "%");
+	    }
 	    
-		boolean firstCondition = true;
-
-		if (!startDate.isEmpty()) {
-			if (firstCondition) {
-				sb.append(" AND access_date >= ?");
-				firstCondition = false;
-			} else {
-				sb.append(" AND access_date >= ?");
-			}
-			params.add(startDate);
-		}
-
-		if (!endDate.isEmpty()) {
-			if (firstCondition) {
-				sb.append(" AND access_date <= ?");
-				firstCondition = false;
-			} else {
-				sb.append(" AND access_date <= ?");
-			}
-			params.add(endDate);
-		}
-
-		if (!account.isEmpty()) {
-			if (firstCondition) {
-				sb.append(" AND lower(account_name) LIKE ?");
-				firstCondition = false;
-			} else {
-				sb.append(" AND lower(account_name) LIKE ?");
-			}
-			params.add("%" + account.toLowerCase() + "%");
-		}
-
-	    sb.append(" ORDER BY access_date");
-
-	    String sql = sb.toString();
+	    if (!conditions.isEmpty()) {
+	        sb.append(" WHERE ").append(String.join(" AND ", conditions));
+	    }
+		
+		sb.append(" ORDER BY access_date");
+		String sql = sb.toString();
 
 	    System.out.println("Executing SQL: " + sql);
+	    System.out.println("Parameters: " + params);
 	    try (
 	        Connection conn = DBConnector.getConnection();
 	        PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -203,59 +203,10 @@ public class MANAGER_B3 extends JFrame {
 	        e.printStackTrace();
 	    }
 	}
-		
-//	private void inputDate(String startDate, String endDate, String account) {
-//	    SimpleDateFormat dateForm = new SimpleDateFormat("yyyyMMdd");
-//
-//	    model.setRowCount(0);
-//
-//	    StringBuilder sb = new StringBuilder();
-//	    sb.append("SELECT * FROM WM_ACCOUNT_ACCESS");
-//
-//	    List<String> conditions = new ArrayList<>();
-//	    List<String> params = new ArrayList<>();
-//	    
-//
-//	    sb.append(" ORDER BY access_date");
-//
-//	    String sql = sb.toString();
-//
-//	    System.out.println("Executing SQL: " + sql);
-//	    try (
-//	        Connection conn = DBConnector.getConnection();
-//	        PreparedStatement pstmt = conn.prepareStatement(sql);
-//	    ) {
-//	        for (int i = 0; i < params.size(); i++) {
-//	            pstmt.setString(i + 1, params.get(i));
-//	        }
-//
-//            System.out.println("결과불러오기");
-//	        try (ResultSet rs = pstmt.executeQuery()) {
-//	            int colCnt = rs.getMetaData().getColumnCount();
-//	            int rowNum = 1;
-//
-//	            while(rs.next()) {
-//	                String[] row = new String[colCnt + 1];
-//	                row[0] = String.valueOf(rowNum++);	
-//
-//	                for (int i = 1; i <= colCnt; i++) {
-//	                    if (rs.getMetaData().getColumnName(i).equalsIgnoreCase("access_date")) {
-//	                        java.sql.Date accDate = rs.getDate("access_date");
-//	                        row[i] = (accDate != null) ? dateForm.format(accDate) : "";
-//	                    } else {
-//	                        row[i] = rs.getString(i);
-//	                    }
-//	                }
-//	                model.addRow(row);
-//	            }
-//	            isAccessLog = true;
-//	            System.out.println("결과불러왔다");
-//	        }
-//	    } catch (SQLException e) {
-//	        e.printStackTrace();
-//	        isAccessLog = false;
-//	    }
-//	}
+	
+	private boolean isValidInput(String input, String placeholder) {
+	    return input != null && !input.trim().isEmpty() && !input.trim().equals(placeholder);
+	}
 
 	public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
