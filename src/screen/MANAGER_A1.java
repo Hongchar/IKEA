@@ -1,9 +1,11 @@
 package screen;
 
+
 import javax.swing.JFrame;
 
 import jframe.JFrames;
 import tool.BottomImage;
+
 import tool.DefaultFrameUtils;
 import tool.HomeButton;
 import tool.MenuBar;
@@ -51,3 +53,4 @@ public class MANAGER_A1 extends JFrame {
 		this.dispose();
 	}
 }
+

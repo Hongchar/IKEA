@@ -2,6 +2,10 @@ package tool;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -85,5 +89,6 @@ public class AddTable {
 		scp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		
 		return new TableComponents(scp, table, model);	
+
 	}
 }
