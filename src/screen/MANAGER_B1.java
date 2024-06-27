@@ -63,22 +63,21 @@ public class MANAGER_B1 extends JFrame {
 				Pattern pattern = Pattern.compile("[\\s가-힣ㄱ-ㅎ]");
 
 				if (pattern.matcher(id).find() || pattern.matcher(pw).find()) {
-					DefaultFrameUtils.makeNotice("ID와 PW를 올바르게 입력해주세요. " 
-							+ "공백이나 한글은 사용할 수 없습니다.");
+					DefaultFrameUtils.makeNotice("ID와 PW를 올바르게 입력해주세요. " + "공백이나 한글은 사용할 수 없습니다.");
 
 					return;
 				}
 				// DB에 계정정보 저장
-				try (Connection conn = DBConnector.getConnection()) {
-					String sql = "INSERT INTO wm_account_info " 
-							+ "(account_name, account_password) " + "VALUES (?, ?)";
-					
-					try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-						pstmt.setString(1, id);
-						pstmt.setString(2, pw);
-						pstmt.executeUpdate();
-						DefaultFrameUtils.makeNotice("ID가 정상적으로 생성되었습니다.");
-					}
+				String sql = "INSERT INTO wm_account_info " 
+				+ "(account_name, account_password) " + "VALUES (?, ?)";
+				try (Connection conn = DBConnector.getConnection();
+						PreparedStatement pstmt = conn.prepareStatement(sql);) {
+
+					pstmt.setString(1, id);
+					pstmt.setString(2, pw);
+					pstmt.executeUpdate();
+					DefaultFrameUtils.makeNotice("ID가 정상적으로 생성되었습니다.");
+
 				} catch (SQLException ex) {
 					DefaultFrameUtils.makeNotice("이미 등록된 ID입니다.");
 				}
