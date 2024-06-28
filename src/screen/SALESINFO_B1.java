@@ -28,7 +28,7 @@ public class SALESINFO_B1 extends JFrame {
 	private JButton home = new HomeButton();
 	private JButton back = new BackButton();
 	private JLabel gray1 = DefaultFrameUtils.makeGrayLabel("SEARCH CONDITIONS", 7, 54);
-	private JLabel gray2 = DefaultFrameUtils.makeGrayLabel("SEARCH DATA", 7, 222);
+	private JLabel gray2 = DefaultFrameUtils.makeGrayLabel("SEARCH DATA", 7, 250);
 	private JTextField start = CreateTextField.halfTextField(new Point(7, 80), "시작");
 	private JTextField end = CreateTextField.halfTextField(new Point(198, 80), "종료");
 	
