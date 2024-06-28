@@ -21,7 +21,7 @@ import tool.DBConnector;
 import tool.DefaultFrameUtils;
 import tool.HomeButton;
 import tool.InfoLabel;
-import jframe.JFrames;
+
 public class PRODUCT_B1 extends JFrame {
 
 	/**
@@ -62,23 +62,23 @@ public class PRODUCT_B1 extends JFrame {
 		add(tableComp.scrollPane);
 		model = (DefaultTableModel) tableComp.table.getModel();
 		
-		// 홈 버튼 클릭 이벤트
-		home.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JFrames.getJFrame("MAIN_A2").setVisible(true);
-				JFrames.getJFrame("PRODUCT_B1").setVisible(false);
-			}
-		});
-		
-		// 뒤로가기 버튼 클릭 이벤트
-		back.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JFrames.getJFrame("PRODUCT_A1").setVisible(true);
-				JFrames.getJFrame("PRODUCT_B1").setVisible(false);
-			}
-		});
+//		// 홈 버튼 클릭 이벤트
+//		home.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				JFrames.getJFrame("MAIN_A2").setVisible(true);
+//				JFrames.getJFrame("PRODUCT_B1").setVisible(false);
+//			}
+//		});
+//		
+//		// 뒤로가기 버튼 클릭 이벤트
+//		back.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				JFrames.getJFrame("PRODUCT_A1").setVisible(true);
+//				JFrames.getJFrame("PRODUCT_B1").setVisible(false);
+//			}
+//		});
 		
 		inputName.addActionListener(new ActionListener() {
 			
@@ -106,48 +106,56 @@ public class PRODUCT_B1 extends JFrame {
 			}
 		});
 		
+		this.setVisible(true);
 	}
 	
 	
 	public static void getProductName(String name) {
-		String sql = "SELECT product_seq, "
-				+ "product_name, "
-				+ "product_qty, "
-				+ "product_cost, "	
-				+ "product_price, "
-				+ "product_weight, "
-				+ "client_id "
-				+ "FROM product"
-				+ (name.isBlank() ? "" : " WHERE product_name LIKE ?");
-		
-		model.setRowCount(0);
-			
-		System.out.println(sql);
-		try (
-			Connection conn = DBConnector.getConnection();
-			PreparedStatement pstmt = conn.prepareStatement(sql);
-		) {
-			if (!name.isEmpty()) {
-				pstmt.setString(1, "%" + name + "%");				
-			}
-			
-			try (
-				ResultSet rs = pstmt.executeQuery();
-			) {
-				int columnCount = rs.getMetaData().getColumnCount();
-				while(rs.next()) {
-					String[] row = new String[columnCount];
-					for (int i = 1; i < columnCount; i++) {
-						row[i - 1] = rs.getString(i);
-					}
-					model.addRow(row);
-					isLoad = true;
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			isLoad = false;
-		}
+	    String sql = "SELECT product_seq, "
+	            + "product_name, "
+	            + "product_qty, "
+	            + "product_cost, "
+	            + "product_price, "
+	            + "product_weight, "
+	            + "client_id "
+	            + "FROM product"
+	            + (name.isBlank() ? "" : " WHERE product_name LIKE ?");
+
+	    model.setRowCount(0);
+
+	    System.out.println(sql);
+	    try (
+	        Connection conn = DBConnector.getConnection();
+	        PreparedStatement pstmt = conn.prepareStatement(sql);
+	    ) {
+	        if (!name.isEmpty()) {
+	            pstmt.setString(1, "%" + name + "%");
+	        }
+
+	        try (ResultSet rs = pstmt.executeQuery()) {
+	            int columnCount = rs.getMetaData().getColumnCount();
+	            while(rs.next()) {
+	                String[] row = new String[columnCount];
+	                for (int i = 1; i <= columnCount; i++) {  // <= 로 수정
+	                    row[i - 1] = rs.getString(i);
+	                }
+	                model.addRow(row);
+	            }
+	            isLoad = true;
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        isLoad = false;
+	    }
+	}
+	
+	public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+        		new PRODUCT_B1();
+            }
+        });
 	}
 
 }

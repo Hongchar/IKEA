@@ -1,5 +1,5 @@
 package screen;
-import java.awt.Point;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -23,6 +23,7 @@ import tool.CreateTextField;
 import tool.DBConnector;
 import tool.DefaultFrameUtils;
 import tool.HomeButton;
+import tool.IkeaTextField;
 import tool.InfoLabel;
 
 public class MANAGER_B3 extends JFrame {
@@ -30,6 +31,7 @@ public class MANAGER_B3 extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	CreateTextField text = new CreateTextField();
 	String[] columnNames = {"No.", "아이디", "접속일"};
 	
@@ -56,9 +58,9 @@ public class MANAGER_B3 extends JFrame {
 		DefaultFrameUtils.makeTopLabel(this, "접근기록조회");
 		DefaultFrameUtils.makeTopPanel(this);
 		add(greyLabel1);
-		startDateInput = CreateTextField.halfTextField(new Point(12, 90), "시작날짜");		
-		endDateInput = CreateTextField.halfTextField(new Point(207, 90), "종료날짜");		
-		accountInput = CreateTextField.textField(new Point(12, 153), "계정ID");
+		startDateInput = IkeaTextField.iconHalfTextField(12, 90, "시작날짜");				
+		endDateInput = IkeaTextField.iconHalfTextField(207, 90, "종료날짜");
+		accountInput = IkeaTextField.textField(12, 153, "계정ID");
 		
 		add(searchBtn);
 		add(greyLabel2);
@@ -93,85 +95,55 @@ public class MANAGER_B3 extends JFrame {
 			}
 		});
 		
-        startDateInput.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                performSearch();
-            }
-        });
-        
-        endDateInput.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                performSearch();
-            }
-        });
-        
-        accountInput.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                performSearch();
-            }
-        });
-		
-		
-		this.setVisible(false);
-	}
-	
-	private void performSearch() {
-		String startDate = startDateInput.getText();
-		String endDate = endDateInput.getText();
-		String account = accountInput.getText();
-		
-		inputDate(startDate, endDate, account);
-	}
-	
-	private void inputDate(String startDate, String endDate, String account) {
-	    SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd");	    
-	    model.setRowCount(0);
 
-	    StringBuilder sb = new StringBuilder();
-	    sb.append("SELECT * FROM WM_ACCOUNT_ACCESS WHERE 1=1");
+	    startDateInput.addActionListener(e -> inputDate());
+	    endDateInput.addActionListener(e -> inputDate());
+	    accountInput.addActionListener(e -> inputDate());
+	    searchBtn.addActionListener(e -> inputDate());
+        
+		
+		this.setVisible(true);
+	}
 
-	    List<Object> params = new ArrayList<>();
+	
+	private void inputDate() {
+//		접속일 시간 없애는 날짜포맷
+//		SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd");
+		
+		String startDate = startDateInput.getText().trim();
+		String endDate = endDateInput.getText().trim();
+		String account = accountInput.getText().trim();
+		
+		model.setRowCount(0);
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("SELECT * FROM WM_ACCOUNT_ACCESS");
+
+		List<String> conditions = new ArrayList<>();
+		List<Object> params = new ArrayList<>();
+
+	    if (isValidInput(startDate, "시작날짜")) {
+	        conditions.add("access_date >= TO_DATE(?, 'YYYY-MM-DD')");
+	        params.add(startDate.trim());
+	    }
+	    if (isValidInput(endDate, "종료날짜")) {
+	        conditions.add("access_date <= (TO_DATE(?, 'YYYY-MM-DD') + 1)");
+	        params.add(endDate.trim());
+	    }
+	    if (isValidInput(account, "계정ID")) {
+	        conditions.add("lower(account_name) LIKE ?");
+	        params.add("%" + account.toLowerCase().trim() + "%");
+	    }
 	    
-		boolean firstCondition = true;
-
-		if (!startDate.isEmpty()) {
-			if (firstCondition) {
-				sb.append(" AND access_date >= ?");
-				firstCondition = false;
-			} else {
-				sb.append(" AND access_date >= ?");
-			}
-			params.add(startDate);
-		}
-
-		if (!endDate.isEmpty()) {
-			if (firstCondition) {
-				sb.append(" AND access_date <= ?");
-				firstCondition = false;
-			} else {
-				sb.append(" AND access_date <= ?");
-			}
-			params.add(endDate);
-		}
-
-		if (!account.isEmpty()) {
-			if (firstCondition) {
-				sb.append(" AND lower(account_name) LIKE ?");
-				firstCondition = false;
-			} else {
-				sb.append(" AND lower(account_name) LIKE ?");
-			}
-			params.add("%" + account.toLowerCase() + "%");
-		}
-
-	    sb.append(" ORDER BY access_date");
-
-	    String sql = sb.toString();
+	    if (!conditions.isEmpty()) {
+	        sb.append(" WHERE ").append(String.join(" AND ", conditions));
+	    }
+		
+		sb.append(" ORDER BY access_date");
+		String sql = sb.toString();
 
 	    System.out.println("Executing SQL: " + sql);
+	    System.out.println("Parameters: " + params);
 	    try (
 	        Connection conn = DBConnector.getConnection();
 	        PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -187,20 +159,41 @@ public class MANAGER_B3 extends JFrame {
 	            while(rs.next()) {
 	                String[] row = new String[colCnt + 1];
 	                row[0] = String.valueOf(rowNum++);
-
+	                
 	                for (int i = 1; i <= colCnt; i++) {
-	                    if (rs.getMetaData().getColumnName(i).equalsIgnoreCase("access_date")) {
-	                        java.sql.Date accDate = rs.getDate("access_date");
-	                        row[i] = (accDate != null) ? dateForm.format(accDate) : "";
-	                    } else {
-	                        row[i] = rs.getString(i);
-	                    }
+	                	row[i] = rs.getString(i);
 	                }
+	                
+//	                접속일 시간 없애는 거
+//	                for (int i = 1; i <= colCnt; i++) {
+//	                    if (rs.getMetaData().getColumnName(i).equalsIgnoreCase("access_date")) {
+//	                        java.sql.Date accDate = rs.getDate("access_date");
+//	                        row[i] = (accDate != null) ? dateForm.format(accDate) : "";
+//	                    } else {
+//	                        row[i] = rs.getString(i);
+//	                    }
+//	                }
 	                model.addRow(row);
+	                isAccessLog = true;
 	            }
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
+	        isAccessLog = false;
 	    }
 	}
+	
+	private boolean isValidInput(String input, String placeholder) {
+	    return input != null && !input.trim().isEmpty() && !input.trim().equals(placeholder);
+	}
+
+	public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+        		new MANAGER_B3();
+            }
+        });
+	}
+
 }
