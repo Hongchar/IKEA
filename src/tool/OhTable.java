@@ -202,7 +202,7 @@ public class OhTable extends JPanel {
                     if (input != null && !input.trim().isEmpty()) {
                         Update.modify(input, col, sellName, clientId);
                     } else {
-                        DefaultFrameUtils.makeNotice("유효한 입력을 입력해주세요.");
+                        DefaultFrameUtils.makeNotice("유효한 값을 입력해주세요.");
                     }
                     dispose();
                 }
