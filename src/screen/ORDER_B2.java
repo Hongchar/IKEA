@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -23,8 +24,12 @@ import tool.DataValidator;
 import tool.DefaultFrameUtils;
 import tool.HomeButton;
 import tool.IkeaTextField;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 public class ORDER_B2 extends JFrame {
+	
+	private static final long serialVersionUID = 1L;
 	
 	String[] tableLabel = {"idx", "상품명", "날짜", "수량", "입고여부", "납품업체"};
 	private AddTable.TableComponents tableComponents;
@@ -38,7 +43,13 @@ public class ORDER_B2 extends JFrame {
 		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeLogo(this);
 		DefaultFrameUtils.makeTopLabel(this, "발주 현황 조회");
+		ImageIcon img = new ImageIcon("res/calendar_icon.png");
+		JLabel jpg = new JLabel(img);
+		jpg.setBounds(155, 91, 26, 26);
 		
+		ImageIcon img2 = new ImageIcon("res/calendar_icon.png");
+		JLabel bg = new JLabel(img2);
+		bg.setBounds(343, 91, 26, 26);
 		tf1 = IkeaTextField.iconHalfTextField(10, 80, "발주일자");
 		tf2 = IkeaTextField.iconHalfTextField(205, 80, "");
 		tf3 = IkeaTextField.textField(10, 140, "상품명");
@@ -62,12 +73,13 @@ public class ORDER_B2 extends JFrame {
 		
 		b.addActionListener(e -> loadData());
 		
+		add(jpg);
+		add(bg);
 		add(b);
 		add(tf1);
 		add(tf2);
 		add(tf3);
 		add(tf4);
-		
 		add(home);
 		add(back);
 		DefaultFrameUtils.makeTopPanel(this);

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -20,6 +21,8 @@ import tool.DataValidator;
 import tool.DefaultFrameUtils;
 import tool.HomeButton;
 import tool.IkeaTextField;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 public class ORDER_B1 extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -35,7 +38,10 @@ public class ORDER_B1 extends JFrame {
 		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeLogo(this);
 		DefaultFrameUtils.makeTopLabel(this, "발주신청");
-		DefaultFrameUtils.makeTopPanel(this);
+		
+		ImageIcon img = new ImageIcon("res/calendar_icon.png");
+		JLabel jpg = new JLabel(img);
+		jpg.setBounds(349, 86, 26, 26);
 		
 		tf1 = IkeaTextField.iconTextField(10, 80, "신청일자");
 		tf2 = IkeaTextField.textField(10, 140, "상품ID");
@@ -57,7 +63,7 @@ public class ORDER_B1 extends JFrame {
 		
 		b1.addActionListener(e -> insertData());
 
-		
+		add(jpg);
 		add(tf1);
 		add(tf2);
 		add(tf3);
@@ -71,6 +77,7 @@ public class ORDER_B1 extends JFrame {
 		add(back);
 		add(home);
 		
+		DefaultFrameUtils.makeTopPanel(this);
 	}
 	
 	private void insertData() {
@@ -89,10 +96,10 @@ public class ORDER_B1 extends JFrame {
 			return ;
 		}
 		
-//		if (!pId.isEmpty() && !DataValidator.validateId(pId)) {
-//			JOptionPane.showMessageDialog(null, "상품 ID의 형식이 올바르지 않습니다. 숫자로 입력해 주세요.");
-//			return ;
-//		}
+		if (!pId.isEmpty() && !DataValidator.validateId(pId)) {
+			JOptionPane.showMessageDialog(null, "상품 ID의 형식이 올바르지 않습니다. 숫자로 입력해 주세요.");
+			return ;
+		}
 		
 		pName = DataValidator.validateProductName(pName);
 		
