@@ -102,38 +102,78 @@ public class PRODUCT_B2 extends JFrame {
 		});
 		
 		move.addActionListener(e -> {
-				String sql1 = "SELECT COUNT(*) FROM product";
-				String sql2 = "UPDATE product SET sector_seq = ? "
-						+ "WHERE sector_seq = ? AND product_seq = ? AND product_qty = ?";
-				try (
-					Connection conn = DBConnector.getConnection();
-					PreparedStatement pstmt1 = conn.prepareStatement(sql1);
-					ResultSet rs = pstmt1.executeQuery();
-				){
-					if(rs.next()) {
-						int count = rs.getInt(1);
-						if (count > 0) {
-							try (
-								PreparedStatement pstmt2 = conn.prepareStatement(sql2);
-							){
-								pstmt2.setInt(1, moveText);
-								pstmt2.setInt(2, sectorCodeText);
-								pstmt2.setInt(3, idText);
-								pstmt2.setInt(4, qtyText);
-								
-								pstmt2.executeUpdate();
-								DefaultFrameUtils.makeNotice(String.format("재고ID %d[%d개]가 %d 구역으로 이동하였습니다", 
-										idText, qtyText,moveText));
-							} catch (SQLException e1) {
-								DefaultFrameUtils.makeNotice("값을 모두 입력해주세요.");
-							}
-						} else {
-							DefaultFrameUtils.makeNotice("해당하는 값이 없습니다");
-						}
-					}
-				} catch (SQLException e1) {
-					DefaultFrameUtils.makeNotice("조회할 수 없습니다.");
-				}
+		    String checkCapacitySql = "SELECT max_capacity FROM sector WHERE sector_seq = ?";
+		    String updateProductSql = "UPDATE product SET sector_seq = ? WHERE sector_seq = ? AND product_seq = ? AND product_qty = ?";
+		    String updateSectorSql = "UPDATE sector SET max_capacity = max_capacity - ? WHERE sector_seq = ?";
+
+		    try (
+		    	Connection conn = DBConnector.getConnection()
+		    ) {
+		        conn.setAutoCommit(false);  // 트랜잭션 시작
+
+		        // 이동할 구역의 여유 공간 확인
+		        try (
+		        	PreparedStatement checkStmt = conn.prepareStatement(checkCapacitySql)
+		        ) {
+		            checkStmt.setInt(1, moveText);
+		            try (ResultSet rs = checkStmt.executeQuery()) {
+		                if (rs.next()) {
+		                    int availableCapacity = rs.getInt("max_capacity");
+		                    if (qtyText > availableCapacity) {
+		                        DefaultFrameUtils.makeNotice(String.format("구역 %d의 최대 적재량 %d을(를) 초과합니다.", moveText, availableCapacity));
+		                        return;
+		                    }
+		                } else {
+		                    DefaultFrameUtils.makeNotice(String.format("구역 %d을(를) 찾을 수 없습니다.", moveText));
+		                    return;
+		                }
+		            }
+		        }
+
+		        // 상품 이동
+		        try (
+		        	PreparedStatement updateProductStmt = conn.prepareStatement(updateProductSql)
+		        ) {
+		            updateProductStmt.setInt(1, moveText);
+		            updateProductStmt.setInt(2, sectorCodeText);
+		            updateProductStmt.setInt(3, idText);
+		            updateProductStmt.setInt(4, qtyText);
+		            
+		            int affectedRows = updateProductStmt.executeUpdate();
+		            
+		            if (affectedRows == 0) {
+		                conn.rollback();
+		                DefaultFrameUtils.makeNotice("해당하는 상품을 찾을 수 없습니다.");
+		                return;
+		            }
+		        }
+
+		        // 이전 구역의 max_capacity 증가
+		        try (
+		        	PreparedStatement updateOldSectorStmt = conn.prepareStatement(updateSectorSql)
+		        ) {
+		            updateOldSectorStmt.setInt(1, -qtyText);  // 증가시키므로 음수 사용
+		            updateOldSectorStmt.setInt(2, sectorCodeText);
+		            updateOldSectorStmt.executeUpdate();
+		        }
+
+		        // 새 구역의 max_capacity 감소
+		        try (
+		        	PreparedStatement updateNewSectorStmt = conn.prepareStatement(updateSectorSql)
+		        ) {
+		            updateNewSectorStmt.setInt(1, qtyText);
+		            updateNewSectorStmt.setInt(2, moveText);
+		            updateNewSectorStmt.executeUpdate();
+		        }
+
+		        conn.commit();  // 트랜잭션 커밋
+		        DefaultFrameUtils.makeNotice(String.format("재고ID %d[%d개]가 %d 구역으로 이동하였습니다", idText, qtyText, moveText));
+
+		    } catch (SQLException ex) {
+		        DefaultFrameUtils.makeNotice("데이터베이스 오류: " + ex.getMessage());
+		    } catch (NumberFormatException ex) {
+		        DefaultFrameUtils.makeNotice("올바른 숫자 형식을 입력해주세요.");
+		    }
 		});
 
 		this.add(home);
