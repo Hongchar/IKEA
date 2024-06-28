@@ -104,6 +104,10 @@ public class SALESINFO_B2 extends JFrame {
 					Object[] rowData = { key, totalPrice, reg_date, product_name, qty, product_price};
 					accountTablePanel.getTableModel().addRow(rowData);
 				}
+				
+				start.setText("");
+				end.setText("");
+				
 			} catch (SQLException e1) {
 				DefaultFrameUtils.makeNotice("날짜를 입력해주세요.");
 				System.out.println("SQL문 오류");
