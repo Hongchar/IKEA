@@ -80,6 +80,18 @@ public class PRODUCT_B1_1 extends JFrame {
 		jt = jtable.table;
 		model = jtable.model;
 		sp = jtable.scrollPane;
+		
+        model = new DefaultTableModel(columnNames, 0) {
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
 
 		add(sp);
 		
@@ -197,9 +209,11 @@ public class PRODUCT_B1_1 extends JFrame {
         }
     }
 	
-    static void modifyCell(String input, String colunmName, String sellName, int clientId) {
+	// 수정 메서드
+    public static void modify(String input, String colunmName, String sellName, int clientId) {
         try (Connection conn = DBConnector.getConnection();) {
-            String sql = "UPDATE product SET " + colunmName + " = ? WHERE CLIENT_ID = ?";
+
+            String sql = "UPDATE CLIENTS SET " + colunmName + " = ? WHERE CLIENT_ID = ?";
             try (PreparedStatement pstmt = conn.prepareStatement(sql);) {
                 pstmt.setString(1, input);
                 pstmt.setInt(2, clientId);
