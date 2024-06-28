@@ -19,7 +19,6 @@ import tool.DBConnector;
 import tool.DefaultFrameUtils;
 import tool.HomeButton;
 import tool.IkeaTextField;
-import tool.InfoLabel;
 
 public class CLIENT_B1 extends JFrame {
 	JTextField Client_name = new IkeaTextField().textField(7, 140, "납품업체명");

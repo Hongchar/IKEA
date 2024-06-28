@@ -10,17 +10,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import jframe.JFrames;
 import tool.BackButton;
-import tool.BottomImage;
-import tool.CreateTextField;
 import tool.DefaultFrameUtils;
 import tool.HomeButton;
 import tool.IkeaTextField;
-import tool.InfoLabel;
 import tool.OhTable;
 import tool.SmallCheckButton;
-import tool.TopLabel;
-import tool.TopPanel;
 
 public class CLIENT_B2 extends JFrame {
 	JTextField text_field = new IkeaTextField().textField(12, 83, "전체조회");
@@ -42,6 +38,26 @@ public class CLIENT_B2 extends JFrame {
 		add(DefaultFrameUtils.makeGrayLabel("PROGRESS INFORMATION", 20, 59));
 		add(DefaultFrameUtils.makeGrayLabel("SEARCH DATA", 8, 178));
 
+		// 홈 버튼
+		add(home);
+		home.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrames.getJFrame("MAIN_A2").setVisible(true);
+				JFrames.getJFrame("CLIENT_B2").setVisible(false);
+			}
+		});
+
+		// 뒤로가기 버튼
+		add(back);
+		back.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JFrames.getJFrame("CLIENT_A1").setVisible(true);
+				JFrames.getJFrame("CLIENT_B2").setVisible(false);
+			}
+		});
+
 		add(text_field);
 		add(comboBox());
 		add(table);
@@ -54,7 +70,7 @@ public class CLIENT_B2 extends JFrame {
 				modify.setText("수정중");
 				modify.setFont(new Font("넥슨고딕Lv1", Font.BOLD, 15));
 				OhTable addTable = (OhTable) table;
-				addTable.modifyMod(modify);
+				addTable.modifyMod(modify, CLIENT_B2.this);
 			}
 		});
 
