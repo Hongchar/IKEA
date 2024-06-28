@@ -1,9 +1,7 @@
 package screen;
-import java.awt.Point;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -97,10 +95,6 @@ public class MANAGER_B3 extends JFrame {
 			}
 		});
 		
-		// 텍스트필드 초기화
-//	    addPlaceholderBehavior(startDateInput, "시작날짜");
-//	    addPlaceholderBehavior(endDateInput, "종료날짜");
-//	    addPlaceholderBehavior(accountInput, "계정ID");
 
 	    startDateInput.addActionListener(e -> inputDate());
 	    endDateInput.addActionListener(e -> inputDate());
@@ -110,30 +104,11 @@ public class MANAGER_B3 extends JFrame {
 		
 		this.setVisible(true);
 	}
-	
-	
-	// 텍스트필드 초기화 메서드
-//	private void addPlaceholderBehavior(JTextField field, String placeholder) {
-//	    field.setText(placeholder);
-//	    field.addFocusListener(new FocusAdapter() {
-//	        @Override
-//	        public void focusGained(FocusEvent e) {
-//	            if (field.getText().equals(placeholder)) {
-//	                field.setText("");
-//	            }
-//	        }
-//
-//	        @Override
-//	        public void focusLost(FocusEvent e) {
-//	            if (field.getText().isEmpty()) {
-//	                field.setText(placeholder);
-//	            }
-//	        }
-//	    });
-//	}
+
 	
 	private void inputDate() {
-		SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd");
+//		접속일 시간 없애는 날짜포맷
+//		SimpleDateFormat dateForm = new SimpleDateFormat("yyyy-MM-dd");
 		
 		String startDate = startDateInput.getText().trim();
 		String endDate = endDateInput.getText().trim();
@@ -148,11 +123,11 @@ public class MANAGER_B3 extends JFrame {
 		List<Object> params = new ArrayList<>();
 
 	    if (isValidInput(startDate, "시작날짜")) {
-	        conditions.add("access_date >= ?");
+	        conditions.add("access_date >= TO_DATE(?, 'YYYY-MM-DD')");
 	        params.add(startDate.trim());
 	    }
 	    if (isValidInput(endDate, "종료날짜")) {
-	        conditions.add("access_date <= ?");
+	        conditions.add("access_date <= (TO_DATE(?, 'YYYY-MM-DD') + 1)");
 	        params.add(endDate.trim());
 	    }
 	    if (isValidInput(account, "계정ID")) {
@@ -184,15 +159,20 @@ public class MANAGER_B3 extends JFrame {
 	            while(rs.next()) {
 	                String[] row = new String[colCnt + 1];
 	                row[0] = String.valueOf(rowNum++);
-
+	                
 	                for (int i = 1; i <= colCnt; i++) {
-	                    if (rs.getMetaData().getColumnName(i).equalsIgnoreCase("access_date")) {
-	                        java.sql.Date accDate = rs.getDate("access_date");
-	                        row[i] = (accDate != null) ? dateForm.format(accDate) : "";
-	                    } else {
-	                        row[i] = rs.getString(i);
-	                    }
+	                	row[i] = rs.getString(i);
 	                }
+	                
+//	                접속일 시간 없애는 거
+//	                for (int i = 1; i <= colCnt; i++) {
+//	                    if (rs.getMetaData().getColumnName(i).equalsIgnoreCase("access_date")) {
+//	                        java.sql.Date accDate = rs.getDate("access_date");
+//	                        row[i] = (accDate != null) ? dateForm.format(accDate) : "";
+//	                    } else {
+//	                        row[i] = rs.getString(i);
+//	                    }
+//	                }
 	                model.addRow(row);
 	                isAccessLog = true;
 	            }

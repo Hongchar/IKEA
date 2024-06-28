@@ -21,28 +21,6 @@ import javax.swing.table.TableColumn;
 
 public class AddTable {
 	
-//	private static class RowCount {
-//		private static final DBConnector connector = new DBConnector();
-//		
-//		public static int getRowCount(String tableName) {
-//			String sql = "SELECT COUNT(*) FROM " + tableName;
-//			int result = 0;
-//			
-//			try (
-//				Connection conn = connector.getConnection();
-//				PreparedStatement pstmt = conn.prepareStatement(sql);
-//				ResultSet rs = pstmt.executeQuery()
-//			) {
-//				if (rs.next()) {
-//					result = rs.getInt(1);
-//				}
-//			} catch (SQLException e) {
-//				e.printStackTrace();
-//			}
-//			return result;
-//		}
-//	}
-	
 	public static class TableComponents {
 		public JScrollPane scrollPane;
 		public JTable table;
@@ -54,7 +32,7 @@ public class AddTable {
 			this.model = model;
 		}
 	}
-	
+
 	public static TableComponents getTable(String[] columnNames) {
 		DefaultTableModel model = new DefaultTableModel(columnNames, 0);
 		JTable table = new JTable(model);
