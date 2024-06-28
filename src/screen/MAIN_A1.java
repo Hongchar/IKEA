@@ -17,7 +17,6 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import jframe.JFrames;
 import tool.BlueLongButton;
 import tool.CreateTextField;
 import tool.DBConnector;
@@ -30,7 +29,6 @@ public class MAIN_A1 extends JFrame {
 	
 	private JTextField idField = CreateTextField.textField(new Point(12, 282), "ID");
 	private JPasswordField pwField = CreateTextField.PasswordTextField(new Point(12, 347));
-	
 	static JButton login = new BlueLongButton("로그인", 12, 412);
 	
 	private static String id;
@@ -38,6 +36,7 @@ public class MAIN_A1 extends JFrame {
 	
 	private JLabel idLabel = new JLabel();
 	private JLabel pwLabel = new JLabel();
+	
 	public MAIN_A1() {
 		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeLogo(this);
@@ -85,6 +84,9 @@ public class MAIN_A1 extends JFrame {
 		JLabel bg = new JLabel(img2);
 		bg.setBounds(0, 522, 400, 328);
 		
+		login.setBounds(87, 425, 228, 50);
+		login.setForeground(Color.WHITE);
+
 		login.addActionListener(e -> {
 			id = idField.getText();
 			pw = new String(pwField.getPassword());

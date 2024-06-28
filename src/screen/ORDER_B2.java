@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
+import jframe.JFrames;
 import tool.AddTable;
 import tool.BackButton;
 import tool.BlueLongButton;
@@ -22,41 +23,55 @@ import tool.DataValidator;
 import tool.DefaultFrameUtils;
 import tool.HomeButton;
 import tool.IkeaTextField;
-
+import javax.swing.JButton;
 public class ORDER_B2 extends JFrame {
 	
 	String[] tableLabel = {"idx", "상품명", "날짜", "수량", "입고여부", "납품업체"};
 	private AddTable.TableComponents tableComponents;
 	private JTextField tf1, tf2, tf3, tf4;
 	
+	private JButton home = new HomeButton();
+	private JButton back = new BackButton();
 	public ORDER_B2() {
 		
-		add(new BackButton());
-		add(new HomeButton());
 		
 		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeLogo(this);
 		DefaultFrameUtils.makeTopLabel(this, "발주 현황 조회");
-		DefaultFrameUtils.makeTopPanel(this);
 		
 		tf1 = IkeaTextField.iconHalfTextField(10, 80, "발주일자");
 		tf2 = IkeaTextField.iconHalfTextField(205, 80, "");
 		tf3 = IkeaTextField.textField(10, 140, "상품명");
 		tf4 = IkeaTextField.textField(10, 200, "거래처");
 		
-		tableComponents = AddTable.getTable(10,  320,  370,  480, tableLabel);
+		tableComponents = AddTable.getTable(tableLabel);
+
+		home.addActionListener(e -> {
+			JFrames.getJFrame("MAIN_A2").setVisible(true);
+			this.setVisible(false);
+		});
+		
+		back.addActionListener(e -> {
+			JFrames.getJFrame("ORDER_A1").setVisible(true);
+			this.setVisible(false);
+		});
+		
 		add(tableComponents.scrollPane);
 		
 		BlueLongButton b = new BlueLongButton("검색", 10, 260);
-		add(b);
 		
 		b.addActionListener(e -> loadData());
 		
+		add(b);
 		add(tf1);
 		add(tf2);
 		add(tf3);
 		add(tf4);
 		
+		add(home);
+		add(back);
+		DefaultFrameUtils.makeTopPanel(this);
+		this.setVisible(false);
 	}
 	
 	private void loadData() {
@@ -115,15 +130,12 @@ public class ORDER_B2 extends JFrame {
 		}
 		
 		String sql = query.toString();
-		System.out.println(sql);
-		System.out.println(params);
-		
 		try (
 			Connection conn = DBConnector.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement(sql)
 			) {
 			for (int i = 0; i < params.size(); ++i) {
-				System.out.println("Setting parameter " + (i + 1) + ": " + params.get(i));
+//				System.out.println("Setting parameter " + (i + 1) + ": " + params.get(i));
 				pstmt.setObject(i + 1, params.get(i));
 			}
 			
@@ -145,9 +157,5 @@ public class ORDER_B2 extends JFrame {
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
-	}
-	
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(() -> new ORDER_B2());
 	}
 }

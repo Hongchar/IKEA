@@ -1,3 +1,4 @@
+
 package screen;
 
 import java.awt.Point;
@@ -21,33 +22,36 @@ import tool.CreateTextField;
 import tool.DBConnector;
 import tool.DefaultFrameUtils;
 import tool.HomeButton;
+import tool.SmallCheckButton;
 
 public class MANAGER_B1 extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
+	// 버튼, 필드, 라벨 등 생성
 	JButton home = new HomeButton();
 	JButton back = new BackButton();
 	JTextField idField = CreateTextField.textField(new Point(12, 80), "ID");
 	JTextField pwField = CreateTextField.textField(new Point(12, 140), "PW");
 	JLabel grayText = DefaultFrameUtils.makeGrayLabel("CREATE ACCOUNT", 20, 60);
-	JButton saveBtn = new BlueLongButton("저장", 300, 200);
+	JButton saveBtn = new SmallCheckButton("저장", 305, 200);
 	JLabel bottomImage = new BottomImage();
 
 	public MANAGER_B1() {
 		DefaultFrameUtils.setDefaultSize(this);
+		DefaultFrameUtils.makeLogo(this);
 		DefaultFrameUtils.makeTopLabel(this, "계정 생성");
 
 		// 홈 버튼 기능구현
 		home.addActionListener(e -> {
 			JFrames.getJFrame("MAIN_A2").setVisible(true);
-			this.dispose();
+			this.setVisible(false);
 		});
 
 		// 뒤로가기 버튼 기능구현
 		back.addActionListener(e -> {
 			JFrames.getJFrame("MANAGER_A1").setVisible(true);
-			this.dispose();
+			this.setVisible(false);
 		});
 
 		// 저장 버튼 기능구현
@@ -63,13 +67,14 @@ public class MANAGER_B1 extends JFrame {
 				Pattern pattern = Pattern.compile("[\\s가-힣ㄱ-ㅎ]");
 
 				if (pattern.matcher(id).find() || pattern.matcher(pw).find()) {
-					DefaultFrameUtils.makeNotice("ID와 PW를 올바르게 입력해주세요. " + "공백이나 한글은 사용할 수 없습니다.");
+					DefaultFrameUtils.makeNotice("ID와 PW를 올바르게 입력해주세요. " 
+							+ "공백이나 한글은 사용할 수 없습니다.");
 
 					return;
 				}
 				// DB에 계정정보 저장
 				String sql = "INSERT INTO wm_account_info " 
-				+ "(account_name, account_password) " + "VALUES (?, ?)";
+						+ "(account_name, account_password) " + "VALUES (?, ?)";
 				try (Connection conn = DBConnector.getConnection();
 						PreparedStatement pstmt = conn.prepareStatement(sql);) {
 
@@ -84,6 +89,7 @@ public class MANAGER_B1 extends JFrame {
 			}
 		});
 
+		// 추가
 		this.add(home);
 		this.add(back);
 		this.add(idField);
@@ -92,8 +98,7 @@ public class MANAGER_B1 extends JFrame {
 		this.add(grayText);
 		this.add(bottomImage);
 
-		DefaultFrameUtils.makeLogo(this);
 		DefaultFrameUtils.makeTopPanel(this);
-		this.dispose();
+		this.setVisible(false);
 	}
 }

@@ -23,18 +23,18 @@ public class SALESINFO_A1 extends JFrame {
 		
 		salesButton.addActionListener(e -> {
 			JFrames.getJFrame("SALESINFO_B1").setVisible(true);
-			this.dispose();
+			this.setVisible(false);
 		});
 		
 		returnButton.addActionListener(e -> {
 			JFrames.getJFrame("SALESINFO_B2").setVisible(true);
-			this.dispose();
+			this.setVisible(false);
 			
 		});
 		
 		home.addActionListener(e -> {
 			JFrames.getJFrame("MAIN_A2").setVisible(true);
-			this.dispose();
+			this.setVisible(false);
 		});
 
 		this.add(home);
@@ -43,6 +43,6 @@ public class SALESINFO_A1 extends JFrame {
 		
 		DefaultFrameUtils.makeTopPanel(this);
 		this.add(new BottomImage());
-		this.dispose();
+		this.setVisible(false);
 	}
 }

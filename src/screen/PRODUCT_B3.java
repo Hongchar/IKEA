@@ -53,64 +53,70 @@ public class PRODUCT_B3 extends JFrame {
 
 		home.addActionListener(e -> {
 			JFrames.getJFrame("MAIN_A2").setVisible(true);
-			JFrames.getJFrame("PRODUCT_B3").setVisible(false);
+			this.setVisible(false);
 		});
 
 		back.addActionListener(e -> {
 			JFrames.getJFrame("PRODUCT_A1").setVisible(true);
-			JFrames.getJFrame("PRODUCT_B3").setVisible(false);
+			this.setVisible(false);
 		});
 		
 		save.addActionListener(e -> {
-			nameText = productName.getText();
-			costText = Integer.parseInt(cost.getText());
-			priceText = Integer.parseInt(price.getText());
-			orderText = Integer.parseInt(orderQty.getText());
-			clientText = Integer.parseInt(clientCord.getText());
-			sectorText = Integer.parseInt(sectorCord.getText());
-			qtyText = Integer.parseInt(productQty.getText());
-			String sql1 = "SELECT * FROM orders WHERE order_name = ? AND order_qty = ?";
-			try (
-				Connection conn = DBConnector.getConnection();
-				PreparedStatement pstmt1 = conn.prepareStatement(sql1);
-			){
-				pstmt1.setString(1, nameText);
-				pstmt1.setInt(2, orderText);
-				try (
-					ResultSet rs = pstmt1.executeQuery();
-				){
-					if(rs.next()) {
-						String sql2 = "INSERT INTO product(product_seq, product_name, "
-								+ "product_qty, product_cost, product_price, client_id, sector_seq) "
-								+ "VALUES (product_seq.nextval, ?, ?, ?, ?, ?, ?)";
-						try (
-							PreparedStatement pstmt2 = conn.prepareStatement(sql2);
-						){
-							pstmt2.setString(1, nameText);
-							pstmt2.setInt(2, qtyText);
-							pstmt2.setInt(3, costText);
-							pstmt2.setInt(4, priceText);
-							pstmt2.setInt(5, clientText);
-							pstmt2.setInt(6, sectorText);
-							
-							pstmt2.executeUpdate();
-							DefaultFrameUtils.makeNotice(String.format("상품 %s(이)가 %d개 입고 됐습니다.", nameText, qtyText));
-							String sql3 = "UPDATE orders SET wh_yn = 'Y' WHERE order_name = ? AND order_qty = ?";
-							try (
-								PreparedStatement pstmt3 = conn.prepareStatement(sql3);
-							){
-								pstmt3.setString(1, nameText);
-								pstmt3.setInt(2, orderText);
-								pstmt3.executeUpdate();
-							}
-						} catch (SQLException e1) {
-							DefaultFrameUtils.makeNotice("정확한 값을 모두 입력해주세요.");
-						}
-					} 
-				}
-			} catch (SQLException e1) {
-				DefaultFrameUtils.makeNotice("PRODUCT_B3 에러");
-			}
+		    try {
+		        nameText = productName.getText();
+		        costText = Integer.parseInt(cost.getText());
+		        priceText = Integer.parseInt(price.getText());
+		        orderText = Integer.parseInt(orderQty.getText());
+		        clientText = Integer.parseInt(clientCord.getText());
+		        sectorText = Integer.parseInt(sectorCord.getText());
+		        qtyText = Integer.parseInt(productQty.getText());
+
+		        try (
+		        	Connection conn = DBConnector.getConnection()
+		        ) {
+		            conn.setAutoCommit(false);
+
+		            String sql1 = "SELECT * FROM orders WHERE order_name = ? AND order_qty = ?";
+		            String sql2 = "INSERT INTO product(product_seq, product_name, product_qty, product_cost, product_price, client_id, sector_seq) "
+		            			+ "VALUES (product_seq.nextval, ?, ?, ?, ?, ?, ?)";
+		            String sql3 = "UPDATE orders SET wh_yn = 'Y' WHERE order_name = ? AND order_qty = ?";
+
+		            try (
+		            	PreparedStatement pstmt1 = conn.prepareStatement(sql1);
+		                PreparedStatement pstmt2 = conn.prepareStatement(sql2);
+		                PreparedStatement pstmt3 = conn.prepareStatement(sql3)
+		            ) {
+
+		                pstmt1.setString(1, nameText);
+		                pstmt1.setInt(2, orderText);
+
+		                try (ResultSet rs = pstmt1.executeQuery()) {
+		                    if (rs.next()) {
+		                        pstmt2.setString(1, nameText);
+		                        pstmt2.setInt(2, qtyText);
+		                        pstmt2.setInt(3, costText);
+		                        pstmt2.setInt(4, priceText);
+		                        pstmt2.setInt(5, clientText);
+		                        pstmt2.setInt(6, sectorText);
+		                        pstmt2.executeUpdate();
+
+		                        pstmt3.setString(1, nameText);
+		                        pstmt3.setInt(2, orderText);
+		                        pstmt3.executeUpdate();
+
+		                        conn.commit();
+		                        DefaultFrameUtils.makeNotice(String.format("상품 %s(이)가 %d개 입고 됐습니다.", nameText, qtyText));
+		                    } else {
+		                        DefaultFrameUtils.makeNotice("해당 주문을 찾을 수 없습니다.");
+		                    }
+		                }
+		            }
+		        } catch (SQLException ex) {
+		            DefaultFrameUtils.makeNotice("데이터베이스 오류: " + ex.getMessage());
+		        }
+		    } catch (NumberFormatException ex) {
+		        DefaultFrameUtils.makeNotice("모든 필드에 올바른 숫자를 입력해주세요.");
+		    }
 		});
 
 		this.add(home);

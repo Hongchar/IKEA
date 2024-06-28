@@ -56,13 +56,6 @@ public class SALESINFO_B1 extends JFrame {
 		JLabel bg = new JLabel(img2);
 		bg.setBounds(343, 91, 26, 26);
 		
-		start.addActionListener(e -> {
-			
-		});
-		
-		end.addActionListener(e -> {
-			
-		});
 		// 패널 배경색 설정
 		accountTablePanel.setBackground(Color.WHITE);
 		accountTablePanel.setBounds(0, 230, 400, 600);
@@ -89,7 +82,9 @@ public class SALESINFO_B1 extends JFrame {
 				PreparedStatement pstmt = conn.prepareStatement(sql2);
 				ResultSet rs = pstmt.executeQuery();
 			) {
+				// 테이블 초기화
 				accountTablePanel.getTableModel().setRowCount(0);
+				
 				while (rs.next()) {
 					int key = rs.getInt("sales_key");
 					int totalPrice = rs.getInt("total_price");
@@ -97,15 +92,16 @@ public class SALESINFO_B1 extends JFrame {
 					String product_name = rs.getString("product_name");
 					int qty = rs.getInt("qty");
 					int product_price = rs.getInt("product_price");
-					// 테이블 초기화
 					
 
 					// 조회 결과 테이블에 추가
 					Object[] rowData = { key, totalPrice, reg_date, product_name, qty, product_price};
 					accountTablePanel.getTableModel().addRow(rowData);
 				}
+				start.setText("");
+				end.setText("");
 			} catch (SQLException e1) {
-				DefaultFrameUtils.makeNotice("날짜를 입력해주세요.");
+				DefaultFrameUtils.makeNotice("날짜를 숫자로만 입력해주세요.");
 				System.out.println("SQL문 오류");
 			}
 		});

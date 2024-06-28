@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import jframe.JFrames;
 import tool.BackButton;
 import tool.BlueLongButton;
 import tool.BottomImage;
@@ -19,14 +20,17 @@ import tool.DataValidator;
 import tool.DefaultFrameUtils;
 import tool.HomeButton;
 import tool.IkeaTextField;
-
+import javax.swing.JButton;
 public class ORDER_B1 extends JFrame {
+	private static final long serialVersionUID = 1L;
+
 	private JTextField tf1, tf2, tf3, tf4, tf5;
+	
+	private JButton home = new HomeButton();
+	private JButton back = new BackButton();
 	
 	public ORDER_B1() {
 		
-		add(new BackButton());
-		add(new HomeButton());
 		
 		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeLogo(this);
@@ -38,18 +42,34 @@ public class ORDER_B1 extends JFrame {
 		tf3 = IkeaTextField.textField(10, 200, "상품명");
 		tf4 = IkeaTextField.halfTextField(10, 260, "발주수량");
 		tf5 = IkeaTextField.halfTextField(200, 260, "업체ID");
-		BlueLongButton b1 = new BlueLongButton("신청", 10, 320);
 		
-		add(new BottomImage());
+		BlueLongButton b1 = new BlueLongButton("신청", 10, 320);
+
+		home.addActionListener(e -> {
+			JFrames.getJFrame("MAIN_A2").setVisible(true);
+			this.setVisible(false);
+		});
+		
+		back.addActionListener(e -> {
+			JFrames.getJFrame("ORDER_A1").setVisible(true);
+			this.setVisible(false);
+		});
+		
+		b1.addActionListener(e -> insertData());
+
 		
 		add(tf1);
 		add(tf2);
 		add(tf3);
 		add(tf4);
 		add(tf5);
+		add(new BottomImage());
+		
+		
 		add(b1);
 		
-		b1.addActionListener(e -> insertData());
+		add(back);
+		add(home);
 		
 	}
 	
@@ -119,10 +139,5 @@ public class ORDER_B1 extends JFrame {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(() -> new ORDER_B1());
-	
 	}
 }
