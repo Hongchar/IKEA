@@ -19,7 +19,7 @@ public class DefaultFrameUtils {
 		f.setSize(410, 850);
 		f.setLayout(null);
 		f.setLocationRelativeTo(null);
-		f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setResizable(false);
 		f.getContentPane().setBackground(new Color(255, 255, 255));
 		f.setVisible(false);
