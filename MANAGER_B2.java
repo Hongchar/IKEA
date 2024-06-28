@@ -18,6 +18,7 @@ import tool.BlueLongButton;
 import tool.CreateTextField;
 import tool.DefaultFrameUtils;
 import tool.HomeButton;
+import tool.SmallCheckButton;
 
 public class MANAGER_B2 extends JFrame {
 
@@ -28,8 +29,8 @@ public class MANAGER_B2 extends JFrame {
 	JButton back = new BackButton();
 	JTextField searchField = CreateTextField.textField(12, 80, "계정ID");
 	JLabel grayText1 = DefaultFrameUtils.makeGrayLabel("PROGRESS INFORMATION", 20, 60);
-	JButton searchBtn = new BlueLongButton("조회", 300, 140);
-	JButton deleteBtn = new BlueLongButton("삭제", 300, 200);
+	JButton searchBtn = new SmallCheckButton("조회", 305, 140);
+	JButton deleteBtn = new SmallCheckButton("삭제", 305, 200);
 	JLabel grayText2 = DefaultFrameUtils.makeGrayLabel("SEARCH DATA", 20, 250);
 
 	// 테이블이 있는 패널 생성
@@ -47,18 +48,19 @@ public class MANAGER_B2 extends JFrame {
 	
 	public MANAGER_B2() {
 		DefaultFrameUtils.setDefaultSize(this);
+		DefaultFrameUtils.makeLogo(this);
 		DefaultFrameUtils.makeTopLabel(this, "계정 관리");
 
 		// 홈 버튼 기능구현
 		home.addActionListener(e -> {
 			JFrames.getJFrame("MAIN_A2").setVisible(true);
-			this.dispose();
+			this.setVisible(false);
 		});
 
 		// 뒤로가기 버튼 기능구현
 		back.addActionListener(e -> {
 			JFrames.getJFrame("MANAGER_A1").setVisible(true);
-			this.dispose();
+			this.setVisible(false);
 		});
 
 		// 패널 배경색 설정
@@ -97,8 +99,7 @@ public class MANAGER_B2 extends JFrame {
 		this.add(grayText2);
 		this.add(accountTablePanel);
 
-		DefaultFrameUtils.makeLogo(this);
 		DefaultFrameUtils.makeTopPanel(this);
-		this.dispose();
+		this.setVisible(false);
 	}
 }
