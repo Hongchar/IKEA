@@ -22,8 +22,8 @@ public class CLIENT_A1 extends JFrame {
 	
 	public CLIENT_A1() {
 		
-		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeLogo(this);
+		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeTopLabel(this, "납품업체 메뉴");
 		
 		regButton.addActionListener(e -> {

@@ -38,8 +38,8 @@ public class MAIN_A1 extends JFrame {
 	private JLabel pwLabel = new JLabel();
 	
 	public MAIN_A1() {
-		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeLogo(this);
+		DefaultFrameUtils.setDefaultSize(this);
 		
 		idField.setBounds(87, 283, 228, 50);
 		idField.setText(null);

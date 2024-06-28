@@ -17,8 +17,8 @@ public class SALESINFO_A1 extends JFrame {
 	private JButton returnButton = new MenuBar("반품 조회", "res/arrow.png", 7, 344, 222);
 	
 	public SALESINFO_A1() {
-		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeLogo(this);
+		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeTopLabel(this, "판매 관리 메뉴");
 		
 		salesButton.addActionListener(e -> {

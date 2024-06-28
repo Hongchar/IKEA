@@ -40,8 +40,8 @@ public class ORDER_B2 extends JFrame {
 	public ORDER_B2() {
 		
 		
-		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeLogo(this);
+		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeTopLabel(this, "발주 현황 조회");
 		ImageIcon img = new ImageIcon("res/calendar_icon.png");
 		JLabel jpg = new JLabel(img);

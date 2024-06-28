@@ -20,8 +20,8 @@ public class PRODUCT_A1 extends JFrame {
 	private JButton home = new HomeButton();
 	
 	public PRODUCT_A1() {
-		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeLogo(this);
+		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeTopLabel(this, "상품 관리 메뉴");
 		
 		proButton.addActionListener(e -> {

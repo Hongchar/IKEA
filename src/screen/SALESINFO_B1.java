@@ -45,8 +45,8 @@ public class SALESINFO_B1 extends JFrame {
 			LocationX, LocationY, width, height);
 	
 	public SALESINFO_B1() {
-		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeLogo(this);
+		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeTopLabel(this, "매출 조회");
 		ImageIcon img = new ImageIcon("res/calendar_icon.png");
 		JLabel jpg = new JLabel(img);

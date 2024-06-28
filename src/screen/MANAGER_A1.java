@@ -20,8 +20,8 @@ public class MANAGER_A1 extends JFrame {
 	private JButton home = new HomeButton();
 	
 	public MANAGER_A1() {
-		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeLogo(this);
+		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeTopLabel(this, "관리자 전용");
 		
 		createButton.addActionListener(e -> {

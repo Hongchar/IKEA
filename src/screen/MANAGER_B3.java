@@ -10,7 +10,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
@@ -51,26 +53,22 @@ public class MANAGER_B3 extends JFrame {
 	private static DefaultTableModel model;
 	
 	public MANAGER_B3() {
-		DefaultFrameUtils.setDefaultSize(this);
-		add(home);
-		add(back);
 		DefaultFrameUtils.makeLogo(this);
+		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeTopLabel(this, "접근기록조회");
-		DefaultFrameUtils.makeTopPanel(this);
-		add(greyLabel1);
 		startDateInput = IkeaTextField.iconHalfTextField(12, 90, "시작날짜");				
 		endDateInput = IkeaTextField.iconHalfTextField(207, 90, "종료날짜");
 		accountInput = IkeaTextField.textField(12, 153, "계정ID");
 		
-		add(searchBtn);
-		add(greyLabel2);
+		ImageIcon img = new ImageIcon("res/calendar_icon.png");
+		JLabel jpg = new JLabel(img);
+		jpg.setBounds(155, 98, 26, 26);
 		
-		add(startDateInput);
-		add(endDateInput);
-		add(accountInput);
+		ImageIcon img2 = new ImageIcon("res/calendar_icon.png");
+		JLabel bg = new JLabel(img2);
+		bg.setBounds(345, 98, 26, 26);
 				
 		tableComp = AddTable.getTable(columnNames);
-		add(tableComp.scrollPane);
 		model = (DefaultTableModel) tableComp.table.getModel();
 		
 		// 테이블 수정 방지
@@ -101,8 +99,22 @@ public class MANAGER_B3 extends JFrame {
 	    accountInput.addActionListener(e -> inputDate());
 	    searchBtn.addActionListener(e -> inputDate());
         
+	    add(jpg);
+	    add(bg);
+	    
+	    add(home);
+	    add(back);
+	    add(greyLabel1);
+	    add(searchBtn);
+	    add(greyLabel2);
+	    
+	    add(startDateInput);
+	    add(endDateInput);
+	    add(accountInput);
+	    add(tableComp.scrollPane);
 		
-		this.setVisible(true);
+	    DefaultFrameUtils.makeTopPanel(this);
+		this.setVisible(false);
 	}
 
 	
@@ -186,14 +198,4 @@ public class MANAGER_B3 extends JFrame {
 	private boolean isValidInput(String input, String placeholder) {
 	    return input != null && !input.trim().isEmpty() && !input.trim().equals(placeholder);
 	}
-
-	public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-        		new MANAGER_B3();
-            }
-        });
-	}
-
 }

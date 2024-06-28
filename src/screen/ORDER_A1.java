@@ -18,8 +18,8 @@ public class ORDER_A1 extends JFrame {
 	private JButton home = new HomeButton();
 	
 	public ORDER_A1() {
-		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeLogo(this);
+		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeTopLabel(this, "발주 관리 메뉴");
 		
 		appButton.addActionListener(e -> {

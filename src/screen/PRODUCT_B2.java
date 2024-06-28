@@ -43,8 +43,8 @@ public class PRODUCT_B2 extends JFrame {
 	int moveText; // 이동할 구역코드 값
 	
 	public PRODUCT_B2() {
-		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeLogo(this);
+		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeTopLabel(this, "상품이동");
 		
 		// 홈 버튼 기능구현

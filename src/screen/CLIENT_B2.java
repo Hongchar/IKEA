@@ -19,7 +19,8 @@ import tool.OhTable;
 import tool.SmallCheckButton;
 
 public class CLIENT_B2 extends JFrame {
-	JTextField text_field = new IkeaTextField().textField(12, 83, "전체조회");
+	private static final long serialVersionUID = 1L;
+	JTextField text_field = IkeaTextField.textField(12, 83, "전체조회");
 	JButton search = new SmallCheckButton("조회", 307, 143);
 	JButton modify = new SmallCheckButton("수정", 207, 143);
 	JButton back = new BackButton();

@@ -48,8 +48,8 @@ public class MANAGER_B2 extends JFrame {
 
 	
 	public MANAGER_B2() {
-		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeLogo(this);
+		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeTopLabel(this, "계정 관리");
 
 		// 홈 버튼 기능구현

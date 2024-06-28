@@ -21,8 +21,8 @@ public class MAIN_A2 extends JFrame {
 	private JLabel grayText = DefaultFrameUtils.makeGrayLabel("Administrator only", 11, 86);
 	
 	public MAIN_A2() {
-		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeLogo(this);
+		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeTimer(this);
 		
 		mgButton.addActionListener(e -> {

@@ -21,18 +21,20 @@ import tool.HomeButton;
 import tool.IkeaTextField;
 
 public class CLIENT_B1 extends JFrame {
-	JTextField Client_name = new IkeaTextField().textField(7, 140, "납품업체명");
-	JTextField Manager_name = new IkeaTextField().textField(7, 200, "담당자명");
-	JTextField Manager_phone = new IkeaTextField().textField(7, 260, "전화번호");
-	JTextField date_field = new IkeaTextField().iconTextField(7, 81, "신청일자: " + LocalDate.now());
+	private static final long serialVersionUID = 1L;
+
+	JTextField Client_name = IkeaTextField.textField(7, 140, "납품업체명");
+	JTextField Manager_name = IkeaTextField.textField(7, 200, "담당자명");
+	JTextField Manager_phone = IkeaTextField.textField(7, 260, "전화번호");
+	JTextField date_field = IkeaTextField.iconTextField(7, 81, "신청일자: " + LocalDate.now());
 
 	JButton save = new BlueLongButton("저장", 10, 321);
 	JButton home = new HomeButton();
 	JButton back = new BackButton();
 
 	public CLIENT_B1() {
-		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeLogo(this);
+		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeTopLabel(this, "  정보등록");
 
 		// 홈 버튼

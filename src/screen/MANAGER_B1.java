@@ -38,8 +38,8 @@ public class MANAGER_B1 extends JFrame {
 	JLabel bottomImage = new BottomImage();
 
 	public MANAGER_B1() {
-		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeLogo(this);
+		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeTopLabel(this, "계정 생성");
 
 		// 홈 버튼 기능구현

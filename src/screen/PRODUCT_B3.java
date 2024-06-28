@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import jframe.JFrames;
 import tool.BackButton;
 import tool.BlueLongButton;
+import tool.BottomImage;
 import tool.CreateTextField;
 import tool.DBConnector;
 import tool.DefaultFrameUtils;
@@ -47,8 +48,8 @@ public class PRODUCT_B3 extends JFrame {
 	int qtyText; // 입고수량 값
 
 	public PRODUCT_B3() {
-		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeLogo(this);
+		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeTopLabel(this, "검수/입고");
 
 		home.addActionListener(e -> {
@@ -129,7 +130,8 @@ public class PRODUCT_B3 extends JFrame {
 		this.add(sectorCord);
 		this.add(productQty);
 		this.add(save);
-		this.dispose();
+		this.add(new BottomImage());
+		this.setVisible(false);
 		
 		DefaultFrameUtils.makeTopPanel(this);
 	}

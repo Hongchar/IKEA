@@ -14,6 +14,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 
+import jframe.JFrames;
 import tool.AddTable;
 import tool.BackButton;
 import tool.BlueLongButton;
@@ -43,13 +44,23 @@ public class PRODUCT_B1 extends JFrame {
     static boolean isLoad = false;
     
     public PRODUCT_B1() {
-        DefaultFrameUtils.makeLogo(this);
         DefaultFrameUtils.setDefaultSize(this);
+        DefaultFrameUtils.makeLogo(this);
+        
+        home.addActionListener(e -> {
+        	JFrames.getJFrame("PRODUCT_A1").setVisible(true);
+        	this.setVisible(false);
+        });
+        back.addActionListener(e -> {
+        	JFrames.getJFrame("PRODUCT_A1").setVisible(true);
+        	this.setVisible(false);
+        });
+        DefaultFrameUtils.makeTopLabel(this, "상품목록조회");
+        add(greyLabel1);
         add(home);
         add(back);
-        DefaultFrameUtils.makeTopLabel(this, "상품목록조회");
+        
         DefaultFrameUtils.makeTopPanel(this);
-        add(greyLabel1);
         inputName = IkeaTextField.textField(12, 81, "상품명");
         add(inputName);
         
@@ -72,7 +83,7 @@ public class PRODUCT_B1 extends JFrame {
         
         editBtn.addActionListener(e -> toggleEditMode());
 
-        this.setVisible(true);
+        this.setVisible(false);
     }
 
     private void toggleEditMode() {
@@ -197,9 +208,5 @@ public class PRODUCT_B1 extends JFrame {
             isLoad = false;
         }
         
-    }
-    
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new PRODUCT_B1());
     }
 }

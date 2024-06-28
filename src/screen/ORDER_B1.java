@@ -35,8 +35,8 @@ public class ORDER_B1 extends JFrame {
 	public ORDER_B1() {
 		
 		
-		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeLogo(this);
+		DefaultFrameUtils.setDefaultSize(this);
 		DefaultFrameUtils.makeTopLabel(this, "발주신청");
 		
 		ImageIcon img = new ImageIcon("res/calendar_icon.png");
