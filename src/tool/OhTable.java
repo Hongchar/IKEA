@@ -5,6 +5,9 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Frame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Connection;
@@ -13,6 +16,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -23,103 +28,95 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 public class OhTable extends JPanel {
-	/*
-	   표 추가 add(new Table(x 좌표값, y좌표값, 가로길이 width, 세로길이 height, 테이블명)
-	   
-	 */
 	static final int WIDTH = 377;
 	static final int HEIGHT = 600;
 	static final String[] COLUMNS = { "거래처ID", "납품업체명", "담당자명", "전화번호", "등록일시" };
-	static DefaultTableModel model = new DefaultTableModel();
-	static JTable jt = new JTable();
+	static DefaultTableModel model;
+	static JTable jt;
 	private MouseAdapter modifyMouseListener;
-	 
+
 	public OhTable() {
 		super();
 		// 표 크기 설정
 		setBounds(6, 201, WIDTH, HEIGHT);
 
-		insertColumns();
-		jt.setModel(model);
+		// 셀 수정 비활성화
+		model = new DefaultTableModel(COLUMNS, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		jt = new JTable(model);
+
+		// 테이블 외형 설정
+		setTableAppearance();
 
 		// 스크롤 바 생성 및 설정
 		JScrollPane scp = new JScrollPane(jt);
 		scp.setPreferredSize(new Dimension(WIDTH, HEIGHT)); // JScrollPane의 크기 설정
 		scp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS); // 가로 스크롤바 항상 표시
 		// JPanel에 JScrollPane 추가
+		setLayout(new BorderLayout());
 		add(scp, BorderLayout.CENTER);
-
 	}
 
-	public void modifyMod(JButton modify) {
-        // 이전에 추가된 마우스 리스너가 있다면 제거
-        removeModifyListener();
-        // 커서 손모양으로 변경
-        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        // 새로운 마우스 클릭 이벤트 리스너 추가
-        modifyMouseListener = new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent evt) {
-                int row = jt.rowAtPoint(evt.getPoint());
-                int col = jt.columnAtPoint(evt.getPoint());
-                if (row >= 0 && col >= 0) {
-                    String columnName = jt.getColumnName(col);
-                    if (columnName.equals("거래처ID")) {
-                        JOptionPane.showMessageDialog(jt, "거래처ID는 수정할 수 없습니다.", "알림",
-                                JOptionPane.INFORMATION_MESSAGE);
-                        return;
-                    }
+	public void modifyMod(JButton modify, JFrame f) {
+		// 이미 리스너가 있을 시 지우기
+		removeModifyListener();
+		// 수정 클릭시 마우스 손바닥 모양 변경
+		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		modifyMouseListener = new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent evt) {
+				int row = jt.rowAtPoint(evt.getPoint());
+				int col = jt.columnAtPoint(evt.getPoint());
+				if (row >= 0 && col >= 0) {
+					String columnName = jt.getColumnName(col);
+					if (columnName.equals("거래처ID")) {
+						DefaultFrameUtils.makeNotice("거래처ID는 수정불가합니다");
+						return;
+					}
 
-                    String value = String.valueOf(jt.getValueAt(row, col));
-                    String newValue = JOptionPane.showInputDialog(jt,
-                            "[" + columnName + "] 값 변경 (" + value + " -> ):");
-                    if (newValue != null && !newValue.isEmpty()) {
-                        jt.setValueAt(newValue, row, col);
-                        JOptionPane.showMessageDialog(jt, "[" + columnName + "] 값이 변경되었습니다.", "알림",
-                                JOptionPane.INFORMATION_MESSAGE);
-                    }
-                }
+					Object cellValue = jt.getValueAt(row, col);
+					String cellName = String.valueOf(cellValue);
 
-                // 수정이 완료되면 다시 리스너 제거 및 커서, 버튼 원상태
-                removeModifyListener();
-                setCursor(Cursor.getDefaultCursor());
-                modify.setText("수정");
-                modify.setFont(new Font("넥슨고딕Lv1", Font.BOLD, 20));
-            }
-        };
+					ModifyDialog dialog = new ModifyDialog(f, columnName, cellName);
+				}
 
-        jt.addMouseListener(modifyMouseListener);
-    }
+				// 수정 완료 후 초기화
+				removeModifyListener();
+				setCursor(Cursor.getDefaultCursor());
+				modify.setText("수정");
+				modify.setFont(new Font("넥슨고딕Lv1", Font.BOLD, 20));
+			}
+		};
+
+		jt.addMouseListener(modifyMouseListener);
+	}
 
 	public void removeModifyListener() {
-        if (modifyMouseListener != null) {
-            jt.removeMouseListener(modifyMouseListener);
-            modifyMouseListener = null;
-        }
-    }
-	
-	// 컬럼 채우기
-	public void insertColumns() {
-		for (String column : COLUMNS) {
-			model.addColumn(column);
+		if (modifyMouseListener != null) {
+			jt.removeMouseListener(modifyMouseListener);
+			modifyMouseListener = null;
 		}
+	}
+
+	// 테이블 외형 설정
+	private void setTableAppearance() {
 		// 컬럼 행 배경색, 글씨색 설정
 		jt.getTableHeader().setBackground(Color.decode("#106EBE"));
 		jt.getTableHeader().setForeground(Color.decode("#FFFFFF"));
+
 		// 컬럼 행 높이 설정
-		int headerHeight = 30; // 원하는 높이 값 설정
+		int headerHeight = 30;
 		jt.getTableHeader().setPreferredSize(new Dimension(jt.getTableHeader().getPreferredSize().width, headerHeight));
-	}
-	
-//	private void update
-	
-	// 셀 외형 세팅
-	private void cellSetting() {
+
 		// 셀 높이 설정
 		int defaultHeight = 40;
 		jt.setRowHeight(defaultHeight);
+
 		// 셀 너비 설정
-		// 너비 자동 크기 조정 비활성화
 		jt.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		int bestSize = 100;
 		for (int i = 0; i < jt.getColumnCount(); i++) {
@@ -135,15 +132,18 @@ public class OhTable extends JPanel {
 		}
 	}
 
-	// Data 가져와서 테이블에 넣기
+	public void insertColumns() {
+		for (String column : COLUMNS) {
+			model.addColumn(column);
+		}
+	}
+
 	public void loadTableData(String where, String input) {
-		// 테이블 데이터 초기화
 		model.setRowCount(0);
 
-		// 데이터 가져오기
 		String sql = "SELECT * FROM CLIENTS" + where;
 		try (Connection conn = DBConnector.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			// 인젝션 공격방지를 위한 조건문
+			// 인젝션 공격 방지용 조건문
 			if (!where.isEmpty()) {
 				pstmt.setString(1, "%" + input + "%");
 			}
@@ -160,6 +160,114 @@ public class OhTable extends JPanel {
 			e.printStackTrace();
 		}
 
-		cellSetting();
+		setTableAppearance();
+	}
+
+	static class ModifyDialog extends JDialog {
+		public ModifyDialog(Frame parent, String colunmName, String sellName) {
+			super(parent, "수정 & 삭제");
+
+			String[] eng_col = { "CLIENT_NAME", "MANAGER_NAME", "MANAGER_PHONE", "CLIENT_DATE" };
+			String[] kor_col = { "납품업체명", "담당자명", "전화번호", "등록일시" };
+
+			setLayout(new BorderLayout());
+			setSize(300, 150);
+
+			// 메세지 라벨
+			String massage = "[" + colunmName + "]에 [" + sellName + "] 수정";
+
+			JLabel messageLabel = new JLabel(massage, JLabel.CENTER);
+			add(messageLabel, BorderLayout.CENTER);
+
+			for (int i = 0; i < kor_col.length; i++) {
+				if (colunmName.equals(kor_col[i])) {
+					colunmName = eng_col[i];
+					break;
+				}
+			}
+
+			String col = colunmName;
+
+			// 버튼 패널
+			JPanel buttonPanel = new JPanel();
+			JButton modifyButton = new JButton("수정");
+			modifyButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					dispose();
+				}
+			});
+
+			JButton deleteButton = new JButton("행 삭제");
+			deleteButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int option = JOptionPane.showConfirmDialog(null, "정말 삭제하시겠습니까?", // message: 표시할 메시지
+							"삭제 확인", // title: 다이얼로그 제목
+							JOptionPane.YES_NO_OPTION, // optionType: 버튼 종류 (YES_NO_OPTION은 OK 및 No 버튼)
+							JOptionPane.QUESTION_MESSAGE // messageType: 메시지 유형 (질문 메시지 아이콘)
+					);
+
+					// 사용자의 선택에 따른 동작 처리
+					if (option == JOptionPane.YES_OPTION) {
+						Update.delete(col, sellName);
+						System.out.println(col);
+						System.out.println(sellName);
+						DefaultFrameUtils.makeNotice("삭제 완료");
+					} else {
+						DefaultFrameUtils.makeNotice("취소");
+					}
+					dispose();
+				}
+			});
+
+			buttonPanel.add(modifyButton);
+			buttonPanel.add(deleteButton);
+			add(buttonPanel, BorderLayout.SOUTH);
+
+			setLocationRelativeTo(parent);
+
+			setVisible(true);
+		}
+
+	}
+
+	static class Update {
+
+		static void modify() {
+			try (Connection conn = DBConnector.getConnection();) {
+
+				String sql2 = "UPDATE fruits SET qty = qty + 1 WHERE fname = '사과'";
+
+				try (PreparedStatement pstmt = conn.prepareStatement(sql2);) {
+					int row = pstmt.executeUpdate();
+					System.out.printf("%d행이 수정되었습니다.\n", row);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+		}
+
+		static void delete(String colunmName, String sellName) {
+		    try (Connection conn = DBConnector.getConnection();) {
+		        String sql = "DELETE FROM CLIENTS WHERE " + colunmName + " = ?";
+		        try (PreparedStatement pstmt = conn.prepareStatement(sql);) {
+		            pstmt.setString(1, sellName);
+		            int rowsAffected = pstmt.executeUpdate();
+		            if (rowsAffected > 0) {
+		                DefaultFrameUtils.makeNotice("삭제 완료");
+		            } else {
+		                DefaultFrameUtils.makeNotice("해당하는 데이터가 없습니다.");
+		            }
+		        } catch (SQLException e) {
+		            if (e.getSQLState().equals("23000")) {
+		                DefaultFrameUtils.makeNotice("납품하고 있는 물건이 있어 삭제 불가능합니다");
+		            } else {
+		                e.printStackTrace(); // 다른 SQLException 처리
+		            }
+		        }
+		    } catch (SQLException e) {
+		        e.printStackTrace(); // Connection 가져오는 과정에서 예외 발생 시 콘솔에 출력
+		    }
+		}
 	}
 }
