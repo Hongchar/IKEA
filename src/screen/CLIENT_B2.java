@@ -12,16 +12,11 @@ import javax.swing.JTextField;
 
 import jframe.JFrames;
 import tool.BackButton;
-import tool.BottomImage;
-import tool.CreateTextField;
 import tool.DefaultFrameUtils;
 import tool.HomeButton;
 import tool.IkeaTextField;
-import tool.InfoLabel;
 import tool.OhTable;
 import tool.SmallCheckButton;
-import tool.TopLabel;
-import tool.TopPanel;
 
 public class CLIENT_B2 extends JFrame {
 	JTextField text_field = new IkeaTextField().textField(12, 83, "전체조회");
