@@ -22,7 +22,11 @@ public class AccountTablePanel extends JPanel {
 	private JScrollPane scp;
 	private String tableName;
 	private String columnIdName;
+	
+	public AccountTablePanel() {
 
+	
+	}
 	public AccountTablePanel(
 			String[] columnNames, int[] columnWidths, String tableName, String columnIdName, 
 			int locationX, int locationY, int width, int height) {

@@ -1,4 +1,4 @@
-package pjc;
+package screen;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

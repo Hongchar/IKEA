@@ -57,8 +57,8 @@ public class Main {
 					JFrame main_a2 = new MAIN_A2();
 					
 					JFrame client_a1 = new CLIENT_A1();
-//					JFrame client_b1 = new CLIENT_B1();
-//					JFrame client_b2 = new CLIENT_B2();
+					JFrame client_b1 = new CLIENT_B1();
+					JFrame client_b2 = new CLIENT_B2();
 					
 					JFrame product_a1 = new PRODUCT_A1();
 					JFrame product_b1 = new PRODUCT_B1();
@@ -70,8 +70,8 @@ public class Main {
 					JFrame salesInfo_b2 = new SALESINFO_B2();
 					
 					JFrame order_a1 = new ORDER_A1();
-//					JFrame order_b1 = new ORDER_B1();
-//					JFrame order_b2 = new ORDER_B2();
+					JFrame order_b1 = new ORDER_B1();
+					JFrame order_b2 = new ORDER_B2();
 					
 					JFrame manager_a1 = new MANAGER_A1();
 					JFrame manager_b1 = new MANAGER_B1();
@@ -82,16 +82,16 @@ public class Main {
 					JFrames.setJFrame("MAIN_A2", main_a2);
 					
 					JFrames.setJFrame("CLIENT_A1", client_a1);
-//					JFrames.setJFrame("CLIENT_B1", client_b1);
-//					JFrames.setJFrame("CLIENT_B2", client_b2);
+					JFrames.setJFrame("CLIENT_B1", client_b1);
+					JFrames.setJFrame("CLIENT_B2", client_b2);
 
 					JFrames.setJFrame("SALESINFO_A1", salesInfo_a1);
 					JFrames.setJFrame("SALESINFO_B1", salesInfo_b1);
 					JFrames.setJFrame("SALESINFO_B2", salesInfo_b2);
 					
 					JFrames.setJFrame("ORDER_A1", order_a1);
-//					JFrames.setJFrame("ORDER_B1", order_b1);
-//					JFrames.setJFrame("ORDER_B2", order_b2);
+					JFrames.setJFrame("ORDER_B1", order_b1);
+					JFrames.setJFrame("ORDER_B2", order_b2);
 					
 					JFrames.setJFrame("PRODUCT_A1", product_a1);
 					JFrames.setJFrame("PRODUCT_B1", product_b1);
