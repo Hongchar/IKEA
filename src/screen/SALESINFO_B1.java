@@ -69,11 +69,11 @@ public class SALESINFO_B1 extends JFrame {
 		String startData = start.getText().trim();
 		String endData = end.getText().trim();
 		if (start.getText() == null && end.getText() != null) {
-			unSql.append("<= '" + endData + "'");
+			unSql.append("<= (TO_DATE('" + endData + "') + 1)");
 		} else if (start.getText() != null && end.getText() == null){
-			unSql.append(">= '" + startData + "'");
+			unSql.append(">= TO_DATE('" + startData + "')");
 		} else if (start.getText() != null && end.getText() != null) {
-			unSql.append(">= '" + startData + "' AND " + "reg_date " + "<= '" + endData + "'");
+			unSql.append(">= TO_DATE('" + startData + "') AND " + "reg_date " + "<= (TO_DATE('" + endData + "') + 1)");
 		}
 		String sql2 = new String(unSql);
 		
