@@ -16,6 +16,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
+import tool.OhTable.Update;
+
 public class CreateTextField {
 	
 	// 긴 사이즈 텍스트입력창 생성
@@ -121,6 +123,7 @@ public class CreateTextField {
 	
 	public static JPasswordField PasswordTextField(Point location) {
 		JPasswordField h_tf = new JPasswordField();
+		h_tf.setEchoChar('*');
 		h_tf.setSize(375, 50);
 		h_tf.setFont(new Font("넥슨Lv1고딕", Font.PLAIN, 14));
 		h_tf.setForeground(Color.GRAY);
