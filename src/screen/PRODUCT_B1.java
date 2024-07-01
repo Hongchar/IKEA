@@ -23,7 +23,6 @@ import tool.DBConnector;
 import tool.DefaultFrameUtils;
 import tool.HomeButton;
 import tool.IkeaTextField;
-import tool.InfoLabel;
 import tool.SmallCheckButton;
 
 public class PRODUCT_B1 extends JFrame {

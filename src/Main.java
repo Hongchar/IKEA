@@ -46,7 +46,7 @@ public class Main {
 				if (LoginTool.confirmExit()) {
 					System.exit(0);
 				}  else {
-					LoginTool.setConfirm('N');
+			        ((JFrame)e.getSource()).setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 				}
 			}
 			

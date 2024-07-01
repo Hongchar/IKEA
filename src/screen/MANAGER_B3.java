@@ -26,7 +26,6 @@ import tool.DBConnector;
 import tool.DefaultFrameUtils;
 import tool.HomeButton;
 import tool.IkeaTextField;
-import tool.InfoLabel;
 
 public class MANAGER_B3 extends JFrame {
 	/**
