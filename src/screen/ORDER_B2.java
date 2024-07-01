@@ -37,6 +37,8 @@ public class ORDER_B2 extends JFrame {
 	
 	private JButton home = new HomeButton();
 	private JButton back = new BackButton();
+	private JLabel grayText = DefaultFrameUtils.makeGrayLabel("PROGRESS INFORMATION", 20, 59);
+
 	public ORDER_B2() {
 		
 		
@@ -72,7 +74,7 @@ public class ORDER_B2 extends JFrame {
 		BlueLongButton b = new BlueLongButton("검색", 10, 260);
 		
 		b.addActionListener(e -> loadData());
-		
+		add(grayText);
 		add(jpg);
 		add(bg);
 		add(b);
@@ -147,7 +149,6 @@ public class ORDER_B2 extends JFrame {
 			PreparedStatement pstmt = conn.prepareStatement(sql)
 			) {
 			for (int i = 0; i < params.size(); ++i) {
-//				System.out.println("Setting parameter " + (i + 1) + ": " + params.get(i));
 				pstmt.setObject(i + 1, params.get(i));
 			}
 			

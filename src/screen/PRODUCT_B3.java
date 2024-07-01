@@ -119,7 +119,7 @@ public class PRODUCT_B3 extends JFrame {
 		        DefaultFrameUtils.makeNotice("모든 필드에 올바른 숫자를 입력해주세요.");
 		    }
 		});
-
+		this.add(grayText);
 		this.add(home);
 		this.add(back);
 		this.add(productName);

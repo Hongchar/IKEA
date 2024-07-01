@@ -15,8 +15,8 @@ public class CLIENT_A1 extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private JButton regButton = new MenuBar("납품업체정보 등록", "res/arrow.png", 7, 241, 120);
-	private JButton modButton = new MenuBar("납품업체정보 수정", "res/arrow.png", 7, 344, 120);
+	private JButton regButton = new MenuBar("납품업체정보 등록", "res/arrow.png", 7, 241, 135);
+	private JButton modButton = new MenuBar("납품업체정보 수정", "res/arrow.png", 7, 344, 135);
 	
 	private JButton home = new HomeButton();
 	

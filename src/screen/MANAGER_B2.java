@@ -30,12 +30,12 @@ public class MANAGER_B2 extends JFrame {
 	JButton back = new BackButton();
 	JTextField searchField = CreateTextField.textField(new Point(12, 80), "계정ID");
 	JLabel grayText1 = DefaultFrameUtils.makeGrayLabel("PROGRESS INFORMATION", 20, 60);
+	JLabel grayText2 = DefaultFrameUtils.makeGrayLabel("SEARCH DATA", 20, 250);
 	JButton searchBtn = new SmallCheckButton("조회", 305, 140);
 	JButton deleteBtn = new SmallCheckButton("삭제", 305, 200);
-	JLabel grayText2 = DefaultFrameUtils.makeGrayLabel("SEARCH DATA", 20, 250);
 
 	// 테이블이 있는 패널 생성
-	String[] columnNames = { "행 번호", "아이디", "비밀번호" };
+	String[] columnNames = { "No.", "아이디", "비밀번호" };
 	int[] columnWidths = {85, 145, 145};
 	String tableName = "wm_account_info";
 	String columnIdName = "account_name";

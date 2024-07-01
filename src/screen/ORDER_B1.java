@@ -31,7 +31,8 @@ public class ORDER_B1 extends JFrame {
 	
 	private JButton home = new HomeButton();
 	private JButton back = new BackButton();
-	
+	private JLabel grayText = DefaultFrameUtils.makeGrayLabel("PROGRESS INFORMATION", 20, 59);
+
 	public ORDER_B1() {
 		
 		
@@ -76,7 +77,7 @@ public class ORDER_B1 extends JFrame {
 		
 		add(back);
 		add(home);
-		
+		add(grayText);
 		DefaultFrameUtils.makeTopPanel(this);
 	}
 	

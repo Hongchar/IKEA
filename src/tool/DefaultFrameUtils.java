@@ -13,7 +13,6 @@ import javax.swing.JLabel;
 // 기본 프레임 도구 
 public class DefaultFrameUtils {
 	static String url = "./res/ikea.png";
-	private static JLabel icon = new JLabel();
 	
 	/** 기본 사이즈로 변환 (setVisible = false)**/
 	public static void setDefaultSize(JFrame f) {
@@ -66,7 +65,7 @@ public class DefaultFrameUtils {
 		
 		JLabel gray = new JLabel(str);
 		
-		gray.setFont(new Font("넥슨Lv1고딕", Font.PLAIN, 14));
+		gray.setFont(new Font("넥슨Lv1고딕 굵게", Font.BOLD, 14));
 		gray.setForeground(new Color(144, 144, 144));
 		gray.setBounds(x, y, 359, 19);
 		

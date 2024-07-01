@@ -111,9 +111,7 @@ public class CLIENT_B1 extends JFrame {
 			}
 		}
 
-		DBConnector connector = new DBConnector();
-
-		try (Connection conn = connector.getConnection()) {
+		try (Connection conn = DBConnector.getConnection()) {
 			// 날짜에 입력받은값이 있을때
 			String sql = date_check
 					? "INSERT INTO clients(client_id, client_name, manager_name, manager_phone, client_date)"

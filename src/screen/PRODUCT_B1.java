@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
@@ -28,7 +29,7 @@ import tool.SmallCheckButton;
 public class PRODUCT_B1 extends JFrame {
     private static final long serialVersionUID = 1L;
 
-    String[] columnNames = {"ID", "재고명", "수량", "원가", "판매가", "무게", "납품업체"};
+    String[] columnNames = {"No.", "재고명", "수량", "원가", "판매가", "무게", "납품업체"};
     
     private static JTextField inputName;
     private AddTable.TableComponents tableComp;
@@ -36,11 +37,10 @@ public class PRODUCT_B1 extends JFrame {
     
     HomeButton home = new HomeButton();
     BackButton back = new BackButton();
-    InfoLabel greyLabel1 = new InfoLabel("SEARCH CONDINTS", 20, 59);
-    InfoLabel greyLabel2 = new InfoLabel("SEARCH DATE", 6, 296);
     BlueLongButton searchBtn = new BlueLongButton("검색", 14, 159);
     SmallCheckButton editBtn = new SmallCheckButton("수정", 305, 206);
-    
+	JLabel greyLabel1 = DefaultFrameUtils.makeGrayLabel("SEARCH CONDITIONS", 20, 59);
+	JLabel greyLabel2 = DefaultFrameUtils.makeGrayLabel("SEARCH DATA", 6, 296);
     static boolean isLoad = false;
     
     public PRODUCT_B1() {

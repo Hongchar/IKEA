@@ -33,7 +33,7 @@ public class SALESINFO_B2 extends JFrame {
 	private JTextField end = CreateTextField.halfTextField(new Point(198, 80), "종료");
 	
 	// 테이블이 있는 패널 생성
-	String[] columnNames = { "번호", "총금액", "반품일", "상품명", "반품수량", "반품금액",};
+	String[] columnNames = { "No.", "총금액", "반품일", "상품명", "반품수량", "반품금액",};
 	int[] columnWidths = {124, 124, 124, 124, 124, 124};
 	String tableName = "sales_record"; // 테이블명 확인후 넣기
 	String columnIdName = "account_name"; // 컬럼명 확인 후 넣기
@@ -110,7 +110,6 @@ public class SALESINFO_B2 extends JFrame {
 				
 			} catch (SQLException e1) {
 				DefaultFrameUtils.makeNotice("날짜를 입력해주세요.");
-				System.out.println("SQL문 오류");
 			}
 		});
 		

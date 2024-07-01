@@ -44,9 +44,9 @@ public class MANAGER_B3 extends JFrame {
 	HomeButton home = new HomeButton();
 	BackButton back = new BackButton();
 	BlueLongButton searchBtn = new BlueLongButton("검색", 12, 220);
-	InfoLabel greyLabel1 = new InfoLabel("SEARCH CONDITIONS", 20, 58);
-	InfoLabel greyLabel2 = new InfoLabel("SEARCH DATA", 6, 296);
-	
+	JLabel greyLabel1 = DefaultFrameUtils.makeGrayLabel("SEARCH CONDITIONS", 17, 69);
+	JLabel greyLabel2 = DefaultFrameUtils.makeGrayLabel("SEARCH DATA", 6, 296);
+
 	private JTextField startDateInput, endDateInput, accountInput;
 	
 	private AddTable.TableComponents tableComp;
@@ -87,7 +87,7 @@ public class MANAGER_B3 extends JFrame {
 		back.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JFrames.getJFrame("MANAGER_B2").setVisible(true);
+				JFrames.getJFrame("MANAGER_A1").setVisible(true);
 				JFrames.getJFrame("MANAGER_B3").setVisible(false);				
 
 			}
@@ -176,15 +176,6 @@ public class MANAGER_B3 extends JFrame {
 	                	row[i] = rs.getString(i);
 	                }
 	                
-//	                접속일 시간 없애는 거
-//	                for (int i = 1; i <= colCnt; i++) {
-//	                    if (rs.getMetaData().getColumnName(i).equalsIgnoreCase("access_date")) {
-//	                        java.sql.Date accDate = rs.getDate("access_date");
-//	                        row[i] = (accDate != null) ? dateForm.format(accDate) : "";
-//	                    } else {
-//	                        row[i] = rs.getString(i);
-//	                    }
-//	                }
 	                model.addRow(row);
 	                isAccessLog = true;
 	            }

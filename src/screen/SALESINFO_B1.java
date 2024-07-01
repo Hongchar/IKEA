@@ -33,7 +33,7 @@ public class SALESINFO_B1 extends JFrame {
 	private JTextField end = CreateTextField.halfTextField(new Point(198, 80), "종료");
 	
 	// 테이블이 있는 패널 생성
-	String[] columnNames = { "번호", "총금액", "판매일", "상품명", "판매수량", "판매금액",};
+	String[] columnNames = { "No.", "총금액", "판매일", "상품명", "판매수량", "판매금액",};
 	int[] columnWidths = {124, 124, 124, 124, 124, 124};
 	String tableName = "sales_record"; // 테이블명 확인후 넣기
 	String columnIdName = "account_name"; // 컬럼명 확인 후 넣기
