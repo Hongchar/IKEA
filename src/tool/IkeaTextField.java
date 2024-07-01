@@ -34,6 +34,7 @@ public class IkeaTextField {
     	JTextField txf = new IconTextField(x, y, label, new ImageIcon("./res/calendar.png"));
     	txf.setBorder(roundBorder());
     	
+    	
     	return txf;
     }
     

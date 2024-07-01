@@ -26,7 +26,6 @@ public class DefaultFrameUtils {
 		Image img = toolkit.getImage("./res/ikeaLogo.png");
 		f.setIconImage(img);
 
-		 
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setResizable(false);
 		f.getContentPane().setBackground(new Color(255, 255, 255));
