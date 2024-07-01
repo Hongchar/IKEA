@@ -4,6 +4,7 @@ import javax.swing.JOptionPane;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.MediaTracker;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -40,9 +41,16 @@ public class DefaultFrameUtils {
 	
 	/** IKEA 로고 생성 **/
 	public static void makeLogo(JFrame f) {
-		icon.setIcon(new ImageIcon(url));
-		icon.setBounds(0, 6, 100, 38);
-		f.add(icon);
+	    ImageIcon logoIcon = new ImageIcon(url);
+	    if (logoIcon.getImageLoadStatus() == MediaTracker.COMPLETE) {
+	        JLabel icon = new JLabel(logoIcon);
+	        icon.setBounds(0, 6, 100, 38);
+	        f.getContentPane().add(icon);
+	        f.revalidate();
+	        f.repaint();
+	    } else {
+	        System.err.println("로고 이미지를 불러올 수 없습니다: " + url);
+	    }
 	}
 	/** 상단 라벨 생성 (String 메세지) 입력 **/
 	public static void makeTopLabel(JFrame f, String str) {
@@ -52,15 +60,6 @@ public class DefaultFrameUtils {
 	public static void makeTimer(JFrame f) {
 		new DigitalWatch(f);
 	}
-	
-//	/** 홈버튼 생성 **/
-//	public static void makeHomeButton(JFrame f) {
-//		f.add(new HomeButton());
-//	}
-//	/** 뒤로가기 버튼 생성 **/
-//	public static void makeBackButton(JFrame f) {
-//		f.add(new BackButton());
-//	}
 	
 	/** 회색 문구 라벨 생성 **/
 	public static JLabel makeGrayLabel(String str, int x, int y) {
