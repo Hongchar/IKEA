@@ -29,7 +29,7 @@ public class MAIN_A1 extends JFrame {
 	
 	private JTextField idField = CreateTextField.textField(new Point(12, 282), "ID");
 	private JPasswordField pwField = CreateTextField.PasswordTextField(new Point(12, 347));
-	static JButton login = new BlueLongButton("로그인", 12, 412);
+	private static JButton login = new BlueLongButton("로그인", 12, 412);
 	
 	private static String id;
 	private static String pw;
@@ -78,7 +78,7 @@ public class MAIN_A1 extends JFrame {
 		
 		ImageIcon img = new ImageIcon("res/ikeaLogo.png");
 		JLabel jpg = new JLabel(img);
-		jpg.setBounds(121, 202, 153, 55);
+		jpg.setBounds(121, 202, 171, 69);
 		
 		ImageIcon img2 = new ImageIcon("res/login_bg.png");
 		JLabel bg = new JLabel(img2);
