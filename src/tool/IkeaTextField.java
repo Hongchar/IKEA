@@ -31,14 +31,15 @@ public class IkeaTextField {
     }
    
     public static JTextField iconTextField(int x, int y, String label) {
-    	JTextField txf = new IconTextField(x, y, label, new ImageIcon("C:\\aiautomation_kdm\\repositories\\ikea\\res\\calendar.png"));
+    	JTextField txf = new IconTextField(x, y, label, new ImageIcon("./res/calendar.png"));
     	txf.setBorder(roundBorder());
+    	
     	
     	return txf;
     }
     
     public static JTextField iconHalfTextField(int x, int y, String label) {
-    	JTextField txf = new IconHalfTextField(x, y, label, new ImageIcon("C:\\aiautomation_kdm\\repositories\\ikea\\res\\calendar.png"));
+    	JTextField txf = new IconHalfTextField(x, y, label, new ImageIcon("./res/calendar.png"));
     	txf.setBorder(roundBorder());
     	
     	return txf;

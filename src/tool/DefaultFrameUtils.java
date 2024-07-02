@@ -4,7 +4,9 @@ import javax.swing.JOptionPane;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.MediaTracker;
+import java.awt.Toolkit;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -19,6 +21,11 @@ public class DefaultFrameUtils {
 		f.setSize(410, 850);
 		f.setLayout(null);
 		f.setLocationRelativeTo(null);
+
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		Image img = toolkit.getImage("./res/ikeaLogo.png");
+		f.setIconImage(img);
+
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setResizable(false);
 		f.getContentPane().setBackground(new Color(255, 255, 255));

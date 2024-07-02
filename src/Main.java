@@ -44,7 +44,7 @@ public class Main {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				if (LoginTool.confirmExit()) {
-					System.exit(0);
+					JFrames.getJFrame("MAIN_A1").dispose();
 				}  else {
 			        ((JFrame)e.getSource()).setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 				}
