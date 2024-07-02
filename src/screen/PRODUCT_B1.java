@@ -28,7 +28,7 @@ import tool.SmallCheckButton;
 public class PRODUCT_B1 extends JFrame {
     private static final long serialVersionUID = 1L;
 
-    String[] columnNames = {"No.", "재고명", "수량", "원가", "판매가", "무게", "납품업체"};
+    String[] columnNames = {"No.", "재고명", "수량", "원가", "판매가", "무게", "가로", "세로", "높이", "구역코드", "납품업체"};
     
     private static JTextField inputName;
     private AddTable.TableComponents tableComp;
@@ -103,8 +103,18 @@ public class PRODUCT_B1 extends JFrame {
     }
 
     private void updateAllRows() {
-        String updateSql = "UPDATE product SET product_name=?, product_qty=?, product_cost=?, " +
-                           "product_price=?, product_weight=?, client_id=? WHERE product_seq=?";
+        String updateSql = "UPDATE product SET "
+        		+ "product_name = ?, "
+        		+ "product_qty = ?, "
+        		+ "product_cost = ?, " 
+        		+ "product_price = ?, "
+        		+ "product_weight = ?, "
+        		+ "product_x = ?, "
+        		+ "product_y = ?, "
+        		+ "product_height = ?, "
+        		+ "sector_seq = ?, "
+        		+ "client_id = ? "
+        		+ "WHERE product_seq = ?";
         
         try (Connection conn = DBConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateSql)) {
@@ -112,10 +122,10 @@ public class PRODUCT_B1 extends JFrame {
             conn.setAutoCommit(false);
             
             for (int i = 0; i < model.getRowCount(); i++) {
-                for (int j = 1; j <= 6; j++) {
+                for (int j = 1; j <= 10; j++) {
                     pstmt.setString(j, (String) model.getValueAt(i, j));
                 }
-                pstmt.setString(7, (String) model.getValueAt(i, 0));
+                pstmt.setString(11, (String) model.getValueAt(i, 0));
                 pstmt.addBatch();
             }
             
@@ -132,9 +142,18 @@ public class PRODUCT_B1 extends JFrame {
     public static void getProductName() {
         String name = inputName.getText();
         
-        String sql = "SELECT product_seq, product_name, product_qty, product_cost, " +
-                     "product_price, product_weight, client_id FROM product" +
-                     (name.isBlank() ? "" : " WHERE product_name LIKE ?");
+        String sql = "SELECT product_seq, "
+        		+ "product_name, "
+        		+ "product_qty, "
+        		+ "product_cost, " 
+        		+ "product_price, "
+        		+ "product_weight, "
+        		+ "product_x, "
+        		+ "product_y, "
+        		+ "product_height, "
+        		+ "sector_seq, "
+        		+ "client_id FROM product" 
+        		+ (name.isBlank() ? "" : " WHERE product_name LIKE ?");
 
         model.setRowCount(0);
 
