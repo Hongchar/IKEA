@@ -1,8 +1,6 @@
 package screen;
 
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +10,10 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 
 import jframe.JFrames;
 import tool.BackButton;
@@ -37,10 +39,7 @@ public class PRODUCT_B2 extends JFrame {
 	JLabel grayText = DefaultFrameUtils.makeGrayLabel("PROGRESS INFORMATION", 20, 60);
 	JButton move = new BlueLongButton("이동", 12, 260);
 	
-	int idText; // 재고ID 값
-	int sectorCodeText; // 구역코드 값
-	int qtyText; // 수량 값
-	int moveText; // 이동할 구역코드 값
+	int idText, sectorCodeText, qtyText, moveText;
 	
 	public PRODUCT_B2() {
 		DefaultFrameUtils.makeLogo(this);
@@ -59,52 +58,28 @@ public class PRODUCT_B2 extends JFrame {
 			this.setVisible(false);
 		});
 		
-		// 재고ID 텍스트 필드 기능구현
-		productId.addActionListener(e -> {
-			try {
-				String text = productId.getText();
-				idText = Integer.parseInt(text);
-			} catch (NumberFormatException e1) {
-				DefaultFrameUtils.makeNotice("재고ID를 입력하세요.");
-
-			}
-		});
-		
-		// 구역코드 텍스트 필드 기능구현
-		sectorCode.addActionListener(e -> {
-			try {
-				String text = sectorCode.getText();
-				sectorCodeText = Integer.parseInt(text);
-			} catch (NumberFormatException exception) {
-				DefaultFrameUtils.makeNotice("구역코드를 입력하세요.");
-			}
-		});
-		
-		// 수량 텍스트 필드 기능구현
-		productQty.addActionListener(e -> {
-			try {
-				String text = productQty.getText();
-				qtyText = Integer.parseInt(text);
-			} catch (NumberFormatException exception) {
-				DefaultFrameUtils.makeNotice("수량을 입력하세요.");
-
-			}
-		});
-		// 이동할 구역코드 텍스트 필드 기능구현
-		moveSector.addActionListener(e -> {
-			try {
-				String text = moveSector.getText();
-				moveText = Integer.parseInt(text);
-			} catch (NumberFormatException exception) {
-				DefaultFrameUtils.makeNotice("이동할 구역코드를 입력하세요.");
-
-			}
-		});
+		  // 재고ID 텍스트 필드 커스텀 Document 설정
+        productId.setDocument(new ProductIdDocument());
+        
 		
 		move.addActionListener(e -> {
-		    String checkCapacitySql = "SELECT max_capacity FROM sector WHERE sector_seq = ?";
-		    String updateProductSql = "UPDATE product SET sector_seq = ? WHERE sector_seq = ? AND product_seq = ? AND product_qty = ?";
-		    String updateSectorSql = "UPDATE sector SET max_capacity = max_capacity - ? WHERE sector_seq = ?";
+			try {
+				String idGetText = productId.getText().split(" - ")[0]; // ID만 추출
+				String secGetText = sectorCode.getText();
+				String qtyGetText = productQty.getText();
+				String moveGetText = moveSector.getText();
+				
+               			idText = Integer.parseInt(idGetText);
+				sectorCodeText = Integer.parseInt(secGetText);
+				qtyText = Integer.parseInt(qtyGetText);
+				moveText = Integer.parseInt(moveGetText);
+				
+			} catch (NumberFormatException exception) {
+				DefaultFrameUtils.makeNotice("입력한 값을 확인해주세요.");
+			}
+			String checkCapacitySql = "SELECT sector_seq, max_capacity FROM sector WHERE sector_seq = ?";
+			String updateProductSql = "UPDATE product SET sector_seq = ? WHERE sector_seq = ? AND product_seq = ? AND product_qty = ?";
+			String updateSectorSql = "UPDATE sector SET max_capacity = max_capacity - ? WHERE sector_seq = ?";
 
 		    try (
 		    	Connection conn = DBConnector.getConnection()
@@ -115,18 +90,18 @@ public class PRODUCT_B2 extends JFrame {
 		        try (
 		        	PreparedStatement checkStmt = conn.prepareStatement(checkCapacitySql)
 		        ) {
-		            checkStmt.setInt(1, moveText);
+		            checkStmt.setInt(1, sectorCodeText);
 		            try (ResultSet rs = checkStmt.executeQuery()) {
 		                if (rs.next()) {
 		                    int availableCapacity = rs.getInt("max_capacity");
 		                    if (qtyText > availableCapacity) {
-		                        DefaultFrameUtils.makeNotice(String.format("구역 %d의 최대 적재량 %d을(를) 초과합니다.", moveText, availableCapacity));
-		                        return;
+		        		        DefaultFrameUtils.makeNotice(String.format("[구역 %d]의 최대 적재량 %d을 초과합니다.", moveText, availableCapacity));
+		        		        return;
 		                    }
-		                } else {
-		                    DefaultFrameUtils.makeNotice(String.format("구역 %d을(를) 찾을 수 없습니다.", moveText));
-		                    return;
-		                }
+		                } 
+		            } catch (SQLException ex) {
+		            	 DefaultFrameUtils.makeNotice(String.format("[구역 %d]을 찾을 수 없습니다.", moveText));
+		    		     return;
 		            }
 		        }
 
@@ -134,46 +109,45 @@ public class PRODUCT_B2 extends JFrame {
 		        try (
 		        	PreparedStatement updateProductStmt = conn.prepareStatement(updateProductSql)
 		        ) {
-		            updateProductStmt.setInt(1, moveText);
-		            updateProductStmt.setInt(2, sectorCodeText);
-		            updateProductStmt.setInt(3, idText);
-		            updateProductStmt.setInt(4, qtyText);
-		            
-		            int affectedRows = updateProductStmt.executeUpdate();
-		            
-		            if (affectedRows == 0) {
-		                conn.rollback();
-		                DefaultFrameUtils.makeNotice("해당하는 상품을 찾을 수 없습니다.");
-		                return;
-		            }
-		        }
+					updateProductStmt.setInt(1, moveText);
+					updateProductStmt.setInt(2, sectorCodeText);
+					updateProductStmt.setInt(3, idText);
+					updateProductStmt.setInt(4, qtyText);
 
-		        // 이전 구역의 max_capacity 증가
-		        try (
-		        	PreparedStatement updateOldSectorStmt = conn.prepareStatement(updateSectorSql)
-		        ) {
-		            updateOldSectorStmt.setInt(1, -qtyText);  // 증가시키므로 음수 사용
-		            updateOldSectorStmt.setInt(2, sectorCodeText);
-		            updateOldSectorStmt.executeUpdate();
-		        }
+					int affectedRows = updateProductStmt.executeUpdate();
 
-		        // 새 구역의 max_capacity 감소
-		        try (
-		        	PreparedStatement updateNewSectorStmt = conn.prepareStatement(updateSectorSql)
-		        ) {
-		            updateNewSectorStmt.setInt(1, qtyText);
-		            updateNewSectorStmt.setInt(2, moveText);
-		            updateNewSectorStmt.executeUpdate();
-		        }
-
-		        conn.commit();  // 트랜잭션 커밋
-		        DefaultFrameUtils.makeNotice(String.format("재고ID %d[%d개]가 %d 구역으로 이동하였습니다", idText, qtyText, moveText));
-
-		    } catch (SQLException ex) {
-		        DefaultFrameUtils.makeNotice("데이터베이스 오류: " + ex.getMessage());
-		    } catch (NumberFormatException ex) {
-		        DefaultFrameUtils.makeNotice("올바른 숫자 형식을 입력해주세요.");
-		    }
+					if (affectedRows == 0) {
+						conn.rollback();
+						DefaultFrameUtils.makeNotice("상품 업데이트에 실패했습니다. 해당하는 상품을 찾을 수 없습니다.");
+						return;
+					} else {
+						try (
+							PreparedStatement updateOldSectorStmt = conn.prepareStatement(updateSectorSql);
+							PreparedStatement updateNewSectorStmt = conn.prepareStatement(updateSectorSql);
+						) {
+							// 이전 구역의 max_capacity 증가
+							updateOldSectorStmt.setInt(1, -qtyText); // 증가시키므로 음수 사용
+							updateOldSectorStmt.setInt(2, sectorCodeText);
+							updateOldSectorStmt.executeUpdate();
+							// 새 구역의 max_capacity 감소
+							updateNewSectorStmt.setInt(1, qtyText);
+							updateNewSectorStmt.setInt(2, moveText);
+							updateNewSectorStmt.executeUpdate();
+						} catch (SQLException ex) {
+							conn.rollback();
+							DefaultFrameUtils.makeNotice("상품 이동중 오류가 발생했습니다.");
+							return;
+						}
+					}
+				} catch (SQLException ex) {
+					DefaultFrameUtils.makeNotice("상품 이동중 오류2: " + ex.getMessage());
+				}
+				conn.commit(); // 트랜잭션 커밋
+				DefaultFrameUtils.makeNotice(
+						String.format("%s (%d개)가 [%d 구역]으로 이동하였습니다", ProductIdDocument.getName(), qtyText, moveText));
+			} catch (SQLException ex) {
+				DefaultFrameUtils.makeNotice("데이터베이스 오류: " + ex.getMessage());
+			}
 		});
 
 		this.add(home);
@@ -188,4 +162,73 @@ public class PRODUCT_B2 extends JFrame {
 		DefaultFrameUtils.makeTopPanel(this);
 		this.setVisible(false);
 	}
+	// 커스텀 Document 클래스
+    private class ProductIdDocument extends PlainDocument {
+		private static final long serialVersionUID = 1520123699877680670L;
+		private static String name;
+		
+		
+		public static String getName() {
+			return name;
+		}
+
+		@Override
+        public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+            if (str == null) return;
+            
+            String currentText = getText(0, getLength());
+            String[] parts = currentText.split(" - ");
+            String idPart = parts[0];
+            
+            if (offs <= idPart.length()) {
+                super.insertString(offs, str, a);
+                updateProductName();
+            }
+        }
+        
+        @Override
+        public void remove(int offs, int len) throws BadLocationException {
+            super.remove(offs, len);
+            updateProductName();
+        }
+        
+        private void updateProductName() {
+            SwingUtilities.invokeLater(() -> {
+                try {
+                    String fullText = getText(0, getLength());
+                    String[] parts = fullText.split(" - ");
+                    String idPart = parts[0].trim();
+                    
+                    if (!idPart.isEmpty()) {
+                        int productId = Integer.parseInt(idPart);
+                        name = getProductNameById(productId);
+                        String newText = idPart + (name != null ? " - " + name : " - 해당 ID의 재고 없음");
+                        
+                        if (!fullText.equals(newText)) {
+                            replace(0, getLength(), newText, null);
+                        }
+                    }
+                } catch (NumberFormatException | BadLocationException e) {
+                    // 숫자가 아닌 경우 또는 Document 조작 실패 시 무시
+                }
+            });
+        }
+    }
+    
+    private String getProductNameById(int productId) {
+        String sql = "SELECT product_name FROM product WHERE product_seq = ?";
+        try (Connection conn = DBConnector.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, productId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("product_name");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            DefaultFrameUtils.makeNotice("데이터베이스 오류: " + e.getMessage());
+        }
+        return null;
+    }
 }
