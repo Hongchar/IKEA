@@ -101,7 +101,7 @@ public class OhTable extends JPanel {
     public void loadTableData(String where, String input) {
         model.setRowCount(0);
 
-        String sql = "SELECT * FROM CLIENTS" + where;
+        String sql = "SELECT * FROM CLIENTS" + where + " ORDER BY CLIENT_ID";
         try (Connection conn = DBConnector.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             // 인젝션 공격 방지용 조건문
             if (!where.isEmpty()) {
