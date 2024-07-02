@@ -90,16 +90,11 @@ public class PRODUCT_B1 extends JFrame {
     }
     
     private void toggleEditMode() {
-        if (editBtn.getText().equals("수정")) {
-            tableComp.table.setDefaultEditor(Object.class, new DefaultCellEditor(new JTextField()));
-            tableComp.table.setEnabled(true);
-            editBtn.setText("완료");
-        } else {
-            tableComp.table.setDefaultEditor(Object.class, null);
-            tableComp.table.setEnabled(false);
-            editBtn.setText("수정");
-            updateAllRows();
-        }
+        boolean isEditing = editBtn.getText().equals("수정");
+        tableComp.table.setDefaultEditor(Object.class, isEditing ? new DefaultCellEditor(new JTextField()) : null);
+        tableComp.table.setEnabled(isEditing);
+        editBtn.setText(isEditing ? "완료" : "수정");
+        if (!isEditing) updateAllRows();
     }
 
     private void updateAllRows() {
