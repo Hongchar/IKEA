@@ -1,6 +1,7 @@
 package tool;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
@@ -44,14 +46,27 @@ public class AddTable {
 		
 		JScrollPane scp = new JScrollPane(table);
 		scp.setBounds(6, 315, 377, 500);
-		scp.setFont(new Font("넥슨Lv1고딕", Font.PLAIN, 14));
+		table.setFont(new Font("넥슨Lv1고딕", Font.PLAIN, 14));
 		
 		DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
 		dtcr.setHorizontalAlignment(SwingConstants.CENTER);
 		
+		// 테이블 헤더 글꼴, 색상 설정
+		table.getTableHeader().setFont(new Font("넥슨Lv1고딕", Font.PLAIN, 16));
 		table.getTableHeader().setBackground(Color.decode("#106EBE"));
 		table.getTableHeader().setForeground(Color.decode("#FFFFFF"));
 		
+        // 컬럼 행 높이 설정
+        int headerHeight = 30;
+        table.getTableHeader().setPreferredSize(new Dimension(table.getTableHeader().getPreferredSize().width, headerHeight));
+		
+        // 셀 내용 가운데 정렬
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+        
 		int defaultHeight = 40;
 		table.setRowHeight(defaultHeight);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);

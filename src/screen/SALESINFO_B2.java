@@ -1,6 +1,7 @@
 package screen;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import jframe.JFrames;
@@ -55,6 +56,11 @@ public class SALESINFO_B2 extends JFrame {
 		ImageIcon img2 = new ImageIcon("res/calendar_icon.png");
 		JLabel bg = new JLabel(img2);
 		bg.setBounds(343, 91, 26, 26);
+		
+		JTable table = accountTablePanel.getTable();
+		
+		table.getColumn("No.").setPreferredWidth(50);
+		table.getColumn("반품일").setPreferredWidth(200);
 		
 		start.addActionListener(e -> {
 			

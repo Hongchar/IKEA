@@ -82,6 +82,9 @@ public class MANAGER_B1 extends JFrame {
 					pstmt.setString(2, pw);
 					pstmt.executeUpdate();
 					DefaultFrameUtils.makeNotice("ID가 정상적으로 생성되었습니다.");
+					
+					idField.setText("");
+					pwField.setText("");
 
 				} catch (SQLException ex) {
 					DefaultFrameUtils.makeNotice("이미 등록된 ID입니다.");

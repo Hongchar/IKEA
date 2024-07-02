@@ -6,15 +6,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 import jframe.JFrames;
@@ -32,6 +32,8 @@ public class MANAGER_B3 extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private static final Pattern DATE_PATTERN = Pattern.compile("^\\d{4}(\\d{2}\\d{2}|-\\d{2}-\\d{2})$");
 	
 	CreateTextField text = new CreateTextField();
 	String[] columnNames = {"No.", "아이디", "접속일"};
@@ -69,6 +71,9 @@ public class MANAGER_B3 extends JFrame {
 				
 		tableComp = AddTable.getTable(columnNames);
 		model = (DefaultTableModel) tableComp.table.getModel();
+		
+		tableComp.table.getColumn("No.").setPreferredWidth(50);
+		tableComp.table.getColumn("접속일").setPreferredWidth(200);
 		
 		// 테이블 수정 방지
 		tableComp.table.setEnabled(false);
@@ -125,6 +130,11 @@ public class MANAGER_B3 extends JFrame {
 		String endDate = endDateInput.getText().trim();
 		String account = accountInput.getText().trim();
 		
+//        if (!isValidDateFormat(startDate) && !isValidDateFormat(endDate)) {
+//            JOptionPane.showMessageDialog(this, "날짜는 yyyymmdd 또는 yyyy-mm-dd 형식으로 입력해주세요.", "입력 오류", JOptionPane.ERROR_MESSAGE);
+//            return;
+//        }
+		
 		model.setRowCount(0);
 
 		StringBuilder sb = new StringBuilder();
@@ -133,14 +143,14 @@ public class MANAGER_B3 extends JFrame {
 		List<String> conditions = new ArrayList<>();
 		List<Object> params = new ArrayList<>();
 
-	    if (isValidInput(startDate, "시작날짜")) {
-	        conditions.add("access_date >= TO_DATE(?, 'YYYY-MM-DD')");
-	        params.add(startDate.trim());
-	    }
-	    if (isValidInput(endDate, "종료날짜")) {
-	        conditions.add("access_date <= (TO_DATE(?, 'YYYY-MM-DD') + 1)");
-	        params.add(endDate.trim());
-	    }
+        if (!startDate.isEmpty()) {
+            conditions.add("access_date >= TO_DATE(?, 'YYYY-MM-DD')");
+            params.add(startDate);
+        }
+        if (!endDate.isEmpty()) {
+            conditions.add("access_date <= (TO_DATE(?, 'YYYY-MM-DD') + 1)");
+            params.add(endDate);
+        }
 	    if (isValidInput(account, "계정ID")) {
 	        conditions.add("lower(account_name) LIKE ?");
 	        params.add("%" + account.toLowerCase().trim() + "%");
@@ -184,6 +194,17 @@ public class MANAGER_B3 extends JFrame {
 	        isAccessLog = false;
 	    }
 	}
+	
+//    private boolean isValidDateFormat(String date) {
+//        return DATE_PATTERN.matcher(date).matches();
+//    }
+//	
+//    private String formatDate(String date) {
+//        if (date.length() == 8) {
+//            return date.substring(0, 4) + "-" + date.substring(4, 6) + "-" + date.substring(6);
+//        }
+//        return date.replaceAll("-", "");
+//    }
 	
 	private boolean isValidInput(String input, String placeholder) {
 	    return input != null && !input.trim().isEmpty() && !input.trim().equals(placeholder);

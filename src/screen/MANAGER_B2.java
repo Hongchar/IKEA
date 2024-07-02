@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 
 import jframe.JFrames;
@@ -19,6 +20,7 @@ import tool.BlueLongButton;
 import tool.CreateTextField;
 import tool.DefaultFrameUtils;
 import tool.HomeButton;
+import tool.IkeaTextField;
 import tool.SmallCheckButton;
 
 public class MANAGER_B2 extends JFrame {
@@ -28,7 +30,7 @@ public class MANAGER_B2 extends JFrame {
 	// 버튼, 필드, 라벨 등 생성
 	JButton home = new HomeButton();
 	JButton back = new BackButton();
-	JTextField searchField = CreateTextField.textField(new Point(12, 80), "계정ID");
+	JTextField searchField = IkeaTextField.textField(12, 80, "계정ID");
 	JLabel grayText1 = DefaultFrameUtils.makeGrayLabel("PROGRESS INFORMATION", 20, 60);
 	JLabel grayText2 = DefaultFrameUtils.makeGrayLabel("SEARCH DATA", 20, 250);
 	JButton searchBtn = new SmallCheckButton("조회", 305, 140);
@@ -42,7 +44,7 @@ public class MANAGER_B2 extends JFrame {
 	int LocationX = 10; int LocationY = 40;
 	int width = 375;    int height = 540;
 
-	JPanel accountTablePanel = new AccountTablePanel(
+	AccountTablePanel accountTablePanel = new AccountTablePanel(
 			columnNames, columnWidths, tableName, columnIdName, 
 			LocationX, LocationY, width, height);
 
@@ -66,7 +68,10 @@ public class MANAGER_B2 extends JFrame {
 
 		// 패널 배경색 설정
 		accountTablePanel.setBackground(Color.WHITE);
-		accountTablePanel.setBounds(0, 230, 400, 600); 
+		accountTablePanel.setBounds(0, 230, 400, 600);
+		
+		JTable table = accountTablePanel.getTable();
+        table.setEnabled(false);
 
 		// 조회 버튼 클릭 이벤트
 		searchBtn.addActionListener(new ActionListener() {

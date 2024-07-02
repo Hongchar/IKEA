@@ -5,11 +5,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.swing.DefaultCellEditor;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
@@ -70,10 +70,14 @@ public class PRODUCT_B1 extends JFrame {
         tableComp = AddTable.getTable(columnNames);
         add(tableComp.scrollPane);
         model = (DefaultTableModel) tableComp.table.getModel();
-        
+
+        tableComp.table.setDefaultEditor(Object.class, null); // 수정모드 전 테이블 편집불가
         editBtn.setEnabled(false);  // 초기에 수정 버튼 비활성화
         
-        inputName.addActionListener(e -> getProductName());
+        inputName.addActionListener(e -> {
+        	getProductName();
+        	editBtn.setEnabled(true);
+        });
         
         searchBtn.addActionListener(e -> {
             getProductName();
@@ -84,93 +88,44 @@ public class PRODUCT_B1 extends JFrame {
 
         this.setVisible(false);
     }
-
+    
     private void toggleEditMode() {
         if (editBtn.getText().equals("수정")) {
-            enableTableEditing();
+            tableComp.table.setDefaultEditor(Object.class, new DefaultCellEditor(new JTextField()));
+            tableComp.table.setEnabled(true);
+            editBtn.setText("완료");
         } else {
-            disableTableEditing();
+            tableComp.table.setDefaultEditor(Object.class, null);
+            tableComp.table.setEnabled(false);
+            editBtn.setText("수정");
+            updateAllRows();
         }
     }
 
-    private void enableTableEditing() {
-        tableComp.table.setEnabled(true);
-        tableComp.table.setCellSelectionEnabled(true);
-        editBtn.setText("완료");
-
-        // 각 열에 CellEditor 추가
-        for (int i = 1; i < tableComp.table.getColumnCount(); i++) {
-            final int column = i;
-            TableCellEditor editor = tableComp.table.getDefaultEditor(tableComp.table.getColumnClass(i));
-            editor.addCellEditorListener(new CellEditorListener() {
-                @Override
-                public void editingStopped(ChangeEvent e) {
-                    int row = tableComp.table.getSelectedRow();
-                    updateDatabase(row, column);
-                }
-
-                @Override
-                public void editingCanceled(ChangeEvent e) {}
-            });
-        }
-    }
-
-    private void disableTableEditing() {
-        tableComp.table.setEnabled(false);
-        tableComp.table.setCellSelectionEnabled(false);
-        editBtn.setText("수정");
-    }
-
-    private void updateDatabase(int row, int column) {
-        String updateSql = "UPDATE product SET " + getColumnName(column) + "=? WHERE product_seq=?";
+    private void updateAllRows() {
+        String updateSql = "UPDATE product SET product_name=?, product_qty=?, product_cost=?, " +
+                           "product_price=?, product_weight=?, client_id=? WHERE product_seq=?";
         
         try (Connection conn = DBConnector.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(updateSql)) {
             
-            String value = (String) model.getValueAt(row, column);
-            String productSeq = (String) model.getValueAt(row, 0);
-
-            setParameterByColumnType(pstmt, 1, column, value);
-            pstmt.setInt(2, Integer.parseInt(productSeq));
-
-            int result = pstmt.executeUpdate();
-            if (result > 0) {
-                System.out.println("DB updated successfully");
-            } else {
-                System.out.println("DB update failed");
+            conn.setAutoCommit(false);
+            
+            for (int i = 0; i < model.getRowCount(); i++) {
+                for (int j = 1; j <= 6; j++) {
+                    pstmt.setString(j, (String) model.getValueAt(i, j));
+                }
+                pstmt.setString(7, (String) model.getValueAt(i, 0));
+                pstmt.addBatch();
             }
-        } catch (SQLException | NumberFormatException ex) {
+            
+            pstmt.executeBatch();
+            conn.commit();
+            JOptionPane.showMessageDialog(this, "변경사항이 저장되었습니다.");
+            
+        } catch (SQLException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "데이터 저장 중 오류가 발생했습니다: " + ex.getMessage());
-        }
-    }
-
-    private String getColumnName(int column) {
-        switch (column) {
-            case 1: return "product_name";
-            case 2: return "product_qty";
-            case 3: return "product_cost";
-            case 4: return "product_price";
-            case 5: return "product_weight";
-            case 6: return "client_id";
-            default: return "";
-        }
-    }
-
-    private void setParameterByColumnType(PreparedStatement pstmt, int parameterIndex, int column, String value) throws SQLException {
-        switch (column) {
-            case 1: // product_name
-            case 6: // client_id
-                pstmt.setString(parameterIndex, value);
-                break;
-            case 2: // product_qty
-                pstmt.setInt(parameterIndex, value != null && !value.isEmpty() ? Integer.parseInt(value) : 0);
-                break;
-            case 3: // product_cost
-            case 4: // product_price
-            case 5: // product_weight
-                pstmt.setDouble(parameterIndex, value != null && !value.isEmpty() ? Double.parseDouble(value) : 0.0);
-                break;
         }
     }
     

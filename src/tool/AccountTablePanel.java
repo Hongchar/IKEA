@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -43,6 +44,12 @@ public class AccountTablePanel extends JPanel {
 
 		// JScrollPane 설정
 		scp.setBounds(locationX, locationY, width, height);
+		
+		
+		int rowCount = 12;
+		for (int i = 0; i < rowCount; ++i) {
+			tableModel.addRow(new Object[columnNames.length]);
+		}
 
 		// 테이블 헤더 스타일 설정
 		table.getTableHeader().setBackground(Color.decode("#106EBE")); // 배경 색
@@ -69,6 +76,13 @@ public class AccountTablePanel extends JPanel {
 		DefaultTableCellRenderer cellRenderer = new DefaultTableCellRenderer();
 		cellRenderer.setHorizontalAlignment(DefaultTableCellRenderer.CENTER); // 가운데 정렬
 		cellRenderer.setBackground(Color.WHITE); // 셀 배경색 설정
+		
+        // 셀 내용 가운데 정렬
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
 
 		add(scp);
 	}
@@ -85,12 +99,18 @@ public class AccountTablePanel extends JPanel {
 
 	// 계정 조회 기능
 	public void searchAccount(String accountId) {
+		
 		String sql = "SELECT rownum, account_name, account_password FROM " 
-				+ tableName + " WHERE " + columnIdName + " = ?";
+				+ tableName + (accountId.isBlank() ? "" : " WHERE lower(" + columnIdName + ") = ?");
+		
 
+		System.out.println(accountId);
 		try (Connection conn = DBConnector.getConnection();
 				PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setString(1, accountId);
+			
+			if (!accountId.isEmpty()) {
+				pstmt.setString(1, "%" + accountId.toLowerCase() + "%");				
+			}
 
 			try (ResultSet rs = pstmt.executeQuery()) {
 				// 테이블 초기화

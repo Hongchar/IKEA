@@ -1,17 +1,4 @@
 package screen;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-
-import jframe.JFrames;
-import tool.AccountTablePanel;
-import tool.BackButton;
-import tool.BlueLongButton;
-import tool.CreateTextField;
-import tool.DBConnector;
-import tool.DefaultFrameUtils;
-import tool.HomeButton;
-
 import java.awt.Color;
 import java.awt.Point;
 import java.sql.Connection;
@@ -21,6 +8,20 @@ import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
+import jframe.JFrames;
+import tool.AccountTablePanel;
+import tool.BackButton;
+import tool.BlueLongButton;
+import tool.CreateTextField;
+import tool.DBConnector;
+import tool.DefaultFrameUtils;
+import tool.HomeButton;
 public class SALESINFO_B1 extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
@@ -55,6 +56,12 @@ public class SALESINFO_B1 extends JFrame {
 		ImageIcon img2 = new ImageIcon("res/calendar_icon.png");
 		JLabel bg = new JLabel(img2);
 		bg.setBounds(343, 91, 26, 26);
+		
+
+		JTable table = accountTablePanel.getTable();
+		
+		table.getColumn("No.").setPreferredWidth(50);
+		table.getColumn("판매일").setPreferredWidth(200);
 		
 		// 패널 배경색 설정
 		accountTablePanel.setBackground(Color.WHITE);
@@ -101,7 +108,7 @@ public class SALESINFO_B1 extends JFrame {
 				start.setText("");
 				end.setText("");
 			} catch (SQLException e1) {
-				DefaultFrameUtils.makeNotice("날짜를 숫자로만 입력해주세요.");
+				DefaultFrameUtils.makeNotice("날짜를 입력해주세요.");
 				System.out.println("SQL문 오류");
 			}
 		});

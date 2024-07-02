@@ -31,7 +31,7 @@ public class ORDER_B2 extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
 	
-	String[] tableLabel = {"idx", "상품명", "날짜", "수량", "입고여부", "납품업체"};
+	String[] tableLabel = {"No.", "상품명", "날짜", "수량", "입고여부", "납품업체"};
 	private AddTable.TableComponents tableComponents;
 	private JTextField tf1, tf2, tf3, tf4;
 	
@@ -40,7 +40,6 @@ public class ORDER_B2 extends JFrame {
 	private JLabel grayText = DefaultFrameUtils.makeGrayLabel("PROGRESS INFORMATION", 20, 59);
 
 	public ORDER_B2() {
-		
 		
 		DefaultFrameUtils.makeLogo(this);
 		DefaultFrameUtils.setDefaultSize(this);
